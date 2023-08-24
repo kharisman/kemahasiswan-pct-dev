@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Intrendship | Data User</title>
-  <link rel="stylesheet" href="internship/vendors/mdi/css/materialdesignicons.min.css">
-  <link rel="stylesheet" href="internship/vendors/css/vendor.bundle.base.css">
-  <link rel="stylesheet" href="internship/css/style.css">
+  <link rel="stylesheet" href="{{asset('internship/vendors/mdi/css/materialdesignicons.min.css')}}">
+  <link rel="stylesheet" href="{{asset('internship/vendors/css/vendor.bundle.base.css')}}">
+  <link rel="stylesheet" href="{{asset('internship/css/style.css')}}">
 </head>
 <body>
   <div class="container-scroller d-flex">
@@ -345,13 +345,13 @@
     </div>
   </div>
 
-  <script src="internship/vendors/js/vendor.bundle.base.js"></script>
-  <script src="internship/vendors/chart.js/Chart.min.js"></script>
-  <script src="internship/js/jquery.cookie.js" type="text/javascript"></script>
-  <script src="internship/js/off-canvas.js"></script>
-  <script src="internship/js/hoverable-collapse.js"></script>
-  <script src="internship/js/template.js"></script>
-  <script src="internship/js/jquery.cookie.js" type="text/javascript"></script>
-  <script src="internship/js/dashboard.js"></script>
+  <script src="{{asset('internship/vendors/js/vendor.bundle.base.js')}}"></script>
+  <script src="{{asset('internship/vendors/chart.js/Chart.min.js')}}"></script>
+  <script src="{{asset('internship/js/jquery.cookie.js" type="text/javascript')}}"></script>
+  <script src="{{asset('internship/js/off-canvas.js')}}"></script>
+  <script src="{{asset('internship/js/hoverable-collapse.js')}}"></script>
+  <script src="{{asset('internship/js/template.js')}}"></script>
+  <script src="{{asset('internship/js/jquery.cookie.js" type="text/javascript')}}"></script>
+  <script src="{{asset('internship/js/dashboard.js')}}"></script>
 </body>
 </html>

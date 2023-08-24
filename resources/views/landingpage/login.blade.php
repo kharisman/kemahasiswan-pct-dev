@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-  <title>Plaocmtech x iduka</title>
+  <title>Palcomtech X iduka</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -51,12 +51,13 @@
         <div class="row align-items-center">
           <div class="col-lg-9 d-none d-lg-block">
             <a href="#" class="small mr-3"><span class="icon-question-circle-o mr-2"></span> Have a questions?</a> 
-            <a href="#" class="small mr-3"><span class="icon-phone2 mr-2"></span> 10 20 123 456</a> 
-            <a href="#" class="small mr-3"><span class="icon-envelope-o mr-2"></span> info@mydomain.com</a> 
+            <a href="#" class="small mr-3"><span class="icon-phone2 mr-2"></span>(0711) 359089 </a> 
+            <a href="#" class="small mr-3"><span class="icon-envelope-o mr-2"></span> info@palcomtech.ac.id</a> 
+            <a href="#" class="small mr-3"><span class="icon-whatsapp"></span> 081271788080</a> 
           </div>
           <div class="col-lg-3 text-right">
-            <a href="login.html" class="small mr-3"><span class="icon-unlock-alt"></span> Log In</a>
-            <a href="register.html" class="small btn btn-primary px-4 py-2 rounded-0"><span class="icon-users"></span> Register</a>
+            <a href="{{route('login')}}" class="small mr-3"><span class="icon-unlock-alt"></span> Log In</a>
+            <a href="{{route('register')}}" class="small btn btn-primary px-4 py-2 rounded-0"><span class="icon-users"></span> Register</a>
           </div>
         </div>
       </div>
@@ -66,15 +67,15 @@
       <div class="container">
         <div class="d-flex align-items-center">
           <div class="site-logo">
-            <a href="index.html" class="d-block">
-              <img src="images/Logo-1.jpg" alt="Image" class="img-fluid" height="70" width="55">
+            <a href="{{route('index')}}" class="d-block">
+              <img src="landingpage/images/Logo-1.jpg" alt="Image" class="img-fluid" height="70" width="55">
             </a>
           </div>
           <div class="mr-auto">
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                 <li>
-                  <a href="index.html" class="nav-link text-left">Home</a>
+                  <a href="{{route('index')}}" class="nav-link text-left">Home</a>
                 </li>
                 <li class="has-children">
                   <a href="about.html" class="nav-link text-left">About Us</a>
@@ -126,7 +127,7 @@
 
     <div class="custom-breadcrumns border-bottom">
       <div class="container">
-        <a href="index.html">Home</a>
+        <a href="{{route('index')}}">Home</a>
         <span class="mx-3 icon-keyboard_arrow_right"></span>
         <span class="current">Login</span>
       </div>
@@ -134,28 +135,35 @@
 
     <div class="site-section">
         <div class="container">
-
-
             <div class="row justify-content-center">
                 <div class="col-md-5">
                     <div class="row">
+                    <form action="{{ route('login.aksi') }}" method="POST" class="user">
+                      @csrf
+                      @if ($errors->any())
+                      <div class="alert alert-danger">
+                        <ul>
+                          @foreach ($errors->all() as $error)
+                          <li>{{ $error }}</li>
+                          @endforeach
+                        </ul>
+                      </div>
+                      @endif
                         <div class="col-md-12 form-group">
-                            <label for="username">Username</label>
-                            <input type="text" id="username" class="form-control form-control-lg">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" id="username" class="form-control form-control-lg" aria-describedby="emailHelp" >
                         </div>
                         <div class="col-md-12 form-group">
-                            <label for="pword">Password</label>
-                            <input type="text" id="pword" class="form-control form-control-lg">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" class="form-control form-control-lg" >
                         </div>
-                    </div>
-                          <a href="iduka/index.html"
-                             class="col-12 btn btn-primary btn-lg">login</a>
-
+                    
+                          <button type="submit" class="col-12 btn btn-primary btn-lg">login</button>
                 </div>
-            </div>
+            </div></div>
             
 
-          
+</div>
         </div>
     </div>
 
@@ -166,9 +174,9 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-3">
-            <p class="mb-4"><img src="images/Logo-1.jpg" alt="Image" class="img-fluid" height="70" width="55"></p>
-            <p>Kerja sama Palcomtech dan iduka</p>  
-            <p><a href="#">lebih lanjut</a></p>
+            <p class="mb-4"><img src="landingpage/images/Logo-1.jpg" alt="Image" class="img-fluid" height="70" width="55"></p>
+            <p>Kerja sama Palcomtech dan Iduka</p>  
+            <p><a href="https://palcomtech.ac.id/">lebih lanjut</a></p>
           </div>
           <div class="col-lg-3">
             <h3 class="footer-heading"><span>About Campus</span></h3>
@@ -176,7 +184,7 @@
                 <li><a href="https://goo.gl/maps/SyB8ZqvgAEQEcmx58">Alamat</a></li>
                 Jl. Jend. Basuki Rahmat No. 05, Talang Aman, Kec. Kemuning, Kota Palembang, Sumatera Selatan
                 <p></p>
-                <li><a href="https://palcomtech.ac.id/">palcomtech.ac.id</a></li>
+                <li><a href="https://palcomtech.ac.id/">Open</a></li>
                 
                 <li>Senin s/d Jumat : 8:00 – 16:00</li>
                 Sabtu: 8:00 – 12:00
