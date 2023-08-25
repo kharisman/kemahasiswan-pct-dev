@@ -18,6 +18,14 @@ Route::controller(AuthController::class)->group(function () {
 	Route::get('logout', 'logout')->middleware('auth')->name('logout');
 	
 });
+Route::controller(AuthIdukaController::class)->group(function () {
+	Route::get('registerIduka', 'registerIduka')->name('registerIduka');
+	Route::post('registerIduka', 'registerIdukaSimpan')->name('registerIduka.simpan');
+	Route::get('login', 'login')->name('login');
+	Route::post('login', 'loginAksi')->name('login.aksi');
+	Route::get('logout', 'logout')->middleware('auth')->name('logout');
+	
+});
 //Tes admin blade
 Route::get('/admin-dashboard', function () { return view('admin/dashboard');});
 Route::get('/admin-artikel', function () { return view('admin/artikel');});
