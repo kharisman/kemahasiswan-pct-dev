@@ -175,8 +175,7 @@
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Events</h1>
-                <a href="" class="btn btn-primary">Add Event</a>
+                <h1 class="h3 mb-0 text-gray-800">Confirm Intrendship</h1>
             </div>
 
             <div class="row">
@@ -187,9 +186,9 @@
                                 <thead>
                                     <tr class="text-center">
                                         <th>No</th>
-                                        <th>Title</th>
-                                        <th>Describe</th>
-                                        <th>Gambar</th>
+                                        <th>Username</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -202,10 +201,7 @@
                                         <td class="text-center" style="width: 300px;">
                                             <div class="row">
                                                 <div class="col mb-2"><a href=""
-                                                        class="btn btn-sm btn-danger">Hapus</a>
-                                                </div>
-                                                <div class="col mb-2"><a href=""
-                                                        class="btn btn-sm btn-warning">Edit</a>
+                                                        class="btn btn-sm btn-primary">Validasi</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -218,4 +214,4 @@
             </div>
         </div>
     </div>
-@endsection
+@endsection)
