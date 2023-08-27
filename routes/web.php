@@ -5,9 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthIdukaController;
 use App\Http\Controllers\IdukaController;
 use App\Http\Controllers\InternshipController;
+use App\Http\Controllers\adminController;
 
 Route::view('/', 'index')->name('index');
-Route::get('internship/index', [InternshipController::class, 'dashboard_internship'])->name('internship.index');
+Route::get('internship/index', [InternshipController::class, 'dashboardInternship'])->name('internship.index');
 Route::get('iduka/index', [IdukaController::class, 'dashboard_iduka'])->name('iduka.index');
 
 Route::controller(AuthController::class)->group(function () {
@@ -16,7 +17,6 @@ Route::controller(AuthController::class)->group(function () {
 	Route::get('login', 'login')->name('login');
 	Route::post('login', 'loginAksi')->name('login.aksi');
 	Route::get('logout', 'logout')->middleware('auth')->name('logout');
-	
 });
 Route::controller(AuthIdukaController::class)->group(function () {
 	Route::get('registerIduka', 'registerIduka')->name('registerIduka');
@@ -26,11 +26,19 @@ Route::controller(AuthIdukaController::class)->group(function () {
 	Route::get('logout', 'logout')->middleware('auth')->name('logout');
 	
 });
-//Tes admin blade
-Route::get('/admin-dashboard', function () { return view('admin/dashboard');});
-Route::get('/admin-artikel', function () { return view('admin/artikel');});
-Route::get('/admin-confirm-iduka', function () { return view('admin/confirm_iduka');});
-Route::get('/admin-confirm-internship', function () { return view('admin/confirm_internship');});
-Route::get('/admin-event', function () { return view('admin/event');});
-Route::get('/admin-iduka', function () { return view('admin/iduka');});
-Route::get('/admin-internship', function () { return view('admin/internship');});
+
+Route::get('/admin-dashboard',[adminController::class,'adminDashboard']);
+Route::get('/admin-artikel',[adminController::class,'adminArtikel']);
+Route::get('/admin-confirm-iduka',[adminController::class,'adminConfirmIduka']);
+Route::get('/admin-confirm-internship',[adminController::class,'adminConfirmInternship']);
+Route::get('/admin-event',[adminController::class,'adminEvent']);
+Route::get('/admin-iduka',[adminController::class,'adminIduka']);
+Route::get('/admin-internship',[adminController::class,'adminInternship']);
+
+Route::get('/add-slider',[adminController::class,'addSlider']);
+Route::post('/add-slider',[adminController::class,'addSliderPost']);
+Route::get('/add-category',[adminController::class,'addCategory']);
+Route::post('/add-category',[adminController::class,'addCategoryPost']);
+Route::get('/add-post',[adminController::class,'addPost']);
+Route::post('/add-post',[adminController::class,'addPostPost']);
+
