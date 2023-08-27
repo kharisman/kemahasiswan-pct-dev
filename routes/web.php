@@ -8,7 +8,11 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\adminController;
 
 Route::view('/', 'index')->name('index');
-Route::get('internship/index', [InternshipController::class, 'dashboardInternship'])->name('internship.index');
+Route::get('internship-index', [InternshipController::class, 'dashboardInternship'])->name('internship.index');
+Route::get('internship-project', [InternshipController::class, 'projectInternship']);
+Route::get('internship-history', [InternshipController::class, 'historyInternship']);
+Route::get('internship-data', [InternshipController::class, 'dataInternship']);
+Route::post('internship-data', [InternshipController::class, 'dataInternshipPost']);
 Route::get('iduka/index', [IdukaController::class, 'dashboard_iduka'])->name('iduka.index');
 
 Route::controller(AuthController::class)->group(function () {
@@ -40,4 +44,6 @@ Route::get('/add-category',[adminController::class,'addCategory']);
 Route::post('/add-category',[adminController::class,'addCategoryPost']);
 Route::get('/add-post',[adminController::class,'addPost']);
 Route::post('/add-post',[adminController::class,'addPostPost']);
+Route::post('/add-category-project',[adminController::class,'addCategoryProject']);
+Route::post('/add-category-project',[adminController::class,'addCategoryProjectPost']);
 

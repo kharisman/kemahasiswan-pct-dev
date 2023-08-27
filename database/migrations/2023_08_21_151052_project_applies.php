@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('project_id');
             $table->integer('internship_id');
             $table->string('status');
+            $table->timestamps();
         });
     }
 

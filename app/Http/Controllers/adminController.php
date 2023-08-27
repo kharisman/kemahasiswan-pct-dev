@@ -9,6 +9,7 @@ use App\Models\Internship;
 use App\Models\Project;
 use App\Models\Slider;
 use App\Models\Category;
+use App\Models\Project_Category;
 use App\Models\Post;
 
 class adminController extends Controller
@@ -76,7 +77,7 @@ class adminController extends Controller
         $new->name = $r->name;
         $new->save();
         $r->session()->flash('message','Data Berhasil Disimpan.');
-        return redirect('admin/add_slider');
+        return redirect('admin/add_category');
     }
     public function addPost(){
         return view('admin/add_post');
@@ -84,7 +85,7 @@ class adminController extends Controller
     public function addPostPost(Request $r){
         $r->validate([
             'title' => 'required|min:3|max:10',
-            'title' => 'required|min:15|max:100'
+            'content' => 'required|min:15|max:100'
         ]);
 
         $new = new Post();
@@ -92,6 +93,20 @@ class adminController extends Controller
         $new->content = $r->content;
         $new->save();
         $r->session()->flash('message','Data Berhasil Disimpan.');
-        return redirect('admin/add_slider');
+        return redirect('admin/add_post');
+    }
+    public function addCategoryProject(){
+        return view('admin/add_category_project');
+    }
+    public function addCategoryProjectPost(Request $r){
+        $r->validate([
+            'category' => 'required|min:3|max:25'
+        ]);
+
+        $new = new Project_Category();
+        $new->category = $r->category;
+        $new->save();
+        $r->session()->flash('message','Data Berhasil Disimpan.');
+        return redirect('admin/add_category_project');
     }
 }
