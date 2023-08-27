@@ -14,4 +14,5 @@ class Project extends Model
     public function idukaProject(){
         return $this->hasOne(Iduka::class,'id','iduka_id');
     }
+    protected $fillable = ['iduka_id', 'name', 'notes' ,'updated_at','created_at'];
 }

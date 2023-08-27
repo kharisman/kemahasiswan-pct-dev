@@ -35,6 +35,30 @@ class AuthController extends Controller
 		return redirect()->route('login')->with('success', 'Registration successful. You can now log in.');
 	}
 
+	public function registerIduka()
+	{
+		return view('landingpage/register_iduka');
+	}
+
+	public function registerIdukaSimpan(Request $request)
+	{
+		$validator=Validator::make($request->all(), [
+			'username' => 'required',
+			'email' => 'required|email',
+			'password' => 'required|confirmed'
+		]);
+		if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+		User::create([
+			'username' => $request->username,
+			'email' => $request->email,
+			'password' => Hash::make($request->password),
+			'roles' => 'iduka'
+		]);
+		return redirect()->route('login')->with('success', 'Registration successful. You can now log in.');
+	}
+
 	public function login()
 	{
 		return view('landingpage/login');
