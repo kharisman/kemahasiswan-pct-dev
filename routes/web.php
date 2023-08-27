@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AuthIdukaController;
 use App\Http\Controllers\IdukaController;
 use App\Http\Controllers\InternshipController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\adminController;
 
 Route::view('/', 'index')->name('index');
@@ -18,18 +18,17 @@ Route::get('iduka/index', [IdukaController::class, 'dashboard_iduka'])->name('id
 Route::controller(AuthController::class)->group(function () {
 	Route::get('register', 'register')->name('register');
 	Route::post('register', 'registerSimpan')->name('register.simpan');
-	Route::get('login', 'login')->name('login');
-	Route::post('login', 'loginAksi')->name('login.aksi');
-	Route::get('logout', 'logout')->middleware('auth')->name('logout');
-});
-Route::controller(AuthIdukaController::class)->group(function () {
 	Route::get('registerIduka', 'registerIduka')->name('registerIduka');
 	Route::post('registerIduka', 'registerIdukaSimpan')->name('registerIduka.simpan');
 	Route::get('login', 'login')->name('login');
 	Route::post('login', 'loginAksi')->name('login.aksi');
 	Route::get('logout', 'logout')->middleware('auth')->name('logout');
-	
 });
+
+Route::get('iduka/recruitment', [ProjectController::class, 'create_project'])->name('create_project');
+Route::post('save_project', [ProjectController::class, 'saveProject'])->name('save_project');
+
+
 
 Route::get('/admin-dashboard',[adminController::class,'adminDashboard']);
 Route::get('/admin-artikel',[adminController::class,'adminArtikel']);
