@@ -10,7 +10,7 @@
                             <i class="mdi mdi-checkbox-multiple-marked text-white icon-lg"></i>
                             <div class="ms-3 ml-md-0 ml-xl-3">
                                 <h5 class="text-white font-weight-bold">Complleted Project</h5>
-                                <p class="mt-2 text-white card-text">10 Project</p>
+                                <p class="mt-2 text-white card-text">{{$completedProject}} Project</p>
                             </div>
                         </div>
                     </div>
@@ -24,7 +24,7 @@
                             <i class="mdi mdi-calendar-remove text-white icon-lg"></i>
                             <div class="ms-3 ml-md-0 ml-xl-3">
                                 <h5 class="text-white font-weight-bold">Reject Project</h5>
-                                <p class="mt-2 text-white card-text">2 Project</p>
+                                <p class="mt-2 text-white card-text">{{$rejectProject}} Project</p>
                             </div>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                             <i class="mdi mdi-clipboard-text text-white icon-lg"></i>
                             <div class="ms-3 ml-md-0 ml-xl-3">
                                 <h5 class="text-white font-weight-bold">On Going Project</h5>
-                                <p class="mt-2 text-white card-text">3 Project</p>
+                                <p class="mt-2 text-white card-text">{{$onGoingProject}} Project</p>
                             </div>
                         </div>
                     </div>
@@ -54,84 +54,25 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            No
-                                        </th>
-                                        <th>
-                                            Name Project
-                                        </th>
-                                        <th>
-                                            Progress
-                                        </th>
-                                        <th>
-                                            Amount
-                                        </th>
-                                        <th>
-                                            Deadline
-                                        </th>
+                                        <th>No</th>
+                                        <th>Name Project</th>
+                                        <th>Progress</th>
+                                        <th>Amount</th>
+                                        <th>Deadline</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="py-1">
-                                            1
-                                        </td>
-                                        <td>
-                                            Project Name
-                                        </td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 25%"
-                                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            $ 77.99
-                                        </td>
-                                        <td>
-                                            May 15, 2024
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-1">
-                                            2
-                                        </td>
-                                        <td>
-                                            Project Name
-                                        </td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 75%"
-                                                    aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            $245.30
-                                        </td>
-                                        <td>
-                                            July 1, 2024
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-1">
-                                            3
-                                        </td>
-                                        <td>
-                                            Project Name
-                                        </td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 90%"
-                                                    aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            $138.00
-                                        </td>
-                                        <td>
-                                            Apr 12, 2024
-                                        </td>
-                                    </tr>
+                                    @foreach ($onGoingProjectData as $item)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->name}}</td>
+                                            <td>
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

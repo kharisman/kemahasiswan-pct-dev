@@ -17,19 +17,19 @@
           <span></span>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="index.html">
+          <a class="nav-link" href="{{url('internship-index')}}">
             <i class="mdi mdi-chart-bar menu-icon"></i>
             <span class="menu-title">Dashboard</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="project.html">
+          <a class="nav-link" href="{{url('internship-project')}}">
             <i class="mdi mdi-view-headline menu-icon"></i>
             <span class="menu-title">Apply Project</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="history.html">
+          <a class="nav-link" href="{{url('internship-history')}}">
             <i class="mdi mdi-box menu-icon"></i>
             <span class="menu-title">History Apply</span>
           </a>
@@ -46,7 +46,7 @@
           </a>
           <div class="collapse" id="auth">
             <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="data.html"> Data User </a></li>
+              <li class="nav-item"> <a class="nav-link" href="{{url('internship-data')}}"> Data User </a></li>
             </ul>
           </div>
         </li>
@@ -55,7 +55,7 @@
           <span></span>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="">
+          <a class="nav-link" href="{{url('logout')}}">
             <i class="mdi mdi-file-document-box-outline menu-icon"></i>
             <span class="menu-title">Log out</span>
           </a>

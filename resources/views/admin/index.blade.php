@@ -52,6 +52,11 @@
                     <span>Intrendship</span></a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="{{url('add-category-project')}}">
+                    <i class="fas fa-fw fa-box"></i>
+                    <span>Project</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{url('admin-event')}}">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>Event</span></a>
