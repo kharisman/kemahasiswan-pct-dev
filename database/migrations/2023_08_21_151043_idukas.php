@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->string('name');
-            $table->text('address');
-            $table->string('phone', 15);
-            $table->string('status');
-            $table->text('photo'); 
+            $table->text('address')->nullable(); // address dapat bernilai null
+            $table->string('phone', 15)->nullable(); // phone dapat bernilai null   
+            $table->enum('status', ['Aktif', 'Tidak'])->default('Tidak');
+            $table->text('photo')->nullable(); // photo dapat bernilai null
             $table->timestamps();
             $table->softDeletes();
         });

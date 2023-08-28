@@ -36,10 +36,10 @@
                     <span>Dashboard</span></a>
             </li>
 
-            <hr class="sidebar-divider">
+            {{-- <hr class="sidebar-divider">
             <div class="sidebar-heading">
                 Advance
-            </div>
+            </div> --}}
 
             <li class="nav-item">
                 <a class="nav-link" href="{{url('admin-confirm-iduka')}}">

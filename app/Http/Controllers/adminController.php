@@ -15,6 +15,13 @@ use App\Models\Post;
 class adminController extends Controller
 {
     //
+
+    public function __construct()
+    {
+        $this->middleware('auth'); // Melindungi semua method dalam controller ini
+    }
+
+    
     public function adminDashboard(){
         $userCount = User::count();
         $idukaCount = Iduka::count();
@@ -27,7 +34,7 @@ class adminController extends Controller
         return view('admin/artikel', compact('data'));
     }
     public function adminConfirmIduka(){
-        $data = User::get();
+        $data = User::where("roles","iduka")->get();
         return view('admin/confirm_iduka');
     }
     public function adminConfirmInternship(){

@@ -81,10 +81,6 @@
                                     <a href="{{route('kontak')}}" class="nav-link text-left">Kontak Kami</a>
                                 </li> --}}
 
-
-
-
-
                                 {{-- <li class="has-children">
                                     <a href="about.html" class="nav-link text-left">About Us</a>
                                     <ul class="dropdown">
