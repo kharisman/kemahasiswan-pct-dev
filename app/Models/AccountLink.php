@@ -5,14 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project_Update extends Model
+class AccountLink extends Model
 {
     use HasFactory;
-    
-    public function internshipProjectUpdate(){
+
+    public function internshipAccount(){
         return $this->hasOne(Internship::class,'id','internship_id');
-    }
-    public function projectUpdate(){
-        return $this->hasOne(Project::class,'id','project_id');
     }
 }

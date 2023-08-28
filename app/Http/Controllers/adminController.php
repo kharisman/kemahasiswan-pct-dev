@@ -9,8 +9,11 @@ use App\Models\Internship;
 use App\Models\Project;
 use App\Models\Slider;
 use App\Models\Category;
-use App\Models\Project_Category;
+use App\Models\ProjectCategory;
 use App\Models\Post;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class adminController extends Controller
 {
@@ -59,9 +62,16 @@ class adminController extends Controller
         return view('admin/add_slider');
     }
     public function addSliderPost(Request $r){
-        $r->validate([
-            'image' => 'required|mimes:jpg,jpeg,png,webp',
+        DB::beginTransaction();
+        try {
+        $validator = Validator::make($r->all(), [
+            'image' => 'required|mimes:jpg,jpeg,png,webp'
         ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
         $photo = $r->file('photo');
         $newPhoto = uniqid().".".$photo->getClientOriginalExtension();
         $photo->move('images',$newPhoto);
@@ -69,51 +79,86 @@ class adminController extends Controller
         $new = new Slider();
         $new->photo = $newPhoto;
         $new->save();
-        $r->session()->flash('message','Data Berhasil Disimpan.');
-        return redirect('admin/add_slider');
+        DB::commit();
+        return redirect('add-slider')->with('success', 'Registrasi Berhasil. Silahkan login');
+        } catch (\Exception $e) {
+        DB::rollback();
+        return back()->with('error', 'Terjadi kesalahan saat melakukan registrasi.');
+        }
     }
     public function addCategory(){
         return view('admin/add_category');
     }
     public function addCategoryPost(Request $r){
-        $r->validate([
+        DB::beginTransaction();
+        try {
+        $validator = Validator::make($r->all(), [
             'name' => 'required|min:3|max:10'
         ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
         $new = new Category();
         $new->name = $r->name;
         $new->save();
-        $r->session()->flash('message','Data Berhasil Disimpan.');
-        return redirect('admin/add_category');
+        DB::commit();
+        return redirect('add-category')->with('success', 'Registrasi Berhasil. Silahkan login');
+        } catch (\Exception $e) {
+        DB::rollback();
+        return back()->with('error', 'Terjadi kesalahan saat melakukan registrasi.');
+        }
     }
     public function addPost(){
         return view('admin/add_post');
     }
     public function addPostPost(Request $r){
-        $r->validate([
+        DB::beginTransaction();
+        try {
+        $validator = Validator::make($r->all(), [
             'title' => 'required|min:3|max:10',
             'content' => 'required|min:15|max:100'
         ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
         $new = new Post();
         $new->title = $r->title;
         $new->content = $r->content;
         $new->save();
-        $r->session()->flash('message','Data Berhasil Disimpan.');
-        return redirect('admin/add_post');
+        DB::commit();
+        return redirect('add-post')->with('success', 'Registrasi Berhasil. Silahkan login');
+        } catch (\Exception $e) {
+        DB::rollback();
+        return back()->with('error', 'Terjadi kesalahan saat melakukan registrasi.');
+        }
     }
     public function addCategoryProject(){
-        return view('admin/add_category_project');
+        $categoryProjectData = ProjectCategory::get();
+        return view('admin/add_category_project',compact('categoryProjectData'));
     }
     public function addCategoryProjectPost(Request $r){
-        $r->validate([
+        DB::beginTransaction();
+        try {
+        $validator = Validator::make($r->all(), [
             'category' => 'required|min:3|max:25'
         ]);
 
-        $new = new Project_Category();
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $new = new ProjectCategory();
         $new->category = $r->category;
         $new->save();
-        $r->session()->flash('message','Data Berhasil Disimpan.');
-        return redirect('admin/add_category_project');
+        DB::commit();
+        return redirect('add-category-project')->with('success', 'Registrasi Berhasil. Silahkan login');
+        } catch (\Exception $e) {
+        DB::rollback();
+        return back()->with('error', 'Terjadi kesalahan saat melakukan registrasi.');
+        }
     }
 }

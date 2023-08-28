@@ -3,27 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Project_Update;
-use App\Models\Project_Apply;
+use App\Models\ProjectUpdate;
+use App\Models\ProjectApply;
+use App\Models\AccountLink;
 use App\Models\Project;
 use App\Models\Internship;
 use App\Models\Iduka;
 use Illuminate\support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class InternshipController extends Controller
 {
     public function dashboardInternship(){
 		$user_id = Internship::where('user_id', Auth::user()->id)->get('id');
-		$completedProject = Project_Update::whereNotNull('date_finish')
+		$completedProject = ProjectUpdate::whereNotNull('date_finish')
 			->where('internship_id', $user_id)
 			->count();
-		$onGoingProject = Project_Update::where('date_finish','')
+		$onGoingProject = ProjectUpdate::where('date_finish','')
 			->where('internship_id', $user_id)
 			->count();
-		$rejectProject = Project_Apply::where('internship_id', $user_id)
+		$rejectProject = ProjectApply::where('internship_id', $user_id)
 			->where('status', 'reject')
 			->count();
-		$onGoingProjectData = Project_Update::join('projects', 'project_updates.project_id', '=', 'projects.id')
+		$onGoingProjectData = ProjectUpdate::join('projects', 'project_updates.project_id', '=', 'projects.id')
 			->where('date_finish', '')
 			->where('internship_id', $user_id)
 			->get();
@@ -35,7 +39,7 @@ class InternshipController extends Controller
 		return view('internship/project', compact('projectData'));
 	}
     public function historyInternship(){
-		$applyProjectData = Project_Apply::get();
+		$applyProjectData = ProjectApply::get();
 		return view('internship/history', compact('applyProjectData'));
 	}
     public function dataInternship(){
@@ -74,7 +78,7 @@ class InternshipController extends Controller
 			$new->save();
 
 			if (isset($r->link1) || isset($r->link2) ||isset($r->link3)) {
-				$newAccountLink = new Account_Link;
+				$newAccountLink = new AccountLink;
 				$newAccountLink->internship_id = $dataId;
 				$newAccountLink->name_account = $r->name_account1;
 				$newAccountLink->link = $r->link1;

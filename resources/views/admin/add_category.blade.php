@@ -9,7 +9,8 @@
         <div class="row">
             <div class="card w-100">
                 <div class="card-body">
-                    <form action="{{url('add-category')}}" method="post">@csrf
+                    <form action="" method="post">
+                        @csrf
                         <label for="name" class="form-label">Input Category Name</label>
                         <input type="text" class="form-control" name="name" id="name">
                         <button type="submit" class="btn btn-success w-100 mt-3">Submit</button>
