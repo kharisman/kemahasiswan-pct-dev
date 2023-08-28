@@ -19,9 +19,10 @@ class AuthController extends Controller
 	public function registerSimpan(Request $request)
 	{
 		$validator=Validator::make($request->all(), [
-			'username' => 'required',
-			'email' => 'required|email',
+			'username' => 'required|string|min:3|max:225',
+			'email' => 'required|email|unique:users,email',
 			'password' => 'required|confirmed'
+
 		]);
 		if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
@@ -32,7 +33,7 @@ class AuthController extends Controller
 			'password' => Hash::make($request->password),
 			'roles' => 'internship'
 		]);
-		return redirect()->route('login')->with('success', 'Registration successful. You can now log in.');
+		return redirect()->route('login')->with('success', 'Registrasi Berhasil. Silahakn login');
 	}
 
 	public function registerIduka()
@@ -56,7 +57,7 @@ class AuthController extends Controller
 			'password' => Hash::make($request->password),
 			'roles' => 'iduka'
 		]);
-		return redirect()->route('login')->with('success', 'Registration successful. You can now log in.');
+		return redirect()->route('login')->with('success', 'Registrasi Berhasil. Silahakn login');
 	}
 
 	public function login()

@@ -6,8 +6,13 @@ use App\Http\Controllers\IdukaController;
 use App\Http\Controllers\InternshipController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\adminController;
+use App\Http\Controllers\LandingController;
 
-Route::view('/', 'index')->name('index');
+Route::get('', [LandingController::class, 'index'])->name('index');
+Route::get('/pengajuan-iduka', [LandingController::class, 'iduka'])->name('iduka');
+Route::get('/pengajuan-intership', [LandingController::class, 'intership'])->name('intership');
+Route::get('/kontak', [LandingController::class, 'kontak'])->name('kontak');
+
 Route::get('internship-index', [InternshipController::class, 'dashboardInternship'])->name('internship.index');
 Route::get('internship-project', [InternshipController::class, 'projectInternship']);
 Route::get('internship-history', [InternshipController::class, 'historyInternship']);
