@@ -51,6 +51,6 @@ Route::get('/add-category',[adminController::class,'addCategory']);
 Route::post('/add-category',[adminController::class,'addCategoryPost']);
 Route::get('/add-post',[adminController::class,'addPost']);
 Route::post('/add-post',[adminController::class,'addPostPost']);
-Route::post('/add-category-project',[adminController::class,'addCategoryProject']);
+Route::get('/add-category-project',[adminController::class,'addCategoryProject']);
 Route::post('/add-category-project',[adminController::class,'addCategoryProjectPost']);
 
