@@ -34,10 +34,12 @@ Route::get('iduka/recruitment', [ProjectController::class, 'create_project'])->n
 Route::post('save_project', [ProjectController::class, 'saveProject'])->name('save_project');
 
 
+Route::middleware(['auth'])->group(function () {
+	Route::get('/admin-dashboard',[adminController::class,'adminDashboard'])->name("admin.dashboard");	
+	Route::get('/admin-confirm-iduka',[adminController::class,'adminConfirmIduka']);
+});
 
-Route::get('/admin-dashboard',[adminController::class,'adminDashboard']);
 Route::get('/admin-artikel',[adminController::class,'adminArtikel']);
-Route::get('/admin-confirm-iduka',[adminController::class,'adminConfirmIduka']);
 Route::get('/admin-confirm-internship',[adminController::class,'adminConfirmInternship']);
 Route::get('/admin-event',[adminController::class,'adminEvent']);
 Route::get('/admin-iduka',[adminController::class,'adminIduka']);

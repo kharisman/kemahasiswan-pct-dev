@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('internships', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->string('name');
-            $table->enum('gender', ['Pria', 'Wanita']);
-            $table->date('date_of_birth');
-            $table->text('address');
-            $table->string('phone', 15);
+            $table->integer('user_id') ;
+            $table->string('name') ;
+            $table->enum('gender', ['Pria', 'Wanita'])->nullable(); // Membuat kolom 'gender' dapat bernilai null
+            $table->date('date_of_birth')->nullable();
+            $table->text('address')->nullable();
+            $table->string('phone', 15)->nullable();
             $table->string('nationality');
             $table->string('education');
-            $table->text('interest');
-            $table->text('photo');
-            $table->string('status');
+            $table->text('interest')->nullable();
+            $table->text('photo')->nullable();
+            $table->enum('status', ['Aktif', 'Tidak'])->default('Tidak');
             $table->timestamps();
             $table->softDeletes();
         });
