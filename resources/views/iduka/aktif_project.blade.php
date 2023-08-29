@@ -1,6 +1,6 @@
 @extends('iduka/layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Project Aktif')
 
 @section('contents')
 
@@ -34,5 +34,4 @@
         </div>
     </div>
 </div>
-
 @endsection

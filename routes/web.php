@@ -18,7 +18,18 @@ Route::get('internship-project', [InternshipController::class, 'projectInternshi
 Route::get('internship-history', [InternshipController::class, 'historyInternship']);
 Route::get('internship-data', [InternshipController::class, 'dataInternship']);
 Route::post('internship-data', [InternshipController::class, 'dataInternshipPost']);
+
 Route::get('iduka/index', [IdukaController::class, 'dashboard_iduka'])->name('iduka.index');
+Route::get('iduka/profile', [IdukaController::class, 'profile_iduka'])->name('iduka.profile');
+
+Route::get('iduka/project', [ProjectController::class, 'all_project'])->name('iduka.all_project');
+Route::get('iduka/pending_project', [ProjectController::class, 'pending_project'])->name('iduka.pending_project');
+Route::get('iduka/aktif_project', [ProjectController::class, 'aktif_project'])->name('iduka.aktif_project');
+Route::get('iduka/selesai_project', [ProjectController::class, 'selesai_project'])->name('iduka.selesai_project');
+Route::get('iduka/recruitment', [ProjectController::class, 'create_project'])->name('create_project');
+Route::post('save_project', [ProjectController::class, 'saveProject'])->name('save_project');
+Route::get('/iduka/{id}/edit_status', [ProjectController::class, 'editStatus'])->name('edit_status');
+Route::post('/iduka/{id}/update-status', [ProjectController::class, 'updateStatus'])->name('update_status');
 
 Route::controller(AuthController::class)->group(function () {
 	Route::get('register', 'register')->name('register');
@@ -29,10 +40,6 @@ Route::controller(AuthController::class)->group(function () {
 	Route::post('login', 'loginAksi')->name('login.aksi');
 	Route::get('logout', 'logout')->middleware('auth')->name('logout');
 });
-
-Route::get('iduka/recruitment', [ProjectController::class, 'create_project'])->name('create_project');
-Route::post('save_project', [ProjectController::class, 'saveProject'])->name('save_project');
-
 
 Route::middleware(['auth'])->group(function () {
 	Route::get('/admin-dashboard',[adminController::class,'adminDashboard'])->name("admin.dashboard");	

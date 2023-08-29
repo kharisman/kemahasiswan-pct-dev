@@ -11,8 +11,15 @@ class Project extends Model
     public function categoryProject(){
         return $this->hasOne(Project_Category::class,'id','category_id');
     }
-    public function idukaProject(){
-        return $this->hasOne(Iduka::class,'id','iduka_id');
+    public function idukaProject()
+    {
+        return $this->hasOne(Iduka::class, 'id', 'iduka_id');
     }
-    protected $fillable = ['iduka_id', 'name', 'notes' ,'updated_at','created_at'];
+
+    protected $fillable = ['iduka_id', 'name', 'category_id','notes', 'updated_at', 'created_at'];
+    
+    public function categories()
+    {
+        return $this->belongsToMany(Project_Category::class, 'projectcategory');
+    }
 }
