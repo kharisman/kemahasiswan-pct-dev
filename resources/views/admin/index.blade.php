@@ -13,6 +13,10 @@
     <link href="{{ asset('admin/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('admin/css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+  
+    <script src="{{ asset('admin/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body id="page-top">
@@ -74,6 +78,11 @@
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{url('admin/settings/slider')}}">Slider</a>
+                        <a class="collapse-item" href="{{url('admin-internship')}}">Kategori Post</a>
+                        <a class="collapse-item" href="{{url('admin-internship')}}">Berita</a>
+                    </div>
+                    <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Manage User:</h6>
                         <a class="collapse-item" href="{{url('admin-iduka')}}">Users Iduka</a>
                         <a class="collapse-item" href="{{url('admin-internship')}}">Users Intrendship</a>
@@ -84,9 +93,6 @@
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
-
-
-
         </ul>
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
@@ -265,6 +271,39 @@
                     </ul>
             
                 </nav>
+
+                @if(Session::has('success'))
+                    <script>
+                    $(document).ready( function () {
+                        Swal.fire({
+                            title: 'Berhasil !',
+                            text: '{{ Session::get('success') }}',
+                            icon: 'success',
+                            confirmButtonText: 'Tutup'
+                        })
+                    } );
+                    </script>
+                    @php
+                    Session::forget('success');
+                    @endphp
+                @endif
+
+
+                @if(Session::has('error'))
+                    <script>
+                    $(document).ready( function () {
+                        Swal.fire({
+                            title: 'Gagal !',
+                            text: '{{ Session::get('error') }}',
+                            icon: 'error',
+                            confirmButtonText: 'Tutup'
+                        })
+                    } );
+                    </script>
+                    @php
+                    Session::forget('error');
+                    @endphp
+                @endif
                 @yield('content')
             </div>
 
@@ -302,7 +341,6 @@
         </div>
     </div>
 
-    <script src="{{ asset('admin/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('admin/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); 
             $table->text('images');
             $table->integer('sort');
-            $table->string('status');
+            $table->enum('status', ['Aktif', 'Tidak'])->default('Aktif');
             $table->timestamps();
             $table->softDeletes();
         });
