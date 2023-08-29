@@ -3,14 +3,14 @@
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Slider</h1>
-                <a href="{{url('admin/settings/slider')}}" class=" btn btn-sm btn-primary shadow-sm"><i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali</a>
+                <h1 class="h3 mb-0 text-gray-800">Kategori</h1>
+                <a href="{{url('admin/settings/kategori-berita')}}" class=" btn btn-sm btn-primary shadow-sm"><i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali</a>
             </div>
 
             <div class="row">
                 <div class="card w-100">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Form Edit Slider</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Form Edit Kategori</h6>
                     </div>
                     <div class="card-body">
                         <div class="">
@@ -19,29 +19,25 @@
                                 <div class="alert alert-success">{{ session('success') }}</div>
                             @endif
 
+
+
+
                             <form method="POST" enctype="multipart/form-data">
-                                <input type="hidden" value="{{$d->id}}">
                                 @csrf
-                                 <div class="form-group">
-                                    <label for="images">Gambar:</label>
-                                    <input type="file" class="form-control-file @error('images') is-invalid @enderror" name="images" accept="image/jpeg,image/png,image/jpg">
-                                    <img width="500" src="{{$d->images}}" alt="">
-                                    @error('images')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-
-
-                                </div>
+                                
+                                <input type="hidden" value="{{$d->id}}">
+                                 
                                 <div class="form-group">
-                                    <label for="sort">Sort:</label>
-                                    <input type="number" class="form-control @error('sort') is-invalid @enderror" name="sort" value="{{ old('sort',$d->sort) }}">
-                                    @error('sort')
+                                    <label for="sort">Nama Kategori:</label>
+                                    <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ old('nama',$d->name) }}">
+                                    @error('nama')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="status">Status:</label>
-                                    <select class="form-control @error('status') is-invalid @enderror" name="status">
+                                    <label for="status">Status</label>
+                                    <select class="form-control @error('status') is-invalid @enderror" name="status" required>
                                         <option value="Aktif" {{ old('status', $d->status) === 'Aktif' ? 'selected' : '' }}>Aktif</option>
                                         <option value="Tidak" {{ old('status', $d->status) === 'Tidak' ? 'selected' : '' }}>Tidak</option>
                                     </select>
@@ -49,6 +45,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                
                                 <button type="submit" class="btn btn-primary">Proses</button>
                             </form>
                             

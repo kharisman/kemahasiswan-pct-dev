@@ -11,9 +11,11 @@ use App\Models\Slider;
 use App\Models\Category;
 use App\Models\ProjectCategory;
 use App\Models\Post;
+use App\Models\PostCategory;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\DB;use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -291,6 +293,241 @@ class adminController extends Controller
         } else {
             return back()->with('error', 'Slider tidak ditemukan.');
         }
+    }
+
+    public function kategori_berita(){
+        $data = Category::get();
+        return view('admin.kategori.data',compact('data')) ;
+    }
+
+    public function kategori_berita_add(){
+        return view('admin.kategori.add') ;
+    }
+
+    public function kategori_berita_add_p(Request $request){
+        
+        // return $request->nama ;
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:categories,name,NULL,id,deleted_at,NULL',
+            'status' => 'required|in:Aktif,Tidak',
+        ]);
+
+        $save  = New Category() ;
+        $save->name = $request->nama;
+        $save->status = $request->status;
+        $save->save() ;
+
+        return back()->with('success', 'Kategori berhasil ditambahkan.');
+    }
+
+    public function kategori_berita_edit(Request $request){
+        
+        $d = Category::where("id",$request->id)->firstOrFail();
+        return view('admin.kategori.edit',compact('d')) ;
+    }
+
+    public function kategori_berita_edit_p(Request $request){
+        
+        // return $request->nama ;
+        
+        $save  = Category::where("id",$request->id)->firstOrFail() ;
+
+
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:categories,name,' . $save->id . ',id,deleted_at,NULL',
+            'status' => 'required|in:Aktif,Tidak',
+        ]);
+
+        $save->name = $request->nama;
+        $save->status = $request->status;
+        $save->save() ;
+
+        return back()->with('success', 'Kategori berhasil diperbarui.');
+    }
+
+    public function kategori_berita_delete_p(Request $request){
+        
+        $save  = Category::where("id",$request->id)->firstOrFail() ;
+        $save->delete() ;
+
+        return back()->with('success', 'Kategori berhasil diperbarui.');
+    }
+
+
+    public function berita(){
+        $data = Post::with("categories.category")->get();
+        return view('admin.berita.data',compact('data')) ;
+    }
+
+    public function berita_add(){
+        $kat = Category::where("status","Aktif")->get();
+        // return $kat ;
+        return view('admin.berita.add',compact('kat')) ;
+    }
+
+    public function berita_add_p(Request $request)
+    {
+        $this->validate($request, [
+            'judul' => 'required|min:5',
+            'konten' => 'required|min:5'
+        ]);
+        
+
+       DB::beginTransaction();
+       try {
+        $description = $request->konten;
+        
+        // return $scoring_scale;
+        if (!empty($description)){
+            $dom = new \DomDocument();
+            @$dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);   
+            $images = $dom->getElementsByTagName('img');
+            foreach($images as $k => $img){
+                $data = $img->getAttribute('src');
+                list($type, $data) = explode(';', $data);
+                list(, $data)      = explode(',', $data);
+                $data = base64_decode($data);
+                $image_name= "/assets/images/post/" . time().$k.'.png';
+                $path = public_path() . $image_name;
+                file_put_contents($path, $data);
+                $img->removeAttribute('src');
+                $img->setAttribute('src', $image_name);
+            }
+            $description = $dom->saveHTML();
+        }
+        $save = New Post ();
+        $save->title = $request->judul;
+        $save->content = ($description);
+        $save->status = $request->status;
+        $save->updated_at = null;
+        $save->save();
+        if (!$save){
+            DB::rollback();
+            return back()->with('error', 'Data Berita gagal disimpan. Coba kembali ');
+        }
+        foreach ($request->kategori as $value) {
+            $category = New PostCategory(); // Ganti dengan metode yang sesuai untuk mengambil kategori berdasarkan nilai
+            
+            $category->category_id = $value; // Pastikan Anda telah mengatur relasi di model Post
+            $category->post_id = $save->id ; // Pastikan Anda telah mengatur relasi di model Post
+            $category->save(); // Pastikan Anda telah mengatur relasi di model Post
+            
+        }
+
+
+       } catch (\Throwable $th) {
+        DB::rollback();
+        dd($th);
+        return back()->with('error', 'Data Berita gagal disimpan. Coba kembali ');
+       }
+       DB::commit();
+        return back()->with('success', 'Data Berita berhasil disimpan. ');
+    }
+
+    public function berita_edit(Request $request){
+        $kat = Category::where("status","Aktif")->get();
+        $d = Post::with("categories.category")->where("id",$request->id)->firstOrFail();
+        // return $kat ;
+        return view('admin.berita.edit',compact('kat','d')) ;
+    }
+
+    public function berita_edit_p(Request $request)
+    {
+
+        
+        $save = Post::where("id",$request->id)->firstOrFail();
+
+
+        $this->validate($request, [
+            'judul' => 'required|min:5',
+            'konten' => 'required|min:5'
+        ]);
+        
+
+       DB::beginTransaction();
+       try {
+        $description = $request->konten;
+        
+        // return $scoring_scale;
+        if (!empty($description)){
+            $dom = new \DomDocument();
+            @$dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);   
+            $images = $dom->getElementsByTagName('img');
+            foreach($images as $k => $img){
+                $data = $img->getAttribute('src');
+
+                
+                if ( !strstr( $data, 'post' ) ) {
+                list($type, $data) = explode(';', $data);
+                list(, $data)      = explode(',', $data);
+                $data = base64_decode($data);
+                $image_name= "/assets/images/post/" . time().$k.'.png';
+                $path = public_path() . $image_name;
+                file_put_contents($path, $data);
+                $img->removeAttribute('src');
+                $img->setAttribute('src', $image_name);
+
+                } else {
+
+                }
+            }
+            $description = $dom->saveHTML();
+        }
+        $save->title = $request->judul;
+        $save->content = ($description);
+        $save->status = $request->status;
+        $save->updated_at = null;
+        $save->save();
+        if (!$save){
+            DB::rollback();
+            return back()->with('error', 'Data Berita gagal diperbarui. Coba kembali ');
+        }
+        
+        PostCategory::where("post_id",$save->id)->delete();
+        foreach ($request->kategori as $value) {
+            $category = New PostCategory(); // Ganti dengan metode yang sesuai untuk mengambil kategori berdasarkan nilai
+            
+            $category->category_id = $value; // Pastikan Anda telah mengatur relasi di model Post
+            $category->post_id = $save->id ; // Pastikan Anda telah mengatur relasi di model Post
+            $category->save(); // Pastikan Anda telah mengatur relasi di model Post
+            
+        }
+
+
+       } catch (\Throwable $th) {
+        DB::rollback();
+        dd($th);
+        return back()->with('error', 'Data Berita gagal diperbarui. Coba kembali ');
+       }
+       DB::commit();
+        return back()->with('success', 'Data Berita berhasil diperbarui. ');
+    }
+
+
+    public function berita_delete_p(Request $request)
+    {
+
+        
+    $save = Post::where("id",$request->id)->firstOrFail();
+
+
+       DB::beginTransaction();
+       try {
+        PostCategory::where("post_id",$request->id)->delete();
+        $save->delete();
+        if (!$save){
+            DB::rollback();
+            return back()->with('error', 'Data Berita gagal dihapus. Coba kembali ');
+        }
+
+
+       } catch (\Throwable $th) {
+        DB::rollback();
+        dd($th);
+        return back()->with('error', 'Data Berita gagal dihapus. Coba kembali ');
+       }
+       DB::commit();
+        return back()->with('success', 'Data Berita berhasil disimpan. ');
     }
     
 }

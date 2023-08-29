@@ -43,6 +43,20 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('settings/slider/edit',[adminController::class,'slider_edit']);
 		Route::post('settings/slider/edit',[adminController::class,'slider_edit_p']);
 		Route::get('settings/slider/delete',[adminController::class,'slider_delete_p']) ;
+		
+		Route::get('settings/kategori-berita',[adminController::class,'kategori_berita']);
+		Route::get('settings/kategori-berita/add',[adminController::class,'kategori_berita_add']);
+		Route::post('settings/kategori-berita/add',[adminController::class,'kategori_berita_add_p']);
+		Route::get('settings/kategori-berita/edit',[adminController::class,'kategori_berita_edit']);
+		Route::post('settings/kategori-berita/edit',[adminController::class,'kategori_berita_edit_p']);
+		Route::get('settings/kategori-berita/delete',[adminController::class,'kategori_berita_delete_p']) ;
+
+		Route::get('settings/berita',[adminController::class,'berita']);
+		Route::get('settings/berita/add',[adminController::class,'berita_add']);
+		Route::post('settings/berita/add',[adminController::class,'berita_add_p']);
+		Route::get('settings/berita/edit',[adminController::class,'berita_edit']);
+		Route::post('settings/berita/edit',[adminController::class,'berita_edit_p']);
+		Route::get('settings/berita/delete',[adminController::class,'berita_delete_p']) ;
 	});
 });
 
