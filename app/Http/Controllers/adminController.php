@@ -13,7 +13,9 @@ use App\Models\ProjectCategory;
 use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB;use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class adminController extends Controller
 {
@@ -24,7 +26,6 @@ class adminController extends Controller
         $this->middleware('auth'); // Melindungi semua method dalam controller ini
     }
 
-    
     public function adminDashboard(){
         $userCount = User::count();
         $idukaCount = Iduka::count();
@@ -161,4 +162,135 @@ class adminController extends Controller
         return back()->with('error', 'Terjadi kesalahan saat melakukan registrasi.');
         }
     }
+
+    public function slider(){
+        $data = Slider::orderBy("sort","desc")->get();
+        // return $data ;
+        return view('admin.slider.data',compact('data')) ;
+    }
+
+    public function slider_add(){
+        return view('admin.slider.add') ;
+    }
+
+    public function slider_add_p(Request $request){
+        
+        $request->validate([
+            'images' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'sort' => 'required|integer',
+            'status' => 'required|in:Aktif,Tidak',
+        ]);
+    
+        if ($request->hasFile('images')) {
+            // Get the uploaded image file
+            $image = $request->file('images');
+
+            // Set the desired width and height
+            $width = 1200;
+            $height = 500;
+
+            // Set the storage path for the new image
+            $publicPath = 'assets/images/slider/';
+
+            // Generate a unique filename for the new image
+            $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+
+            // Create a new instance of Intervention Image
+            $image = Image::make($image);
+
+            // Resize the image while maintaining aspect ratio
+            $image->resize($width, $height, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $image->save(public_path($publicPath . $filename));
+            $url = asset($publicPath . $filename);
+        } else {
+            // No image was uploaded, set the URL to null or a default value
+            $url = null;
+            $filename = null;
+        }
+
+        Slider::create([
+            'images' => $url,
+            'sort' => $request->sort,
+            'status' => $request->status,
+        ]);
+
+    
+        return back()->with('success', 'Slider berhasil ditambahkan.');
+    }
+
+    public function slider_edit(Request $request){
+        
+        $d = Slider::where("id",$request->id)->firstOrFail();
+        return view('admin.slider.edit', compact('d')) ;
+    }
+
+
+    public function slider_edit_p(Request $request) {
+        $request->validate([
+            'images' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'sort' => 'required|integer',
+            'status' => 'required|in:Aktif,Tidak',
+        ]);
+    
+        $slider = Slider::findOrFail($request->id);
+    
+        if ($request->hasFile('images')) {
+            // Get the uploaded image file
+            $image = $request->file('images');
+    
+            // Set the desired width and height
+            $width = 1200;
+            $height = 500;
+    
+            // Set the storage path for the new image
+            $publicPath = 'assets/images/slider/';
+    
+            // Generate a unique filename for the new image
+            $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+    
+            // Create a new instance of Intervention Image
+            $image = Image::make($image);
+    
+            // Resize the image while maintaining aspect ratio
+            $image->resize($width, $height, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $image->save(public_path($publicPath . $filename));
+            $url = asset($publicPath . $filename);
+    
+            // Delete the old image if it exists
+            if ($slider->images && file_exists(public_path($slider->images))) {
+                unlink(public_path($slider->images));
+            }
+    
+            $slider->images = $url;
+        }
+    
+        $slider->sort = $request->sort;
+        $slider->status = $request->status;
+        $slider->save();
+    
+        return back()->with('success', 'Slider berhasil diperbarui.');
+    }
+
+    public function slider_delete_p(Request $request) {
+        $sliderId = $request->id;
+        
+        $slider = Slider::find($sliderId);
+    
+        if ($slider) {
+            // Delete the associated image from storage if it exists
+            if ($slider->images && file_exists(public_path($slider->images))) {
+                unlink(public_path($slider->images));
+            }
+    
+            $slider->delete();
+            return back()->with('success', 'Slider berhasil dihapus.');
+        } else {
+            return back()->with('error', 'Slider tidak ditemukan.');
+        }
+    }
+    
 }

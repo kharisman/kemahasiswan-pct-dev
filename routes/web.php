@@ -36,7 +36,14 @@ Route::post('save_project', [ProjectController::class, 'saveProject'])->name('sa
 
 Route::middleware(['auth'])->group(function () {
 	Route::get('/admin-dashboard',[adminController::class,'adminDashboard'])->name("admin.dashboard");	
-	Route::get('/admin-confirm-iduka',[adminController::class,'adminConfirmIduka']);
+	Route::prefix('admin')->group(function () {
+		Route::get('settings/slider',[adminController::class,'slider']);
+		Route::get('settings/slider/add',[adminController::class,'slider_add']);
+		Route::post('settings/slider/add',[adminController::class,'slider_add_p']);
+		Route::get('settings/slider/edit',[adminController::class,'slider_edit']);
+		Route::post('settings/slider/edit',[adminController::class,'slider_edit_p']);
+		Route::get('settings/slider/delete',[adminController::class,'slider_delete_p']) ;
+	});
 });
 
 Route::get('/admin-artikel',[adminController::class,'adminArtikel']);
