@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('internship_id');
             $table->enum('name_account', ['github', 'instagram', 'linkedin']);
-            $table->string('link');
+            $table->text('link');
             $table->timestamps();
             $table->softDeletes();
         });

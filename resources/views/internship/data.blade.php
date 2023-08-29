@@ -1,6 +1,20 @@
 @extends('internship/main')
 @section('contentInternship')
-    <div class="content-wrapper">
+    <div class="content-wrapper">                    
+        @if(session('success'))
+        <div class="alert alert-success w-100">
+            {{ session('success') }}
+        </div>
+        @endif
+        @if ($errors->any())
+        <div class="alert alert-danger w-100">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         <form action="{{url('internship-data')}}" method="post" enctype="multipart/form-data">@csrf
             <div class="row">
                 <div class="card">
@@ -41,7 +55,7 @@
                         <div class="row mb-3 text-end">
                             <label for="photo" class="col-sm-4 col-form-label text-start">Photo</label>
                             <div class="col-sm-8">
-                                <input id="photo" class="form-control" type="file" name="foto" required>
+                                <input id="photo" class="form-control" type="file" name="photo" required>
                             </div>
                         </div>
                         <div class="row mb-3 text-end">
@@ -65,85 +79,87 @@
                                     required>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-warning btn-sm text-center w-100">Update</button>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-
-                        <p class="d-inline-flex gap-1 text-end">
-                        <div class="text-dark" data-bs-toggle="collapse" href="#collapseExample1" role="button"
-                            aria-expanded="false" aria-controls="collapseExample">
-                            Kontak >>
+                        <div class="row mb-3 text-end">
+                            <label for="phone" class="col-sm-4 col-form-label text-start">Nomor Telepon</label>
+                            <div class="col-sm-8">
+                                <input id="phone" class="form-control" type="text" placeholder="nomor telepon ..." name="phone" required>
+                            </div>
                         </div>
-                        </p>
                     </div>
-                    <div class="collapse" id="collapseExample1">
-                        <div class="card card-body">
-                            <div class="row mb-3 text-end">
-                                <label for="phone" class="col-sm-4 col-form-label text-start">Nomor Telepon</label>
-                                <div class="col-sm-8">
-                                    <input id="phone" class="form-control" type="text" placeholder="nomor telepon ..."
-                                        name="phone" required>
+                    <div class="card">
+                        <div class="card-header">
+                            <p class="d-inline-flex gap-1 text-end">
+                                <div class="text-dark" data-bs-toggle="collapse" href="#collapseExample1" role="button"
+                                    aria-expanded="false" aria-controls="collapseExample">
+                                    Kontak >>
                                 </div>
-                            </div>
-                            <div class="row mb-3 text-end">
-                                <label for="name_account1" class="col-sm-4 col-form-label text-start">Media Sosial 1</label>
-                                <div class="col-sm-8">
-                                    <select class="form-control" name="name_account1" id="name_account1">
-                                        <option value="">Input Media Sosial</option>
-                                        <option value="Github">Github</option>
-                                        <option value="Instagram">Instagram</option>
-                                        <option value="Linked">Linked</option>
-                                    </select>
+                            </p>
+                        </div>
+                        <div class="collapse" id="collapseExample1">
+                            <div class="card card-body">
+                                <div id="media-link-1">
+                                    <div class="row mb-3 text-end">
+                                        <label class="col-sm-4 col-form-label text-start">Media Sosial 1</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control media-select" name="name_account1" id="name_account1">
+                                                <option value="">Input Media Sosial</option>
+                                                <option value="github">Github</option>
+                                                <option value="instagram">Instagram</option>
+                                                <option value="linkedin">Linked</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3 text-end">
+                                        <label class="col-sm-4 col-form-label text-start">Link 1</label>
+                                        <div class="col-sm-8">
+                                            <input class="form-control" type="text" placeholder="url ..." name="link1" id="link1">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mb-3 text-end">
-                                <label for="link1" class="col-sm-4 col-form-label text-start">Media Sosial 1</label>
-                                <div class="col-sm-8">
-                                    <input id="link1" class="form-control" type="text" placeholder="url ..."
-                                        name="link1">
-                                </div>
-                            </div>
-                            <div class="row mb-3 text-end">
-                                <label for="name_account2" class="col-sm-4 col-form-label text-start">Media Sosial 2</label>
-                                <div class="col-sm-8">
-                                    <select class="form-control" name="name_account2" id="name_account2">
-                                        <option value="">Input Media Sosial</option>
-                                        <option value="Github">Github</option>
-                                        <option value="Instagram">Instagram</option>
-                                        <option value="Linked">Linked</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row mb-3 text-end">
-                                <label for="link2" class="col-sm-4 col-form-label text-start">Media Sosial 2</label>
-                                <div class="col-sm-8">
-                                    <input id="link2" class="form-control" type="text" placeholder="url ..."
-                                        name="link2">
-                                </div>
-                            </div>
-                            <div class="row mb-3 text-end">
-                                <label for="name_account3" class="col-sm-4 col-form-label text-start">Media Sosial 3</label>
-                                <div class="col-sm-8">
-                                    <select class="form-control" name="name_account3" id="name_account3">
-                                        <option value="">Input Media Sosial</option>
-                                        <option value="Github">Github</option>
-                                        <option value="Instagram">Instagram</option>
-                                        <option value="Linked">Linked</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row mb-3 text-end">
-                                <label for="link3" class="col-sm-4 col-form-label text-start">Media Sosial 3</label>
-                                <div class="col-sm-8">
-                                    <input id="link3" class="form-control" type="text" placeholder="url ..."
-                                        name="link3">
+                                <div class="row mb-3 text-end">
+                                    <div class="col-sm-8 offset-sm-4">
+                                        <button type="button" id="add-media-btn" class="btn btn-primary">Tambah Media</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        $(document).ready(function () {
+                            let mediaCount = 1;
+                            function addMediaInput() {
+                                mediaCount++;
+                                const newMediaLinkInputs = `
+                                    <div class="row mb-3 text-end">
+                                        <label class="col-sm-4 col-form-label text-start">Media Sosial ${mediaCount}</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control media-select" name="name_account${mediaCount}">
+                                                <option value="">Input Media Sosial</option>
+                                                <option value="Github">Github</option>
+                                                <option value="instagram">Instagram</option>
+                                                <option value="linkedin">Linkedin</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3 text-end">
+                                        <label class="col-sm-4 col-form-label text-start">Link ${mediaCount}</label>
+                                        <div class="col-sm-8">
+                                            <input class="form-control" type="text" placeholder="url ..." name="link${mediaCount}">
+                                        </div>
+                                    </div>
+                                `;
+                                $("#media-link-1").append(newMediaLinkInputs);
+                                if (mediaCount >= 3) {
+                                    $("#add-media-btn").hide();
+                                }
+                            }
+                            $("#add-media-btn").click(function () {
+                                addMediaInput();
+                            });
+                        });
+                    </script>
                 <div class="card">
                     <div class="card-header">
 
@@ -169,6 +185,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <button type="submit" class="btn btn-warning btn-sm text-center w-100">Update</button>
                     </div>
                 </div>
             </div>

@@ -15,6 +15,7 @@ Route::get('/kontak', [LandingController::class, 'kontak'])->name('kontak');
 
 Route::get('internship-index', [InternshipController::class, 'dashboardInternship'])->name('internship.index');
 Route::get('internship-project', [InternshipController::class, 'projectInternship']);
+Route::post('internship-project', [InternshipController::class, 'projectInternshipPost']);
 Route::get('internship-history', [InternshipController::class, 'historyInternship']);
 Route::get('internship-data', [InternshipController::class, 'dataInternship']);
 Route::post('internship-data', [InternshipController::class, 'dataInternshipPost']);

@@ -55,9 +55,9 @@
           <span></span>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{url('logout')}}">
+          <a class="nav-link" href="{{url('/')}}">
             <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-            <span class="menu-title">Log out</span>
+            <span class="menu-title">Landing-Page</span>
           </a>
         </li>
       </ul>
@@ -69,13 +69,25 @@
             <span class="mdi mdi-menu"></span>
           </button>
           <div class="navbar-brand-wrapper">
-            <a class="navbar-brand brand-logo" href=""><img src="images/logo.svg" alt="logo"/></a>
-            <a class="navbar-brand brand-logo-mini" href=""><img src="images/logo-mini.svg" alt="logo"/></a>
+            <a class="navbar-brand brand-logo" href=""><img src="{{asset('landingpage/images/logo-1.jpg')}}" width="50" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href=""><img src="{{asset('landingpage/images/logo-1.jpg')}}" height="55" width="30" alt="logo"/></a>
           </div>
-          <h4 class="font-weight-bold mb-0 d-none d-md-block mt-1">Welcome back, Zeinniko</h4>
+          <h4 class="font-weight-bold mb-0 d-none d-md-block mt-1">Welcome back, 
+            @if (Auth::check())
+            <?php
+                $internship = App\Models\Internship::where('user_id', Auth::user()->id)->first();
+                $name = $internship ? $internship->name : '';
+                $photo = $internship ? $internship->photo : '';
+            ?>
+            {{ $name }}
+            @endif
+        
+          </h4>
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item">
-              <h4 class="mb-0 font-weight-bold d-none d-xl-block">April 14, 2023</h4>
+              <h4 class="mb-0 font-weight-bold d-none d-xl-block">
+                {{ now()->format('F d, Y') }}
+              </h4>
             </li>
             <li class="nav-item dropdown me-1">
               <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-bs-toggle="dropdown">
@@ -179,8 +191,8 @@
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                <img src="images/faces/face5.jpg" alt="profile"/>
-                <span class="nav-profile-name">Zeinniko</span>
+                <img src="{{ asset('images/internship/' . $photo) }}" width="55" alt="profile"/>
+                <span class="nav-profile-name">{{$name}}</span>
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                 <a class="dropdown-item">
