@@ -1,6 +1,6 @@
 @extends('iduka.layouts.app')
 
-@section('title', 'Create Project')
+@section('title', 'Form Create Project')
 
 @section('contents')
 <html lang="en">
@@ -35,15 +35,10 @@
                         <label for="category_id">Kategori Project</label>
                         <select name="category_id" class="form-control" id="category_id">
                             <option value="" disabled selected>Pilih Kategori</option>
-
                             @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->category }}</option>
                             @endforeach
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="status">Status Project</label>
-                        <input type="text" name="status" class="form-control" id="status" value="Pending" readonly>
                     </div>
                     <div class="form-group">
                         <label for="name">Title Project</label>
@@ -52,7 +47,6 @@
                     <label for="notes">Notes</label>
                     <textarea name="notes" id="notes" cols="30" rows="10"></textarea>
                     <button type="submit" class="btn btn-primary">Submit</button>
-
 
                 </form>
             </div>

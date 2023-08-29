@@ -23,7 +23,6 @@ class ProjectController extends Controller
             'iduka_id' => 'required',
             'name' => 'required|string|max:255',
             'notes' => 'nullable|string',
-            'status' => 'nullable|string',
             'content' => 'nullable|string',
             'category_id' => 'required',
         ]);
@@ -31,7 +30,7 @@ class ProjectController extends Controller
         $project = new Project();
         $project->iduka_id = $data['iduka_id'];
         $project->name = $data['name'];
-        $project->status = $data['status'];
+        $project->status = 'aktif';
         $project->category_id = $data['category_id'];
         // Menyimpan konten Summernote
         $notesContent = $data['notes'] ?? '';
@@ -39,7 +38,6 @@ class ProjectController extends Controller
         $combinedContent = $notesContent . "\n" . $summernoteContent;
         $project->notes = $combinedContent;
 
-        // Menyimpan gambar yang diunggah melalui Summernote
         preg_match_all('/<img[^>]+src="([^"]+)"/', $summernoteContent, $imageMatches);
         foreach ($imageMatches[1] as $imageSrc) {
             if (Str::startsWith($imageSrc, 'data:image')) {
@@ -56,8 +54,55 @@ class ProjectController extends Controller
         // Simpan data proyek
         $project->save();
     
-        return redirect()->route('create_project')->with('success', 'Project created successfully.');
+        return redirect()->route('iduka.index')->with('success', 'Project created successfully.');
     }
+
+        public function editProject($projectId)
+    {
+        $project = Project::findOrFail($projectId);
+        $categories = ProjectCategory::all();
+        return view('iduka.edit', compact('project', 'categories'));
+    }
+
+    public function updateProject(Request $request, $projectId)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'notes' => 'nullable|string',
+            'status' => 'nullable|string',
+            'content' => 'nullable|string',
+            'category_id' => 'required',
+        ]);
+
+        $project = Project::findOrFail($projectId);
+        $project->name = $data['name'];
+        $project->status = $data['status'];
+        $project->category_id = $data['category_id'];
+
+        $notesContent = $data['notes'] ?? '';
+        $summernoteContent = $data['content'] ?? '';
+        $combinedContent = $notesContent . "\n" . $summernoteContent;
+
+        preg_match_all('/<img[^>]+src="([^"]+)"/', $summernoteContent, $imageMatches);
+        foreach ($imageMatches[1] as $imageSrc) {
+            if (Str::startsWith($imageSrc, asset('storage/'))) {
+                continue; // Ignore existing images
+            }
+            if (Str::startsWith($imageSrc, 'data:image')) {
+                $extension = explode('/', mime_content_type($imageSrc))[1];
+                $filename = 'summernote/' . Str::random(40) . '.' . $extension;
+                $imageData = base64_decode(preg_replace('/data:image\/(.*?);base64,/', '', $imageSrc));
+                Storage::disk('public')->put($filename, $imageData);
+                $combinedContent = str_replace($imageSrc, asset('storage/' . $filename), $combinedContent);
+            }
+        }
+
+        $project->notes = $combinedContent;
+        $project->save();
+
+        return redirect()->route('iduka.index', ['id' => $projectId])->with('success', 'Project updated successfully.');
+    }
+
 
         public function editStatus($projectId)
     {
@@ -125,4 +170,25 @@ class ProjectController extends Controller
         return view('iduka/aktif_project', compact('projects', 'categories'));
     }
 
+    public function delete($id)
+    {
+        $project = Project::find($id);
+
+        if (!$project) {
+            return redirect()->back()->with('error', 'Project not found.');
+        }
+
+        preg_match_all('/<img[^>]+src="([^"]+)"/', $project->notes, $imageMatches);
+        foreach ($imageMatches[1] as $imageSrc) {
+            if (Str::startsWith($imageSrc, asset('storage'))) {
+                $imagePath = str_replace(asset('storage/'), '', $imageSrc);
+                Storage::disk('public')->delete($imagePath);
+            }
+        }
+
+        // Delete the project
+        $project->delete();
+
+        return redirect()->route('iduka.index')->with('success', 'Project deleted successfully.');
+    }
 }

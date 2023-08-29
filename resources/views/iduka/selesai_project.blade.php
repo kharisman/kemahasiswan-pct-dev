@@ -1,6 +1,6 @@
 @extends('iduka/layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Project Selesai')
 
 @section('contents')
 
@@ -28,7 +28,6 @@
                     @endforeach
                 @else
                     <p>Kamu belum ada projek yang telah selesai.</p>
-                    
                 @endif
             </div>
         </div>

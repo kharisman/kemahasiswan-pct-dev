@@ -30,7 +30,10 @@ Route::get('iduka/recruitment', [ProjectController::class, 'create_project'])->n
 Route::post('save_project', [ProjectController::class, 'saveProject'])->name('save_project');
 Route::get('/iduka/{id}/edit_status', [ProjectController::class, 'editStatus'])->name('edit_status');
 Route::post('/iduka/{id}/update-status', [ProjectController::class, 'updateStatus'])->name('update_status');
-
+Route::get('/iduka/edit-project/{id}', [ProjectController::class, 'editProject'])->name('edit_project');
+Route::put('/iduka/update-project/{id}', [ProjectController::class, 'updateProject'])->name('update_project');
+Route::delete('/projects/{id}', [IdukaController::class, 'delete'])->name('delete_project');
+Route::delete('/projects/{id}', [ProjectController::class, 'delete'])->name('delete_project');
 Route::controller(AuthController::class)->group(function () {
 	Route::get('register', 'register')->name('register');
 	Route::post('register', 'registerSimpan')->name('register.simpan');

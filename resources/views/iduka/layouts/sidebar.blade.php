@@ -34,7 +34,7 @@
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Berkas</h6>
-            <a class="collapse-item" href="pelamar.html">Pelamar Magang</a>
+            <a class="collapse-item" href="pelamar.html">Pelamar </a>
             <a class="collapse-item" href="{{route('iduka.all_project')}}">Semua Project</a>
             <a class="collapse-item" href="{{route('iduka.pending_project')}}">Projects Pending</a>
             <a class="collapse-item" href="{{route('iduka.aktif_project')}}">Projects Aktif</a>
@@ -59,7 +59,7 @@
 <li class="nav-item">
     <a class="nav-link" href="{{route('create_project')}}">
         <i class="fas fa-fw fa-table"></i>
-        <span>Open recruitment</span></a>
+        <span>Buat Project</span></a>
 </li>
 
   <!-- Divider -->
