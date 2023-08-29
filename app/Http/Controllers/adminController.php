@@ -292,5 +292,65 @@ class adminController extends Controller
             return back()->with('error', 'Slider tidak ditemukan.');
         }
     }
+
+    public function kategori_berita(){
+        $data = Category::get();
+        return view('admin.kategori.data',compact('data')) ;
+    }
+
+    public function kategori_berita_add(){
+        return view('admin.kategori.add') ;
+    }
+
+    public function kategori_berita_add_p(Request $request){
+        
+        // return $request->nama ;
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:categories,name,NULL,id,deleted_at,NULL',
+            'status' => 'required|in:Aktif,Tidak',
+        ]);
+
+        $save  = New Category() ;
+        $save->name = $request->nama;
+        $save->status = $request->status;
+        $save->save() ;
+
+        return back()->with('success', 'Kategori berhasil ditambahkan.');
+    }
+
+    public function kategori_berita_edit(Request $request){
+        
+        $d = Category::where("id",$request->id)->firstOrFail();
+        return view('admin.kategori.edit',compact('d')) ;
+    }
+
+
+    
+    public function kategori_berita_edit_p(Request $request){
+        
+        // return $request->nama ;
+        
+        $save  = Category::where("id",$request->id)->firstOrFail() ;
+
+
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:categories,name,' . $save->id . ',id,deleted_at,NULL',
+            'status' => 'required|in:Aktif,Tidak',
+        ]);
+
+        $save->name = $request->nama;
+        $save->status = $request->status;
+        $save->save() ;
+
+        return back()->with('success', 'Kategori berhasil diperbarui.');
+    }
+
+    public function kategori_berita_delete_p(Request $request){
+        
+        $save  = Category::where("id",$request->id)->firstOrFail() ;
+        $save->delete() ;
+
+        return back()->with('success', 'Kategori berhasil diperbarui.');
+    }
     
 }
