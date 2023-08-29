@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Http\Request;
 use App\Models\Project;
+use App\Models\ProjectCategory;
 class IdukaController extends Controller
 {
     public function dashboard_iduka()
     {
-		//$iduka_id = Auth::user()->iduka_id;
-        // Retrieve projects associated with the iduka_id
-		$user = Auth::user();
-
-    // Retrieve projects associated with the user's iduka_id
-    $projects = Project::where('iduka_id', $user->id)->get();
-		
-        return view('iduka/index', compact('projects')); // Mengirim data projects ke tampilan
+        $user = Auth::user();
+        $categories = ProjectCategory::all();
+        $projects = Project::where('iduka_id', $user->id)->get();
+        $latestProject = Project::where('iduka_id', $user->id)->latest()->first();
+    
+        return view('iduka/index', compact('projects', 'categories', 'latestProject')); // Mengirim data projects dan categories ke tampilan
     }
+    public function profile_iduka(){
+        return view('iduka/profile');
+    }
+
 
 }

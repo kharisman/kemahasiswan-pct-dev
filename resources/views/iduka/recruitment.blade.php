@@ -4,7 +4,8 @@
 
 @section('contents')
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <title>Summernote with Bootstrap 4</title>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
@@ -15,7 +16,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-  </head><body>
+</head>
+
+<body>
     <div class="container-fluid">
         <!-- Page Content -->
         <div class="card">
@@ -27,36 +30,50 @@
                         <label for="iduka_id">Iduka ID</label>
                         <input type="text" name="iduka_id" class="form-control" id="iduka_id" value="{{ Auth::user()->id }}" readonly>
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="category_id">Kategori Project</label>
+                        <select name="category_id" class="form-control" id="category_id">
+                            <option value="" disabled selected>Pilih Kategori</option>
+
+                            @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->category }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status Project</label>
+                        <input type="text" name="status" class="form-control" id="status" value="Pending" readonly>
+                    </div>
                     <div class="form-group">
                         <label for="name">Title Project</label>
-                        <input type="text" name="name" class="form-control" id="name">
+                        <input type="text" name="name" class="form-control" id="name" placeholder="Nama project">
                     </div>
-                        <label for="notes">Notes</label>
-                        <textarea name="notes" id="notes" cols="30" rows="10"></textarea>
+                    <label for="notes">Notes</label>
+                    <textarea name="notes" id="notes" cols="30" rows="10"></textarea>
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    
-                    
+
+
                 </form>
             </div>
         </div>
     </div>
 
     <script>
-            $('#notes').summernote({
-                placeholder: 'Notes',
-                tabsize: 2,
-                height: 200,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ]
-            });
-        
+        $('#notes').summernote({
+            placeholder: 'Notes',
+            tabsize: 2,
+            height: 200,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
     </script>
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('iduka/vendor/jquery/jquery.min.js')}}"></script>
@@ -75,4 +92,4 @@
     <script src="{{asset('iduka/js/demo/chart-area-demo.js')}}"></script>
     <script src="{{asset('iduka/js/demo/chart-pie-demo.js')}}"></script>
 
-@endsection
+    @endsection
