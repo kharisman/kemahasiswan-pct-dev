@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class PostCategory extends Model
 {
     use HasFactory;
+    public $timestamps = false; 
+    protected $table = 'posts_categories';
     public function category(){
         return $this->hasOne(Category::class,'id','category_id');
     }
