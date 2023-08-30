@@ -39,7 +39,7 @@ class AuthController extends Controller
 				'password' => Hash::make($request->password),
 				'roles' => 'internship'
 			]);
-
+			
 			$internship = new Internship();
 			$internship->user_id = $user->id;
 			$internship->name = $request->username;

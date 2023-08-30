@@ -12,4 +12,10 @@ class Iduka extends Model
     public function idukaUser(){
         return $this->hasOne(User::class,'id','user_id');
     }
+    protected $fillable = ['id','user_id','name', 'address', 'phone', 'photo', 'status'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

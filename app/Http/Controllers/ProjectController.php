@@ -20,13 +20,13 @@ class ProjectController extends Controller
     public function saveProject(Request $request)
     {
         $data = $request->validate([
-            'iduka_id' => 'required',
+
             'name' => 'required|string|max:255',
             'notes' => 'nullable|string',
             'content' => 'nullable|string',
             'category_id' => 'required',
         ]);
-
+        $data['iduka_id'] = Auth::user()->id;
         $project = new Project();
         $project->iduka_id = $data['iduka_id'];
         $project->name = $data['name'];

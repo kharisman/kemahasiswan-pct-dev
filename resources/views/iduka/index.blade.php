@@ -166,10 +166,10 @@
         </div>
         <div class="card-body">
             <div class="text-center">
-                <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="img/undraw_posting_photo.svg" alt="...">
+                <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="img/team.svg" alt="...">
             </div>
-            <p> ilustrasi kerjasama / atau alur kerja sama </p>
-            <a target="_blank" rel="nofollow" href="https://undraw.co/">search &rarr;</a>
+            <p> Alur kerja sama </p>
+            <a target="_blank" rel="nofollow" href="https://palcomtech.ac.id">search &rarr;</a>
         </div>
     </div>
 </div>
