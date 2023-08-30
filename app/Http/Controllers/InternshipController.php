@@ -39,11 +39,11 @@ class InternshipController extends Controller
 			->get();
 		return view('internship/project', compact('projectData'));
 	}
-    public function projectInternshipPost(){
+    public function projectInternshipPost(Request $r){
 		$projectData = Project::join('idukas','projects.iduka_id','=','idukas.id')
-		->where($nameIduka,'like',"%$r->search%")
-		->where($nameProject,'like',"%$r->search%")
-		->get();;
+		->where('projects.name','like',"%$r->search%")
+		->orWhere('idukas.name','like',"%$r->search%")
+		->get();
 		return view('internship/project', compact('projectData'));
 	}
     public function historyInternship(){
@@ -51,12 +51,7 @@ class InternshipController extends Controller
 		return view('internship/history', compact('applyProjectData'));
 	}
     public function dataInternship(){
-		$projectData = Project::join('idukas', 'projects.iduka_id', '=', 'idukas.id')
-			->where('idukas.'.$nameIduka, 'like', "%$r->search%")
-			->where('projects.'.$nameProject, 'like', "%$r->search%")
-			->get();
-
-		return view('internship/project', compact('projectData'));
+		return view('internship/data');
 	}
     public function dataInternshipPost(Request $r){
 		
@@ -72,7 +67,9 @@ class InternshipController extends Controller
 				'nationality' => 'required',
 				'education' => 'required',
 				'interest' => 'required',
-				'phone' => 'required'
+				'phone' => 'required',
+				'application_letter' => 'mimes:pdf',
+				'certificate' => 'mimes:pdf',
 			]);
 	
 			if ($validator->fails()) {
@@ -152,7 +149,22 @@ class InternshipController extends Controller
 			return back()->with('error', 'Data Pribadi gagal diperbarui. Coba kembali. Error: ' . $th->getMessage());
 		}
 	}
-    public function detailProjectInternship(){
-		return view('internship/detail');
+    public function projectDetailInternship(Request $r, $id){
+		$projectData = Project::join('idukas','projects.iduka_id','=','idukas.id')->findOrFail($id);
+		
+		return view('internship/detail_project', compact('projectData'));
+	}
+	public function applyProjectInternship(Request $r, $id){
+		$id = Auth::user()->id;
+		$data = Internship::where('user_id', $id)->first();
+		$dataId = $data->id;
+		$new = new ProjectApply;
+		$new->project_id = $id;
+		$new->internship_id = $dataId;
+		$new->status = "";
+		$new->created_at = now();
+		$new->updated_at = null;
+		$new->save();
+		return redirect('internship-index')->with('success', 'Data lamaran berhasil dikirim. ');
 	}
 }
