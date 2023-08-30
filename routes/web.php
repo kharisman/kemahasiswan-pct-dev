@@ -25,7 +25,11 @@ Route::get('internship-data', [InternshipController::class, 'dataInternship']);
 Route::post('internship-data', [InternshipController::class, 'dataInternshipPost']);
 
 Route::get('iduka/index', [IdukaController::class, 'dashboard_iduka'])->name('iduka.index');
-Route::get('iduka/profile', [IdukaController::class, 'profile_iduka'])->name('iduka.profile');
+//Route::get('iduka/profile', [IdukaController::class, 'profile_iduka'])->name('iduka.profile');
+Route::get('/iduka/{id}/edit', [IdukaController::class, 'edit'])->name('iduka.edit');
+Route::put('/iduka/{id}/update', [IdukaController::class, 'update'])->name('iduka.update');
+Route::get('/iduka/profile', [IdukaController::class, 'profile'])->name('iduka.profile');
+
 
 Route::get('iduka/project', [ProjectController::class, 'all_project'])->name('iduka.all_project');
 Route::get('iduka/pending_project', [ProjectController::class, 'pending_project'])->name('iduka.pending_project');

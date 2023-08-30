@@ -27,11 +27,6 @@
                 <form action="{{ route('save_project') }}" method="POST" class="project">
                     @csrf
                     <div class="form-group">
-                        <label for="iduka_id">Iduka ID</label>
-                        <input type="text" name="iduka_id" class="form-control" id="iduka_id" value="{{ Auth::user()->id }}" readonly>
-                    </div>
-                    
-                    <div class="form-group">
                         <label for="category_id">Kategori Project</label>
                         <select name="category_id" class="form-control" id="category_id">
                             <option value="" disabled selected>Pilih Kategori</option>
