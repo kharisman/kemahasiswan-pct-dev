@@ -43,6 +43,8 @@ Route::get('/iduka/edit-project/{id}', [ProjectController::class, 'editProject']
 Route::put('/iduka/update-project/{id}', [ProjectController::class, 'updateProject'])->name('update_project');
 Route::delete('/projects/{id}', [IdukaController::class, 'delete'])->name('delete_project');
 Route::delete('/projects/{id}', [ProjectController::class, 'delete'])->name('delete_project');
+Route::get('iduka/pelamar', [ProjectController::class, 'data_apply'])->name('iduka.data_apply');
+
 Route::controller(AuthController::class)->group(function () {
 	Route::get('register', 'register')->name('register');
 	Route::post('register', 'registerSimpan')->name('register.simpan');
