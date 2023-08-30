@@ -22,14 +22,14 @@ class InternshipController extends Controller
 		$completedProject = ProjectUpdate::whereNotNull('date_finish')
 			->where('internship_id', $user_id)
 			->count();
-		$onGoingProject = ProjectUpdate::where('date_finish','')
+		$onGoingProject = ProjectUpdate::whereNull('date_finish')
 			->where('internship_id', $user_id)
 			->count();
 		$rejectProject = ProjectApply::where('internship_id', $user_id)
 			->where('status', 'reject')
 			->count();
 		$onGoingProjectData = ProjectUpdate::join('projects', 'project_updates.project_id', '=', 'projects.id')
-			->where('date_finish', '')
+			->whereNull('date_finish')
 			->where('internship_id', $user_id)
 			->get();
 		return view('internship/index', compact('completedProject','onGoingProject','rejectProject','onGoingProjectData'));

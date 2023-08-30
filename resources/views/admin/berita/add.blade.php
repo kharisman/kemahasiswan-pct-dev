@@ -28,6 +28,14 @@
 
                             <form method="POST" enctype="multipart/form-data">
                                 @csrf
+
+                                <div class="form-group">
+                                    <label for="images">Cover:</label>
+                                    <input type="file" class="form-control-file @error('images') is-invalid @enderror" name="images" accept="image/jpeg,image/png,image/jpg">
+                                    @error('images')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                                  
                                 <div class="form-group">
                                     <label for="judul">Nama Berita:</label>

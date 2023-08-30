@@ -6,24 +6,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
-    <link rel="stylesheet" href="landingpage/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="{{url('')}}/landingpage/fonts/icomoon/style.css">
 
-    <link rel="stylesheet" href="landingpage/css/bootstrap.min.css">
-    <link rel="stylesheet" href="landingpage/css/jquery-ui.css">
-    <link rel="stylesheet" href="landingpage/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="landingpage/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="landingpage/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="{{url('')}}/landingpage/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{url('')}}/landingpage/css/jquery-ui.css">
+    <link rel="stylesheet" href="{{url('')}}/landingpage/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="{{url('')}}/landingpage/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="{{url('')}}/landingpage/css/owl.theme.default.min.css">
 
-    <link rel="stylesheet" href="landingpage/css/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="{{url('')}}/landingpage/css/jquery.fancybox.min.css">
 
-    <link rel="stylesheet" href="landingpage/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="{{url('')}}/landingpage/css/bootstrap-datepicker.css">
 
-    <link rel="stylesheet" href="landingpage/fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="{{url('')}}/landingpage/fonts/flaticon/font/flaticon.css">
 
-    <link rel="stylesheet" href="landingpage/css/aos.css">
+    <link rel="stylesheet" href="{{url('')}}/landingpage/css/aos.css">
     <link href="css/jquery.mb.YTPlayer.min.css" media="all" rel="stylesheet" type="text/css">
 
-    <link rel="stylesheet" href="landingpage/css/style.css">
+    <link rel="stylesheet" href="{{url('')}}/landingpage/css/style.css">
 </head>
 
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
@@ -62,7 +62,7 @@
                 <div class="d-flex align-items-center">
                     <div class="site-logo">
                         <a href="{{route('index')}}" class="d-block">
-                            <img src="landingpage/images/Logo-1.jpg" alt="Image" class="img-fluid" height="70" width="55">
+                            <img src="{{url('')}}/landingpage/images/Logo-1.jpg" alt="Image" class="img-fluid" height="70" width="55">
                         </a>
                     </div>
                     <div class="mr-auto">
@@ -77,6 +77,11 @@
                                 <li class="{{ Request::route()->getName() == 'intership' ? 'active' : '' }}">
                                     <a href="{{route('intership')}}" class="nav-link text-left">Program Intership</a>
                                 </li>
+
+                                <li class="{{ Request::route()->getName() == 'berita' ? 'active' : '' }}">
+                                    <a href="{{route('berita')}}" class="nav-link text-left">Berita</a>
+                                </li>
+
                                 {{-- <li class="{{ Request::route()->getName() == 'kontak' ? 'active' : '' }}">
                                     <a href="{{route('kontak')}}" class="nav-link text-left">Kontak Kami</a>
                                 </li> --}}
@@ -115,7 +120,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3">
-                        <p class="mb-4"><img src="landingpage/images/Logo-1.jpg" alt="Image" class="img-fluid" height="70" width="55"></p>
+                        <p class="mb-4"><img src="{{url('')}}/landingpage/images/Logo-1.jpg" alt="Image" class="img-fluid" height="70" width="55"></p>
                         <p>Kerja sama Palcomtech dan Iduka</p>
                         <p><a href="https://palcomtech.ac.id">lebih lanjut</a></p>
                     </div>
@@ -170,21 +175,21 @@
     <div id="loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#51be78"/></svg></div>
     -->
 
-    <script src="landingpage/js/jquery-3.3.1.min.js"></script>
-    <script src="landingpage/js/jquery-migrate-3.0.1.min.js"></script>
-    <script src="landingpage/js/jquery-ui.js"></script>
-    <script src="landingpage/js/popper.min.js"></script>
-    <script src="landingpage/js/bootstrap.min.js"></script>
-    <script src="landingpage/js/owl.carousel.min.js"></script>
-    <script src="landingpage/js/jquery.stellar.min.js"></script>
-    <script src="landingpage/js/jquery.countdown.min.js"></script>
-    <script src="landingpage/js/bootstrap-datepicker.min.js"></script>
-    <script src="landingpage/js/jquery.easing.1.3.js"></script>
-    <script src="landingpage/js/aos.js"></script>
-    <script src="landingpage/js/jquery.fancybox.min.js"></script>
-    <script src="landingpage/js/jquery.sticky.js"></script>
-    <script src="landingpage/js/jquery.mb.YTPlayer.min.js"></script>
-    <script src="landingpage/js/main.js"></script>
+    <script src="{{url('')}}/landingpage/js/jquery-3.3.1.min.js"></script>
+    <script src="{{url('')}}/landingpage/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="{{url('')}}/landingpage/js/jquery-ui.js"></script>
+    <script src="{{url('')}}/landingpage/js/popper.min.js"></script>
+    <script src="{{url('')}}/landingpage/js/bootstrap.min.js"></script>
+    <script src="{{url('')}}/landingpage/js/owl.carousel.min.js"></script>
+    <script src="{{url('')}}/landingpage/js/jquery.stellar.min.js"></script>
+    <script src="{{url('')}}/landingpage/js/jquery.countdown.min.js"></script>
+    <script src="{{url('')}}/landingpage/js/bootstrap-datepicker.min.js"></script>
+    <script src="{{url('')}}/landingpage/js/jquery.easing.1.3.js"></script>
+    <script src="{{url('')}}/landingpage/js/aos.js"></script>
+    <script src="{{url('')}}/landingpage/js/jquery.fancybox.min.js"></script>
+    <script src="{{url('')}}/landingpage/js/jquery.sticky.js"></script>
+    <script src="{{url('')}}/landingpage/js/jquery.mb.YTPlayer.min.js"></script>
+    <script src="{{url('')}}/landingpage/js/main.js"></script>
 
 </body>
 
