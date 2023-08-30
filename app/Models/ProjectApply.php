@@ -14,4 +14,13 @@ class ProjectApply extends Model
     public function projectApply(){
         return $this->hasOne(Project::class,'id','project_id');
     }
+    public function internship()
+    {
+        return $this->belongsTo(Internship::class);
+    }
+    public function project()
+{
+    return $this->belongsTo(Project::class);
+}
+
 }

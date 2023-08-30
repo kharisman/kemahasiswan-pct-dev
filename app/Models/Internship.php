@@ -11,5 +11,10 @@ class Internship extends Model
     public function internshipUser(){
         return $this->hasOne(User::class,'id','internship_id');
     }
+    public function projectApplies()
+    {
+        return $this->hasMany(ProjectApply::class);
+    }
+
 }
 

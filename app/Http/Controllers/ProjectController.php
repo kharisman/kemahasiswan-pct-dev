@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Project;
+use App\Models\Iduka;
+use App\Models\ProjectApply;
 use App\Models\ProjectCategory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -12,10 +14,12 @@ use Illuminate\Support\Facades\Auth;
 class ProjectController extends Controller
 {
     public function create_project()
-    {
+    {   
         $categories = ProjectCategory::all();
-        return view('iduka/recruitment', ['categories' => $categories]);
+        $iduka = Auth::user()->iduka;
+        return view('iduka.recruitment', ['iduka' => $iduka, 'categories' => $categories]);
     }
+    
 
     public function saveProject(Request $request)
     {
@@ -61,7 +65,8 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($projectId);
         $categories = ProjectCategory::all();
-        return view('iduka.edit', compact('project', 'categories'));
+        $iduka = Auth::user()->iduka;
+        return view('iduka.edit', compact('project', 'categories','iduka'));
     }
 
     public function updateProject(Request $request, $projectId)
@@ -105,9 +110,10 @@ class ProjectController extends Controller
 
 
         public function editStatus($projectId)
-    {
+    {   
+        $iduka = Auth::user()->iduka;
         $project = Project::findOrFail($projectId);
-        return view('iduka/edit_status', compact('project'));
+        return view('iduka/edit_status', compact('project','iduka'));
     }
 
     public function updateStatus(Request $request, $projectId)
@@ -128,46 +134,49 @@ class ProjectController extends Controller
     public function all_project()
     {
         $user = Auth::user();
+        $iduka = Auth::user()->iduka;
         $categories = ProjectCategory::all();
         $projects = Project::where('iduka_id', $user->id)->get();
     
-        return view('iduka/project', compact('projects', 'categories'));
+        return view('iduka/project', compact('projects', 'categories','iduka'));
     }
 
     public function pending_project()
     {
         $user = Auth::user();
+        $iduka = Auth::user()->iduka;
         $categories = ProjectCategory::all();
 
         $projects = Project::where('iduka_id', $user->id)
                         ->where('status', 'pending')
                         ->get();
 
-        return view('iduka/pending_project', compact('projects', 'categories'));
+        return view('iduka/pending_project', compact('projects', 'categories','iduka'));
     }
 
     public function selesai_project()
     {
         $user = Auth::user();
+        $iduka = Auth::user()->iduka;
         $categories = ProjectCategory::all();
 
         $projects = Project::where('iduka_id', $user->id)
                         ->where('status', 'selesai')
                         ->get();
 
-        return view('iduka/selesai_project', compact('projects', 'categories'));
+        return view('iduka/selesai_project', compact('projects', 'categories','iduka'));
     }
 
     public function aktif_project()
     {
         $user = Auth::user();
         $categories = ProjectCategory::all();
-
+        $iduka = Auth::user()->iduka;
         $projects = Project::where('iduka_id', $user->id)
                         ->where('status', 'aktif')
                         ->get();
 
-        return view('iduka/aktif_project', compact('projects', 'categories'));
+        return view('iduka/aktif_project', compact('projects', 'categories','iduka'));
     }
 
     public function delete($id)
@@ -191,4 +200,17 @@ class ProjectController extends Controller
 
         return redirect()->route('iduka.index')->with('success', 'Project deleted successfully.');
     }
+    public function data_apply()
+    {   
+        $iduka = Auth::user()->iduka;
+    
+        $projectApplies = ProjectApply::with(['project', 'internship'])->get();
+    
+        return view('iduka.pelamar', [
+            'iduka' => $iduka,
+            'projectApplies' => $projectApplies
+        ]);
+    }
+    
+
 }
