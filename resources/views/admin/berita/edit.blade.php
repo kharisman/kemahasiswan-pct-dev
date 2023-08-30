@@ -30,6 +30,18 @@
                                 @csrf
                                 @method('POST') <!-- Tambahkan method override untuk HTTP POST -->
 
+
+                                <div class="form-group">
+                                    <label for="images">Cover:</label>
+                                    <input type="file" class="form-control-file @error('images') is-invalid @enderror" name="images" accept="image/jpeg,image/png,image/jpg">
+                                    <img width="500" src="{{$d->cover}}" alt="">
+                                    @error('images')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+
+
+                                </div>
+
                                 <div class="form-group">
                                     <label for="judul">Nama Berita:</label>
                                     <input type="text" class="form-control @error('judul') is-invalid @enderror" name="judul" value="{{ old('judul', $d->title) }}">
@@ -43,12 +55,11 @@
                                     <select class="form-control select2 @error('kategori') is-invalid @enderror" name="kategori[]" multiple required>
                                         @foreach ($kat as $kategori)
                                             <option value="{{ $kategori->id }}" 
-                @if ($d->categories->contains('category_id', $kategori->id))
-                    selected
-                @endif
-            >
-                {{ $kategori->name }}
-            </option>
+                                                @if ($d->categories->contains('category_id', $kategori->id))
+                                                    selected
+                                                @endif>
+                                                {{ $kategori->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     @error('kategori')

@@ -13,6 +13,10 @@ Route::get('/pengajuan-iduka', [LandingController::class, 'iduka'])->name('iduka
 Route::get('/pengajuan-intership', [LandingController::class, 'intership'])->name('intership');
 Route::get('/kontak', [LandingController::class, 'kontak'])->name('kontak');
 
+
+Route::get('/berita', [LandingController::class, 'berita'])->name('berita');
+Route::get('/berita/{id}/{judul}', [LandingController::class, 'berita_detail']);
+
 Route::get('internship-index', [InternshipController::class, 'dashboardInternship'])->name('internship.index');
 Route::get('internship-project', [InternshipController::class, 'projectInternship']);
 Route::post('internship-project', [InternshipController::class, 'projectInternshipPost']);

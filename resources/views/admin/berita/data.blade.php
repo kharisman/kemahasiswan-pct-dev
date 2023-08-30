@@ -15,6 +15,7 @@
                                 <thead>
                                     <tr class="text-center">
                                         <th>No</th>
+                                        <th>Cover</th>
                                         <th>Judul</th>
                                         <th>Kategori</th>
                                         <th>Status</th>
@@ -28,6 +29,7 @@
                                     @foreach ( $data as $d )
                                     <tr>
                                         <td>{{$no++}}</td>
+                                        <td><img width="100" src="{{$d->cover}}" alt=""></td>
                                         <td>{{$d->title}}</td>
                                         <td>
                                         @foreach ($d->categories as $category)

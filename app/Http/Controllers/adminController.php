@@ -368,6 +368,7 @@ class adminController extends Controller
     public function berita_add_p(Request $request)
     {
         $this->validate($request, [
+            'images' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'judul' => 'required|min:5',
             'konten' => 'required|min:5'
         ]);
@@ -395,7 +396,39 @@ class adminController extends Controller
             }
             $description = $dom->saveHTML();
         }
+
+        if ($request->hasFile('images')) {
+            // Get the uploaded image file
+            $image = $request->file('images');
+
+            // Set the desired width and height
+            $width = 1200;
+            $height = 500;
+
+            // Set the storage path for the new image
+            $publicPath = 'assets/images/post/';
+
+            // Generate a unique filename for the new image
+            $filename = "cover-".uniqid() . '.' . $image->getClientOriginalExtension();
+
+            // Create a new instance of Intervention Image
+            $image = Image::make($image);
+
+            // Resize the image while maintaining aspect ratio
+            $image->resize($width, $height, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $image->save(public_path($publicPath . $filename));
+            $url = asset($publicPath . $filename);
+        } else {
+            // No image was uploaded, set the URL to null or a default value
+            $url = null;
+            $filename = null;
+        }
+
+
         $save = New Post ();
+        $save->cover = $url;
         $save->title = $request->judul;
         $save->content = ($description);
         $save->status = $request->status;
@@ -439,6 +472,7 @@ class adminController extends Controller
 
 
         $this->validate($request, [
+            'images' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'judul' => 'required|min:5',
             'konten' => 'required|min:5'
         ]);
@@ -473,6 +507,39 @@ class adminController extends Controller
             }
             $description = $dom->saveHTML();
         }
+
+        if ($request->hasFile('images')) {
+            // Get the uploaded image file
+            $image = $request->file('images');
+    
+            // Set the desired width and height
+            $width = 1200;
+            $height = 500;
+    
+            // Set the storage path for the new image
+            $publicPath = 'assets/images/post/';
+    
+            // Generate a unique filename for the new image
+            $filename = "cover-".uniqid() . '.' . $image->getClientOriginalExtension();
+    
+            // Create a new instance of Intervention Image
+            $image = Image::make($image);
+    
+            // Resize the image while maintaining aspect ratio
+            $image->resize($width, $height, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $image->save(public_path($publicPath . $filename));
+            $url = asset($publicPath . $filename);
+    
+            // Delete the old image if it exists
+            if ($save->cover && file_exists(public_path($save->cover))) {
+                unlink(public_path($save->cover));
+            }
+    
+            $save->cover = $url;
+        }
+
         $save->title = $request->judul;
         $save->content = ($description);
         $save->status = $request->status;
