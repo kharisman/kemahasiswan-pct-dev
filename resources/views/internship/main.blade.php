@@ -77,7 +77,11 @@
             <?php
                 $internship = App\Models\Internship::where('user_id', Auth::user()->id)->first();
                 $name = $internship ? $internship->name : '';
-                $photo = $internship ? $internship->photo : '';
+                if ($internship->photo <> '') {
+                  $photo = $internship->photo;
+                }else {
+                  $photo = 'undraw_profile.svg';
+                }
             ?>
             {{ $name }}
             @endif
