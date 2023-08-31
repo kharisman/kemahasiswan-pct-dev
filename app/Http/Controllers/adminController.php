@@ -570,12 +570,11 @@ class adminController extends Controller
         return back()->with('success', 'Data Berita berhasil diperbarui. ');
     }
 
-
     public function berita_delete_p(Request $request)
     {
 
         
-    $save = Post::where("id",$request->id)->firstOrFail();
+       $save = Post::where("id",$request->id)->firstOrFail();
 
 
        DB::beginTransaction();
@@ -596,5 +595,150 @@ class adminController extends Controller
        DB::commit();
         return back()->with('success', 'Data Berita berhasil disimpan. ');
     }
+
+    public function kategori_project(){
+        $data = ProjectCategory::get();
+        return view('admin.kategori_project.data',compact('data')) ;
+    }
+
+    public function kategori_project_add(){
+        return view('admin.kategori_project.add') ;
+    }
+
+    public function kategori_project_add_p(Request $request){
+        
+        // return $request->nama ;
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:project_categories,category,NULL,id,deleted_at,NULL',
+            'status' => 'required|in:Aktif,Tidak',
+        ]);
+
+        $save  = New ProjectCategory() ;
+        $save->category = $request->nama;
+        $save->status = $request->status;
+        $save->save() ;
+
+        return back()->with('success', 'Kategori berhasil ditambahkan.');
+    }
+
+
+    public function kategori_project_edit(Request $request){
+        
+        $d = ProjectCategory::where("id",$request->id)->firstOrFail();
+        return view('admin.kategori_project.edit',compact('d')) ;
+    }
+
+    public function kategori_project_edit_p(Request $request){
+        
+        // return $request->nama ;
+        
+        $save  = ProjectCategory::where("id",$request->id)->firstOrFail() ;
+
+
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:project_categories,category,' . $save->id . ',id,deleted_at,NULL',
+            'status' => 'required|in:Aktif,Tidak',
+        ]);
+
+        $save->category = $request->nama;
+        $save->status = $request->status;
+        $save->save() ;
+
+        return back()->with('success', 'Kategori berhasil diperbarui.');
+    }
+
+    public function kategori_project_delete_p(Request $request){
+        
+        $save  = ProjectCategory::where("id",$request->id)->firstOrFail() ;
+        $save->delete() ;
+
+        return back()->with('success', 'Kategori berhasil diperbarui.');
+    }
+
+    public function project(){
+        $data = Project::get();
+        return view('admin.project.data',compact('data')) ;
+    }
+
+
+    public function project_edit(Request $request){
+        
+        $project = Project::where("id",$request->id)->firstOrFail();
+        $categories = ProjectCategory::all();
+        return view('admin.project.edit',compact('project','categories')) ;
+    }
+
+    public function project_edit_p(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'notes' => 'required|string',
+            'category_id' => 'required',
+            'periode_pendaftaran' => [
+                'required',
+                'regex:/\d{4}-\d{2}-\d{2}\s*-\s*\d{4}-\d{2}-\d{2}/', // Format custom regex
+            ],
+            'periode_pengerjaan' => [
+                'required',
+                'regex:/\d{4}-\d{2}-\d{2}\s*-\s*\d{4}-\d{2}-\d{2}/', // Format custom regex
+            ],
+        ]);
+
+        $periode_pendaftaran = explode(" - ", $data['periode_pendaftaran']);
+        $periode_pengerjaan = explode(" - ", $data['periode_pengerjaan']);
+
+        $project = Project::findOrFail($request->id);
+
+        try {
+            DB::beginTransaction();
+
+            $project->name = $data['name'];
+            $project->category_id = $data['category_id'];
+            $project->level = $request->tingkat_Kesulitan;
+            $project->registration_start_at = $periode_pendaftaran[0];
+            $project->registration_end_at = $periode_pendaftaran[1];
+            $project->work_start_at = $periode_pengerjaan[0];
+            $project->work_end_at = $periode_pengerjaan[1];
+
+            $description = $data['notes'];
+
+            if (!empty($description)) {
+                $dom = new \DomDocument();
+                @$dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $images = $dom->getElementsByTagName('img');
+                foreach ($images as $k => $img) {
+                    $data = $img->getAttribute('src');
+
+                    if ( !strstr( $data, 'project' ) ) {
+                    list($type, $data) = explode(';', $data);
+                    list(, $data) = explode(',', $data);
+                    $data = base64_decode($data);
+                    $image_name = "/assets/images/project/" . time() . $k . '.png';
+                    $path = public_path() . $image_name;
+                    file_put_contents($path, $data);
+                    $img->removeAttribute('src');
+                    $img->setAttribute('src', $image_name);
+                    }
+                }
+                $description = $dom->saveHTML();
+            }
+
+            $project->notes = $description;
+
+            // Simpan data proyek
+            $project->save();
+
+            DB::commit();
+
+            return back()->with('success', 'Proyek berhasil diperbarui.');
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            return back()->with('error', 'Terjadi kesalahan saat memperbarui proyek.');
+        }
+    }
+
+
+    
     
 }

@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     use HasFactory;
-    public function categoryProject(){
-        return $this->hasOne(Project_Category::class,'id','category_id');
+    public function category(){
+        return $this->hasOne(ProjectCategory::class,'id','category_id');
     }
     public function idukaProject()
     {

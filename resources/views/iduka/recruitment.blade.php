@@ -1,84 +1,123 @@
 @extends('iduka.layouts.app')
-
-@section('title', 'Form Create Project')
-
+@section('title', 'Form Buat Project')
 @section('contents')
-<html lang="en">
+<div class="container-fluid">
+    <!-- Page Content -->
+    <div class="card">
+        <div class="card-body text-left">
+            <form action="{{ route('save_project') }}" method="POST" class="project">
+                @csrf
+                <div class="form-group">
+                    <label for="category_id">Kategori Project</label>
+                    <select name="category_id" class="form-control" id="category_id">
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->category }}
+                        </option>
+                        @endforeach
+                    </select>
+                    @error('category_id')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="name">Nama Project</label>
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Nama project" value="{{ old('name') }}">
+                    @error('name')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Summernote with Bootstrap 4</title>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+                <div class="form-group">
+                    <label for="periode_pendaftaran">Periode Pendaftaran</label>
+                    <input type="text" name="periode_pendaftaran" class="form-control" id="periode_pendaftaran" placeholder="periode pendaftaran project" value="{{ old('periode_pendaftaran') }}">
+                    @error('periode_pendaftaran')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+                <div class="form-group">
+                    <label for="periode_pengerjaan">Periode Pengerjaan</label>
+                    <input type="text" name="periode_pengerjaan" class="form-control" id="periode_pengerjaan" placeholder="periode pengerjaan project" value="{{ old('periode_pengerjaan') }}">
+                    @error('periode_pengerjaan')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
 
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-</head>
+                <div class="form-group">
+                    <label for="status">Tingkat Kesulitan</label>
+                    <select name="tingkat_Kesulitan" class="form-control" id="status">
+                        <option value="Mudah" {{ old('tingkat_Kesulitan') == 'Mudah' ? 'selected' : '' }}>Mudah</option>
+                        <option value="Sedang" {{ old('tingkat_Kesulitan') == 'Sedang' ? 'selected' : '' }}>Sedang</option>
+                        <option value="Susah" {{ old('tingkat_Kesulitan') == 'Susah' ? 'selected' : '' }}>Susah</option>
+                    </select>
+                    @error('tingkat_Kesulitan')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
 
-<body>
-    <div class="container-fluid">
-        <!-- Page Content -->
-        <div class="card">
-            <div class="card-body text-left">
-                <h4 class="col-md-9">Form Project</h4>
-                <form action="{{ route('save_project') }}" method="POST" class="project">
-                    @csrf
-                    <div class="form-group">
-                        <label for="category_id">Kategori Project</label>
-                        <select name="category_id" class="form-control" id="category_id">
-                            <option value="" disabled selected>Pilih Kategori</option>
-                            @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->category }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Title Project</label>
-                        <input type="text" name="name" class="form-control" id="name" placeholder="Nama project">
-                    </div>
-                    <label for="notes">Notes</label>
-                    <textarea name="notes" id="notes" cols="30" rows="10"></textarea>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="form-group">
+                    <label for="notes">Deskripsi Project</label>
+                    <textarea name="notes" id="notes" cols="30" rows="10">{{ old('notes') }}</textarea>
+                    @error('notes')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
 
-                </form>
-            </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
         </div>
     </div>
-
-    <script>
-        $('#notes').summernote({
-            placeholder: 'Notes',
-            tabsize: 2,
-            height: 200,
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen', 'codeview', 'help']]
-            ]
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js" integrity="sha512-mh+AjlD3nxImTUGisMpHXW03gE6F4WdQyvuFRkjecwuWLwD2yCijw4tKA3NsEFpA1C3neiKhGXPSIGSfCYPMlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css" integrity="sha512-rBi1cGvEdd3NmSAQhPWId5Nd6QxE8To4ADjM2a6n0BrqQdisZ/RPUlm0YycDzvNL1HHAh1nKZqI0kSbif+5upQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script>
+    $(document).ready(function() {
+        $('#periode_pendaftaran').daterangepicker({
+            timePicker: false
+            , startDate: moment().startOf('hour')
+            , endDate: moment().startOf('hour').add(1, 'day')
+            , locale: {
+                format: 'YYYY-MM-DD', // Ganti sesuai dengan format yang Anda inginkan
+                applyLabel: 'Apply'
+                , cancelLabel: 'Cancel',
+                // ... (tambahkan konfigurasi lain sesuai kebutuhan)
+            }
         });
-    </script>
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{asset('iduka/vendor/jquery/jquery.min.js')}}"></script>
-    <script src="{{asset('iduka/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="{{asset('iduka/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+        $('#periode_pengerjaan').daterangepicker({
+            timePicker: false
+            , startDate: moment().startOf('hour')
+            , endDate: moment().startOf('hour').add(1, 'day')
+            , locale: {
+                format: 'YYYY-MM-DD ', // Ganti sesuai dengan format yang Anda inginkan
+                applyLabel: 'Apply'
+                , cancelLabel: 'Cancel',
+                // ... (tambahkan konfigurasi lain sesuai kebutuhan)
+            }
+        });
+    });
 
-    <!-- Custom scripts for all pages-->
-    <script src="{{asset('iduka/js/sb-admin-2.min.js')}}"></script>
 
-    <!-- Page level plugins -->
-    <script src="{{asset('iduka/vendor/chart.js/Chart.min.js')}}"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="{{asset('iduka/js/demo/chart-area-demo.js')}}"></script>
-    <script src="{{asset('iduka/js/demo/chart-pie-demo.js')}}"></script>
 
-    @endsection
+    $('#notes').summernote({
+        placeholder: 'Notes'
+        , tabsize: 2
+        , height: 200
+        , toolbar: [
+            ['style', ['style']]
+            , ['font', ['bold', 'underline', 'clear']]
+            , ['color', ['color']]
+            , ['para', ['ul', 'ol', 'paragraph']]
+            , ['table', ['table']]
+            , ['insert', ['link', 'picture', 'video']]
+            , ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+    });
+
+</script>
+@endsection

@@ -141,6 +141,12 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'periode_pendaftaran' => [
+            'date_range_format' => 'Format :attribute harus yyyy-mm-dd - yyyy-mm-dd.',
+        ],
+        'periode_pengerjaan' => [
+            'date_range_format' => 'Format :attribute harus yyyy-mm-dd - yyyy-mm-dd.',
+        ],
     ],
 
     /*
