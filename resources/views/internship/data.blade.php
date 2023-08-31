@@ -27,6 +27,9 @@
                             <div class="col-sm-8">
                                 <input id="name" class="form-control" type="text" name="name" placeholder="name..."
                                     required>
+                                @error('name')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-3 text-end">
@@ -34,6 +37,9 @@
                             <div class="col-sm-8">
                                 <input id="date_of_birth" class="form-control" type="date" name="date_of_birth" placeholder="date_of_birth..."
                                     required>
+                                    @error('date_of_birth')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                             </div>
                         </div>
                         <div class="row mb-3 text-end">
@@ -44,18 +50,27 @@
                                     <option value="Pria">Pria</option>
                                     <option value="Wanita">Wanita</option>
                                 </select>
+                                @error('gender')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-3 text-end">
                             <label for="address" class="col-sm-4 col-form-label text-start">Alamat</label>
                             <div class="col-sm-8">
                                 <textarea class="form-control" name="address" id="address" cols="32" rows="2" placeholder="address..."></textarea>
+                                @error('address')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-3 text-end">
                             <label for="photo" class="col-sm-4 col-form-label text-start">Photo</label>
                             <div class="col-sm-8">
                                 <input id="photo" class="form-control" type="file" name="photo" required>
+                                @error('photo')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-3 text-end">
@@ -63,6 +78,9 @@
                             <div class="col-sm-8">
                                 <input id="nationality" class="form-control" type="text" name="nationality" placeholder="nationality..."
                                     required>
+                                    @error('nationality')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                             </div>
                         </div>
                         <div class="row mb-3 text-end">
@@ -70,6 +88,9 @@
                             <div class="col-sm-8">
                                 <input id="education" class="form-control" type="text" name="education" placeholder="education..."
                                     required>
+                                    @error('education')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                             </div>
                         </div>
                         <div class="row mb-3 text-end">
@@ -77,6 +98,9 @@
                             <div class="col-sm-8">
                                 <input id="interest" class="form-control" type="text" name="interest" placeholder="interest..."
                                     required>
+                                    @error('interest')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                             </div>
                         </div>
                         <div class="row mb-3 text-end">
@@ -84,6 +108,9 @@
                             <div class="col-sm-8">
                                 <input id="phone" class="form-control" type="text" placeholder="nomor telepon ..." name="phone" required>
                             </div>
+                            @error('phone')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     <div class="card">
@@ -176,12 +203,18 @@
                                 <label for="application_letter" class="col-sm-4 col-form-label text-start">Surat Lamaran</label>
                                 <div class="col-sm-8">
                                     <input id="application_letter" class="form-control" type="file" name="application_letter">
+                                    @error('application_letter')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="row mb-3 text-end">
                                 <label for="certificate" class="col-sm-4 col-form-label text-start">Sertifikat Lomba</label>
                                 <div class="col-sm-8">
                                     <input id="certificate" class="form-control" type="file" name="certificate">
+                                    @error('certificate')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>

@@ -43,8 +43,8 @@ class AuthController extends Controller
 			$internship = new Internship();
 			$internship->user_id = $user->id;
 			$internship->name = $request->username;
-			$internship->gender = "Pria";
-			$internship->date_of_birth = "2022-02-02";
+			$internship->gender = "";
+			$internship->date_of_birth = "";
 			$internship->address = "";
 			$internship->phone = "";
 			$internship->nationality = "";
@@ -52,6 +52,7 @@ class AuthController extends Controller
 			$internship->interest = "";
 			$internship->photo = "";
 			$internship->status = "Tidak";
+			$internship->updated_at = "0000-00-00 00:00:00";
 			$internship->save();
 			DB::commit();
 			return redirect()->route('login')->with('success', 'Registrasi Berhasil. Silahkan login');
