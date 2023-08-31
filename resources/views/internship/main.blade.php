@@ -82,6 +82,7 @@
                 }else {
                   $photo = 'undraw_profile.svg';
                 }
+
             ?>
             {{ $name }}
             @endif
@@ -145,32 +146,36 @@
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
                 <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                @if ($internship->phone == "")
+                  <a class="dropdown-item preview-item" href="{{url('internship-data')}}">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-danger">
+                        <i class="mdi mdi-information mx-0"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <h6 class="preview-subject font-weight-normal">Complleted your profile</h6>
+                      <p class="font-weight-light small-text mb-0 text-muted">
+                        Now for Apply
+                      </p>
+                    </div>
+                </a>  
+                @endif
+                @if (session('success'))
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-success">
-                      <i class="mdi mdi-information mx-0"></i>
-                    </div>
-                  </div>
-                  <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-normal">Application Error</h6>
-                    <p class="font-weight-light small-text mb-0 text-muted">
-                      Just now
-                    </p>
-                  </div>
-                </a>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <div class="preview-icon bg-warning">
                       <i class="mdi mdi-settings mx-0"></i>
                     </div>
                   </div>
                   <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-normal">Settings</h6>
+                    <h6 class="preview-subject font-weight-normal">{{ session('success') }}</h6>
                     <p class="font-weight-light small-text mb-0 text-muted">
-                      Private message
+                      Aplly Send
                     </p>
                   </div>
                 </a>
+                @endif
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-info">
@@ -203,7 +208,7 @@
                   <i class="mdi mdi-settings text-primary"></i>
                   Settings
                 </a>
-                <a class="dropdown-item">
+                <a class="dropdown-item" href="{{url('logout')}}">
                   <i class="mdi mdi-logout text-primary"></i>
                   Logout
                 </a>

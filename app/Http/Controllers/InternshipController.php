@@ -96,6 +96,7 @@ class InternshipController extends Controller
 			$new->education = $r->education;
 			$new->interest = $r->interest;
 			$new->phone = $r->phone;
+			$new->update_at = now();
 			$new->save();
 
 			$mediaCount = 1;
@@ -143,10 +144,9 @@ class InternshipController extends Controller
 			}
 		DB::commit();
 		return redirect('internship-data')->with('success', 'Data Pribadi berhasil diperbarui. ');
-		} catch (\Throwable $th) {
+		} catch (\Throwable $e) {
 			DB::rollback();
-			dd($th);
-			return back()->with('error', 'Data Pribadi gagal diperbarui. Coba kembali. Error: ' . $th->getMessage());
+			return back()->with('error', 'Data Pribadi gagal diperbarui. Coba kembali. Error: ');
 		}
 	}
     public function projectDetailInternship(Request $r, $id){
