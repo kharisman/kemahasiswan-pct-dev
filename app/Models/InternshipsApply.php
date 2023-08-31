@@ -14,4 +14,5 @@ class InternshipsApply extends Model
     public function idukaApply(){
         return $this->hasOne(Iduka::class,'id','iduka_id');
     }
+    
 }

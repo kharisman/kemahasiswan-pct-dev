@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('category_id');
             $table->integer('iduka_id');
             $table->text('notes');
-            $table->string('status');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });

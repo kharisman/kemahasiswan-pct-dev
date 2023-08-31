@@ -171,7 +171,7 @@
           <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
           Settings
         </a>
-        <a class="dropdown-item" href="#">
+        <a class="dropdown-item" href="{{route('iduka.change_email_password')}}">
           <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
           Activity Log
         </a>

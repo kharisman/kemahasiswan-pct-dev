@@ -31,7 +31,9 @@ Route::get('iduka/index', [IdukaController::class, 'dashboard_iduka'])->name('id
 Route::get('/iduka/{id}/edit', [IdukaController::class, 'edit'])->name('iduka.edit');
 Route::put('/iduka/{id}/update', [IdukaController::class, 'update'])->name('iduka.update');
 Route::get('/iduka/profile', [IdukaController::class, 'profile'])->name('iduka.profile');
-
+Route::get('/iduka/change_email_password', [IdukaController::class, 'change_email_password'])->name('iduka.change_email_password');
+Route::post('idukaa/profile/update-email', [IdukaController::class, 'updateEmail'])->name('profile.update.email');
+Route::post('iduka/profile/update-password', [IdukaController::class, 'updatePassword'])->name('profile.update.password');
 
 Route::get('iduka/project', [ProjectController::class, 'all_project'])->name('iduka.all_project');
 Route::get('iduka/pending_project', [ProjectController::class, 'pending_project'])->name('iduka.pending_project');
@@ -46,6 +48,10 @@ Route::put('/iduka/update-project/{id}', [ProjectController::class, 'updateProje
 Route::delete('/projects/{id}', [IdukaController::class, 'delete'])->name('delete_project');
 Route::delete('/projects/{id}', [ProjectController::class, 'delete'])->name('delete_project');
 Route::get('iduka/pelamar', [ProjectController::class, 'data_apply'])->name('iduka.data_apply');
+Route::get('iduka/status_diterima', [ProjectController::class, 'data_apply_diterima'])->name('iduka.data_apply_diterima');
+Route::get('iduka/status_ditolak', [ProjectController::class, 'data_apply_ditolak'])->name('iduka.data_apply_ditolak');
+Route::get('iduka/detail_pelamar/{projectApplyId}', [ProjectController::class, 'detail_apply'])->name('iduka.detail_apply');
+Route::post('/edit-status/{applyId}', [ProjectController::class, 'edit_status_apply'])->name('edit.status');
 
 Route::controller(AuthController::class)->group(function () {
 	Route::get('register', 'register')->name('register');

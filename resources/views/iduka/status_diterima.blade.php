@@ -10,13 +10,13 @@
             <th>Project Name</th>
             <th>Internship Name</th>
             <th>Status</th>
-            <th>Tanggal Apply</th>
+            <th>Tanggal Diterima</th>
             <th>Aksi</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($projectApplies as $projectApply)
-        @if (!$projectApply->status) {{-- Check if the status is empty or null --}}
+        @if ($projectApply->status === 'accepted') {{-- Check if the status is "diterima" --}}
         <tr>
             <td>{{ $projectApply->id }}</td>
             <td>{{ $projectApply->project->name }}</td>
@@ -29,15 +29,6 @@
                 <a href="{{ route('iduka.detail_apply', ['projectApplyId' => $projectApply->id]) }}" class="btn btn-success btn-circle btn-lg">
                     <i class="fas fa-info-circle"></i>
                 </a>Info profile Intern
-                <form id="form_{{ $projectApply->id }}" class="status-form" action="{{ route('edit.status', ['applyId' => $projectApply->id]) }}" method="POST">
-                    @csrf
-                    <select name="new_status" class="status-dropdown">
-                        <option value="accepted">Diterima</option>
-                        <option value="rejected">Ditolak</option>
-                        <option value="pending">Menunggu</option>
-                    </select>
-                    <button type="submit">Simpan</button>
-                </form></div>
             </td>
         </tr>
         @endif

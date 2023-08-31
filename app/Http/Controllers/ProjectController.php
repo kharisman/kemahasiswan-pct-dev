@@ -7,12 +7,13 @@ use App\Models\Project;
 use App\Models\Iduka;
 use App\Models\ProjectApply;
 use App\Models\ProjectCategory;
+use App\Models\Internship;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth; 
-
+use Illuminate\Http\UploadedFile;
 class ProjectController extends Controller
 {
     public function create_project()
@@ -92,9 +93,6 @@ class ProjectController extends Controller
         }
     }
 
-
-
-
     public function editProject($projectId)
     {
         $project = Project::findOrFail($projectId);
@@ -173,8 +171,6 @@ class ProjectController extends Controller
         }
     }
 
-
-
         public function editStatus($projectId)
     {   
         $iduka = Auth::user()->iduka;
@@ -197,14 +193,24 @@ class ProjectController extends Controller
         return redirect()->route('iduka.index')->with('success', 'Status updated successfully.');
     }
     
-    public function all_project()
+    public function all_project(Request $request)
     {
-        $user = Auth::user();
         $iduka = Auth::user()->iduka;
         $categories = ProjectCategory::all();
-        $projects = Project::where('iduka_id', $user->id)->get();
-    
-        return view('iduka/project', compact('projects', 'categories','iduka'));
+
+        $search = $request->input('search');
+
+        $query = Project::where('iduka_id', $iduka->id);
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%');
+            });
+        }
+
+        $projects = $query->get();
+
+        return view('iduka.project', compact('projects', 'categories', 'iduka'));
     }
 
     public function pending_project()
@@ -220,26 +226,34 @@ class ProjectController extends Controller
         return view('iduka/pending_project', compact('projects', 'categories','iduka'));
     }
 
-    public function selesai_project()
+    public function selesai_project(Request $request)
     {
-        $user = Auth::user();
         $iduka = Auth::user()->iduka;
         $categories = ProjectCategory::all();
 
-        $projects = Project::where('iduka_id', $user->id)
-                        ->where('status', 'selesai')
-                        ->get();
+        $search = $request->input('search');
 
-        return view('iduka/selesai_project', compact('projects', 'categories','iduka'));
+        $query = Project::where('iduka_id', $iduka->id)
+                        ->where('status', 'Tidak');
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%');
+            });
+        }
+
+        $projects = $query->get();
+
+        return view('iduka.selesai_project', compact('projects', 'categories', 'iduka'));
     }
-
+    
     public function aktif_project()
     {
         $user = Auth::user();
         $categories = ProjectCategory::all();
         $iduka = Auth::user()->iduka;
-        $projects = Project::where('iduka_id', $user->id)
-                        ->where('status', 'aktif')
+        $projects = Project::where('iduka_id', $iduka->id)
+                        ->where('status', 'Aktif')
                         ->get();
 
         return view('iduka/aktif_project', compact('projects', 'categories','iduka'));
@@ -266,17 +280,77 @@ class ProjectController extends Controller
 
         return redirect()->route('iduka.index')->with('success', 'Project deleted successfully.');
     }
+    
     public function data_apply()
     {   
         $iduka = Auth::user()->iduka;
-    
-        $projectApplies = ProjectApply::with(['project', 'internship'])->get();
-    
+        
+        $projectApplies = ProjectApply::with(['project', 'internship'])
+            ->whereHas('project', function ($query) use ($iduka) {
+                $query->where('iduka_id', $iduka->id);
+            })
+            ->get();
+        
         return view('iduka.pelamar', [
             'iduka' => $iduka,
             'projectApplies' => $projectApplies
         ]);
     }
-    
 
+    public function data_apply_diterima()
+    {   
+        $iduka = Auth::user()->iduka;
+        
+        $projectApplies = ProjectApply::with(['project', 'internship'])
+            ->whereHas('project', function ($query) use ($iduka) {
+                $query->where('iduka_id', $iduka->id);
+            })
+            ->get();
+        
+        return view('iduka.status_diterima', [
+            'iduka' => $iduka,
+            'projectApplies' => $projectApplies
+        ]);
+    }
+    public function data_apply_ditolak()
+    {   
+        $iduka = Auth::user()->iduka;
+        
+        $projectApplies = ProjectApply::with(['project', 'internship'])
+            ->whereHas('project', function ($query) use ($iduka) {
+                $query->where('iduka_id', $iduka->id);
+            })
+            ->get();
+        
+        return view('iduka.status_ditolak', [
+            'iduka' => $iduka,
+            'projectApplies' => $projectApplies
+        ]);
+    }
+
+    public function detail_apply($projectApplyId)
+    {
+        $iduka = Auth::user()->iduka;
+        $projectApply = ProjectApply::with(['project', 'internship'])->find($projectApplyId);
+        
+        return view('iduka/detail_pelamar', compact('projectApply', 'iduka'));
+    }
+
+    public function edit_status_apply(Request $request, $applyId)
+    {
+        $newStatus = $request->input('new_status'); // Ambil status baru dari input form
+        
+        $apply = ProjectApply::find($applyId); // Temukan entitas ProjectApply berdasarkan ID
+        
+        if (!$apply) {
+            return redirect()->back()->with('error', 'Pendaftaran tidak ditemukan');
+        }
+        
+        // Update status dengan status baru
+        $apply->status = $newStatus;
+        $apply->save();
+        
+        return redirect()->back()->with('success', 'Status berhasil diperbarui');
+    }
+    
 }

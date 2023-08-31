@@ -12,9 +12,8 @@
         <div class="form-group">
             <label for="status">Edit Status</label>
             <select class="form-control" id="status" name="status" required>
-                <option value="pending" {{ $project->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="aktif" {{ $project->status === 'aktif' ? 'selected' : '' }}>Aktif</option>
-                <option value="selesai" {{ $project->status === 'selesai' ? 'selected' : '' }}>Selesai</option>
+                <option value="Aktif" {{ $project->status === 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                <option value="Tidak" {{ $project->status === 'Tidak' ? 'selected' : '' }}>Selesai</option>
             </select>
         </div>
         <button id="confirmButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#statusModal">Save Changes</button>
