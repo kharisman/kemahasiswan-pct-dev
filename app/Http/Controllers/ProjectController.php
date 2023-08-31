@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Iduka;
 use App\Models\ProjectApply;
 use App\Models\ProjectCategory;
+use App\Models\ProjectUpdate;
 use App\Models\Internship;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
@@ -351,6 +352,38 @@ class ProjectController extends Controller
         $apply->save();
         
         return redirect()->back()->with('success', 'Status berhasil diperbarui');
+        } 
+        public function ongoing_progress()
+{   
+    $iduka = Auth::user()->iduka;
+    
+    $projectUpdates = ProjectUpdate::with(['project', 'internship'])
+        ->whereHas('project', function ($query) use ($iduka) {
+            $query->where('iduka_id', $iduka->id);
+        })
+        ->get();
+
+    $groupedUpdates = [];
+    
+    foreach ($projectUpdates as $update) {
+        $projectId = $update->project_id;
+        
+        if (!isset($groupedUpdates[$projectId])) {
+            $groupedUpdates[$projectId] = [
+                'project' => $update->project,
+                'internships' => []
+            ];
+        }
+        
+        $groupedUpdates[$projectId]['internships'][] = $update->internship->name;
     }
     
+    return view('iduka.ongoing_progress', [
+        'iduka' => $iduka,
+        'groupedUpdates' => $groupedUpdates
+    ]);
+}
+
+        
+
 }

@@ -52,6 +52,9 @@ Route::get('iduka/status_diterima', [ProjectController::class, 'data_apply_diter
 Route::get('iduka/status_ditolak', [ProjectController::class, 'data_apply_ditolak'])->name('iduka.data_apply_ditolak');
 Route::get('iduka/detail_pelamar/{projectApplyId}', [ProjectController::class, 'detail_apply'])->name('iduka.detail_apply');
 Route::post('/edit-status/{applyId}', [ProjectController::class, 'edit_status_apply'])->name('edit.status');
+//Route::get('iduka.ongoing_progress', [ProjectController::class, 'ongoing_progress'])->name('iduka.ongoing_progress');
+Route::get('/ongoing_progress', [ProjectController::class, 'ongoing_progress'])->name('iduka.ongoing_progress');
+
 
 Route::controller(AuthController::class)->group(function () {
 	Route::get('register', 'register')->name('register');

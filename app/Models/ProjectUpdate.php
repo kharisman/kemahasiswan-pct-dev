@@ -8,11 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectUpdate extends Model
 {
     use HasFactory;
-    
     public function internshipProjectUpdate(){
-        return $this->hasOne(Internship::class,'id','internship_id');
+        return $this->belongsTo(Internship::class,'id', 'internship_id');
     }
+    
     public function projectUpdate(){
-        return $this->hasOne(Project::class,'id','project_id');
+        return $this->belongsTo(Project::class, 'id','project_id');
     }
+   
+        public function internship()
+{
+    return $this->belongsTo(Internship::class, 'internship_id');
+}
+
+public function project()
+{
+    return $this->belongsTo(Project::class, 'project_id');
+}
+
+    
 }
