@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectApply extends Model
 {
     use HasFactory;
+
+
     public function internshipProjectApply(){
         return $this->hasOne(Internship::class,'id','internship_id');
     }
@@ -19,8 +21,9 @@ class ProjectApply extends Model
         return $this->belongsTo(Internship::class);
     }
     public function project()
-{
-    return $this->belongsTo(Project::class);
-}
+    {
+        return $this->belongsTo(Project::class);
+    }
+
 
 }

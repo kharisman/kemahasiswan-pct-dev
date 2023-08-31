@@ -22,4 +22,14 @@ class Project extends Model
     {
         return $this->belongsToMany(Project_Category::class, 'projectcategory');
     }
+
+    public function iduka()
+    {
+        return $this->belongsTo(Iduka::class, 'iduka_id', 'id');
+    }
+
+    public function projectApplies()
+    {
+        return $this->hasMany(ProjectApply::class);
+    }
 }

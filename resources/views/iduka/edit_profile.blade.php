@@ -27,9 +27,9 @@
                     <label for="photo">Foto Profil</label>
                     <input type="file" name="photo" class="form-control" id="photo" accept="image/*" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])">
                     @if ($iduka->photo)
-                    <img src="{{ asset($iduka->photo) }}" id="output" class="img-fluid mt-2" alt="Profile Photo Preview" style="max-height: 200px;">
+                    <img src="{{ asset($iduka->photo) }}" id="output" class="img-fluid mt-2" alt="Belum punya foto profil" style="max-height: 200px;">
                     @else
-                    <img src="path/to/default/photo" id="output" class="img-fluid mt-2" alt="Profile Photo Preview" style="max-height: 200px;">
+                    <img src="path/to/default/photo" id="output" class="img-fluid mt-2" alt="Belum punya foto profil" style="max-height: 200px;">
                     @endif
                 </div>
 

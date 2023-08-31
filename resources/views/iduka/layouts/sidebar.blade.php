@@ -35,10 +35,12 @@
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Berkas</h6>
             <a class="collapse-item" href="{{route('iduka.data_apply')}}">Pelamar </a>
+            <a class="collapse-item" href="{{route('iduka.data_apply_diterima')}}">Diterima </a>
+            <a class="collapse-item" href="{{route('iduka.data_apply_ditolak')}}">Ditolak </a>
             <a class="collapse-item" href="{{route('iduka.all_project')}}">Semua Project</a>
-            <a class="collapse-item" href="{{route('iduka.pending_project')}}">Projects Pending</a>
-            <a class="collapse-item" href="{{route('iduka.aktif_project')}}">Projects Aktif</a>
+            <a class="collapse-item" href="{{route('iduka.aktif_project')}}">Project Aktif</a>
             <a class="collapse-item" href="{{route('iduka.selesai_project')}}">Projects selesai</a>
+            
         </div>
     </div>
 </li>

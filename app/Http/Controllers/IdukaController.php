@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 class IdukaController extends Controller
 {
     public function dashboard_iduka()
@@ -95,4 +96,56 @@ class IdukaController extends Controller
 
         return redirect()->route('iduka/index')->with('success', 'Project deleted successfully.');
     }
+
+    public function change_email_password()
+    {
+        $iduka = Auth::user()->iduka;
+        return view('iduka.change_email_password', ['iduka' => $iduka]);
+    }
+    
+    public function updateEmail(Request $request)
+    {
+        $user = Auth::user();
+    
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users,email,' . $user->id
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+    
+        $user->update([
+            'email' => $request->email
+        ]);
+    
+        return redirect()->back()->with('success', 'Email berhasil diperbarui.');
+    }
+    
+    public function updatePassword(Request $request)
+    {
+        $user = Auth::user();
+    
+        $validator = Validator::make($request->all(), [
+            'old_password' => ['required', function ($attribute, $value, $fail) use ($user) {
+                if (!Hash::check($value, $user->password)) {
+                    $fail(__('The old password is incorrect.'));
+                }
+            }],
+            'password' => 'required|confirmed|min:8',
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+    
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+    
+        return redirect()->back()->with('success', 'Password berhasil diperbarui.');
+    }
+    
+
+
 }

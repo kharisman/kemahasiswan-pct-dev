@@ -21,8 +21,19 @@
                             </div>
                             <div class="card-body">
                                 <p>Status: {{ $project->status }}</p>
+                                <p>Level: {{ $project->level }} </p>
+                                <p>Tanggal Registrasi: {{ $project->registration_start_at }} sampai dengan{{ $project->registration_end_at}}  </p>
+                                <p>Akan mulai tanggal: {{ $project->work_start_at }} sampai dengan{{ $project->work_end_at}}  </p>
+                                Keterangan
                                 <p>{!! $project->notes !!}</p>
-                                <a href="{{ route('edit_status', ['id' => $project->id]) }}" class="btn btn-primary">Actions</a>
+                                <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Actions
+                            </button>
+                            <div class="dropdown-menu">
+                             
+                            </div>
+                        </div>
                             </div>
                         </div>
                     @endforeach
