@@ -89,6 +89,10 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('settings/kategori-project/edit',[adminController::class,'kategori_project_edit']);
 		Route::post('settings/kategori-project/edit',[adminController::class,'kategori_project_edit_p']);
 		Route::get('settings/kategori-project/delete',[adminController::class,'kategori_project_delete_p']) ;
+
+		Route::get('project',[adminController::class,'project']);
+		Route::get('project/edit',[adminController::class,'project_edit']);
+		Route::post('project/edit',[adminController::class,'project_edit_p']);
 	});
 });
 
