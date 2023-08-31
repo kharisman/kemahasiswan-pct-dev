@@ -35,9 +35,11 @@ class InternshipController extends Controller
 		return view('internship/index', compact('completedProject','onGoingProject','rejectProject','onGoingProjectData'));
 	}
     public function projectInternship(){
+		$id = Auth::user()->id;
+		$internship = Internship::where('user_id', $id)->first();
 		$projectData = Project::join('idukas','projects.iduka_id','=','idukas.id')->limit(10)->inRandomOrder()
 			->get();
-		return view('internship/project', compact('projectData'));
+		return view('internship/project', compact('projectData', 'internship'));
 	}
     public function projectInternshipPost(Request $r){
 		$projectData = Project::join('idukas','projects.iduka_id','=','idukas.id')
