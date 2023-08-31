@@ -77,12 +77,25 @@
             <?php
                 $internship = App\Models\Internship::where('user_id', Auth::user()->id)->first();
                 $name = $internship ? $internship->name : '';
+                $dateSign = ($internship->created_at)->format('h'). " hours ago";
                 if ($internship->photo <> '') {
                   $photo = $internship->photo;
                 }else {
                   $photo = 'undraw_profile.svg';
                 }
+                $condition = 0;
 
+                if ($internship->phone == "") {
+                    $condition++;
+                }
+
+                if (session('success')) {
+                    $condition++;
+                }
+
+                if ($dateSign < 24) {
+                    $condition++;
+                }
             ?>
             {{ $name }}
             @endif
@@ -106,34 +119,10 @@
                       <img src="images/faces/face4.jpg" alt="image" class="profile-pic">
                   </div>
                   <div class="preview-item-content flex-grow">
-                    <h6 class="preview-subject ellipsis font-weight-normal">David Grey
+                    <h6 class="preview-subject ellipsis font-weight-normal">Name Project
                     </h6>
                     <p class="font-weight-light small-text text-muted mb-0">
-                      The meeting is cancelled
-                    </p>
-                  </div>
-                </a>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                      <img src="images/faces/face2.jpg" alt="image" class="profile-pic">
-                  </div>
-                  <div class="preview-item-content flex-grow">
-                    <h6 class="preview-subject ellipsis font-weight-normal">Tim Cook
-                    </h6>
-                    <p class="font-weight-light small-text text-muted mb-0">
-                      New product launch
-                    </p>
-                  </div>
-                </a>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                      <img src="images/faces/face3.jpg" alt="image" class="profile-pic">
-                  </div>
-                  <div class="preview-item-content flex-grow">
-                    <h6 class="preview-subject ellipsis font-weight-normal"> Johnson
-                    </h6>
-                    <p class="font-weight-light small-text text-muted mb-0">
-                      Upcoming board meeting
+                      Success
                     </p>
                   </div>
                 </a>
@@ -142,7 +131,7 @@
             <li class="nav-item dropdown me-2">
               <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
                 <i class="mdi mdi-email-open mx-0"></i>
-                <span class="count bg-danger">1</span>
+                <span class="count bg-danger">{{$condition}}</span>
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
                 <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
@@ -176,6 +165,7 @@
                   </div>
                 </a>
                 @endif
+                @if ($dateSign < 24)
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-info">
@@ -185,10 +175,11 @@
                   <div class="preview-item-content">
                     <h6 class="preview-subject font-weight-normal">New user registration</h6>
                     <p class="font-weight-light small-text mb-0 text-muted">
-                      2 days ago
+                      {{$dateSign}}
                     </p>
                   </div>
                 </a>
+                @endif
               </div>
             </li>
           </ul>

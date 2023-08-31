@@ -14,6 +14,7 @@
                         </div>
                     </form>
                 </div>
+                @if ($internship->phone <> '')
                 <div class="row">
                     @foreach ($projectData as $item)
                     <div class="col-md-4 mb-3">
@@ -29,6 +30,9 @@
                     </div>
                     @endforeach
                 </div>
+                @else
+                    <div class="h3 text-center">Your Profile Not Complleted Please, Complleted you profile <a href="{{url('internship-data')}}">here</a></div>
+                @endif
             </div>
         </div>
     </div>
