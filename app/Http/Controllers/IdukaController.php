@@ -18,10 +18,9 @@ class IdukaController extends Controller
     {
         $user = Auth::user();
         $categories = ProjectCategory::all();
-        $projects = Project::where('iduka_id', $user->id)->get();
-        $iduka = Auth::user()->iduka;
-        $latestProject = Project::where('iduka_id', $user->id)->latest()->first();
-    
+        $iduka = Iduka::where("user_id", Auth::user()->id)->firstOrFail();
+        $projects = Project::where('iduka_id', $iduka->id)->get();
+        $latestProject = Project::where('iduka_id', $iduka->id)->latest()->first();
         return view('iduka/index', compact('projects', 'categories', 'latestProject','iduka')); // Mengirim data projects dan categories ke tampilan
     }
     

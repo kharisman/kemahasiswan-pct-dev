@@ -570,12 +570,11 @@ class adminController extends Controller
         return back()->with('success', 'Data Berita berhasil diperbarui. ');
     }
 
-
     public function berita_delete_p(Request $request)
     {
 
         
-    $save = Post::where("id",$request->id)->firstOrFail();
+       $save = Post::where("id",$request->id)->firstOrFail();
 
 
        DB::beginTransaction();
@@ -596,5 +595,66 @@ class adminController extends Controller
        DB::commit();
         return back()->with('success', 'Data Berita berhasil disimpan. ');
     }
+
+    public function kategori_project(){
+        $data = ProjectCategory::get();
+        return view('admin.kategori_project.data',compact('data')) ;
+    }
+
+    public function kategori_project_add(){
+        return view('admin.kategori_project.add') ;
+    }
+
+    public function kategori_project_add_p(Request $request){
+        
+        // return $request->nama ;
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:project_categories,category,NULL,id,deleted_at,NULL',
+            'status' => 'required|in:Aktif,Tidak',
+        ]);
+
+        $save  = New ProjectCategory() ;
+        $save->category = $request->nama;
+        $save->status = $request->status;
+        $save->save() ;
+
+        return back()->with('success', 'Kategori berhasil ditambahkan.');
+    }
+
+
+    public function kategori_project_edit(Request $request){
+        
+        $d = ProjectCategory::where("id",$request->id)->firstOrFail();
+        return view('admin.kategori_project.edit',compact('d')) ;
+    }
+
+    public function kategori_project_edit_p(Request $request){
+        
+        // return $request->nama ;
+        
+        $save  = ProjectCategory::where("id",$request->id)->firstOrFail() ;
+
+
+        $request->validate([
+            'nama' => 'required|string|max:255|unique:project_categories,category,' . $save->id . ',id,deleted_at,NULL',
+            'status' => 'required|in:Aktif,Tidak',
+        ]);
+
+        $save->category = $request->nama;
+        $save->status = $request->status;
+        $save->save() ;
+
+        return back()->with('success', 'Kategori berhasil diperbarui.');
+    }
+
+    public function kategori_project_delete_p(Request $request){
+        
+        $save  = ProjectCategory::where("id",$request->id)->firstOrFail() ;
+        $save->delete() ;
+
+        return back()->with('success', 'Kategori berhasil diperbarui.');
+    }
+
+    
     
 }

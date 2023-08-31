@@ -3,20 +3,7 @@
 @section('title', 'Edit Project')
 
 @section('contents')
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Summernote with Bootstrap 4</title>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-</head>
 <div class="container-fluid">
     <!-- Page Content -->
     <div class="card">
@@ -47,8 +34,24 @@
                     <label for="name">Title Project</label>
                     <input type="text" name="name" class="form-control" id="name" value="{{ $project->name }}">
                 </div>
+                <div class="form-group">
+                    <label for="periode_pendaftaran">Periode Pendaftaran</label>
+                    <input type="text" name="periode_pendaftaran" class="form-control datetimepicker" id="periode_pendaftaran" value="{{ old('periode_pendaftaran', $project->registration_start_at . ' - ' . $project->registration_end_at) }}" placeholder="yyyy-mm-dd - yyyy-mm-dd">
+                </div>
+                <div class="form-group">
+                    <label for="periode_pengerjaan">Periode Pengerjaan</label>
+                    <input type="text" name="periode_pengerjaan" class="form-control datetimepicker" id="periode_pengerjaan" value="{{ old('periode_pengerjaan', $project->work_start_at . ' - ' . $project->work_end_at) }}" placeholder="yyyy-mm-dd - yyyy-mm-dd">
+                </div>
+                <div class="form-group">
+                    <label for="tingkat_Kesulitan">Tingkat Kesulitan</label>
+                    <select name="tingkat_Kesulitan" class="form-control" id="tingkat_Kesulitan">
+                        <option value="Mudah" {{ $project->level === 'Mudah' ? 'selected' : '' }}>Mudah</option>
+                        <option value="Sedang" {{ $project->level === 'Sedang' ? 'selected' : '' }}>Sedang</option>
+                        <option value="Susah" {{ $project->level === 'Susah' ? 'selected' : '' }}>Susah</option>
+                    </select>
+                </div>
                 <label for="notes">Notes</label>
-                <textarea name="notes" id="notes" cols="30" rows="10">{{ $project->notes }}</textarea>
+                <textarea name="notes" id="notes" cols="30" rows="10">{{ old('notes', $project->notes) }}</textarea>
                 <button id="confirmButton" type="button" class="btn btn-primary">Update</button>
             </form>
         </div>
@@ -74,15 +77,56 @@
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js" integrity="sha512-mh+AjlD3nxImTUGisMpHXW03gE6F4WdQyvuFRkjecwuWLwD2yCijw4tKA3NsEFpA1C3neiKhGXPSIGSfCYPMlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css" integrity="sha512-rBi1cGvEdd3NmSAQhPWId5Nd6QxE8To4ADjM2a6n0BrqQdisZ/RPUlm0YycDzvNL1HHAh1nKZqI0kSbif+5upQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script>
-    // Trigger the final confirmation when the "Confirm" button in the modal is clicked
-    document.getElementById('finalConfirmButton').addEventListener('click', function () {
-        document.getElementById('projectForm').submit();
-    });
+    $(document).ready(function() {
+        $('#periode_pendaftaran').daterangepicker({
+            singleDatePicker: false,
+            showDropdowns: true,
+            locale: {
+                format: 'YYYY-MM-DD',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                weekLabel: 'W',
+                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                firstDay: 1
+            }
+        });
 
-    // Trigger the project confirmation modal when the initial "Update" button is clicked
-    document.getElementById('confirmButton').addEventListener('click', function () {
-        $('#projectModal').modal('show');
+        $('#periode_pengerjaan').daterangepicker({
+            singleDatePicker: false,
+            showDropdowns: true,
+            locale: {
+                format: 'YYYY-MM-DD',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                weekLabel: 'W',
+                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                firstDay: 1
+            }
+        });
+
+        // Trigger the final confirmation when the "Confirm" button in the modal is clicked
+        $('#finalConfirmButton').on('click', function () {
+            $('#projectForm').submit();
+        });
+
+        // Trigger the project confirmation modal when the initial "Update" button is clicked
+        $('#confirmButton').on('click', function () {
+            $('#projectModal').modal('show');
+        });
     });
 
     $('#notes').summernote({
@@ -100,21 +144,6 @@
         ]
     });
 </script>
-<!-- Bootstrap core JavaScript -->
-<script src="{{asset('iduka/vendor/jquery/jquery.min.js')}}"></script>
-<script src="{{asset('iduka/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
-<!-- Core plugin JavaScript -->
-<script src="{{asset('iduka/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
-
-<!-- Custom scripts for all pages -->
-<script src="{{asset('iduka/js/sb-admin-2.min.js')}}"></script>
-
-<!-- Page level plugins -->
-<script src="{{asset('iduka/vendor/chart.js/Chart.min.js')}}"></script>
-
-<!-- Page level custom scripts -->
-<script src="{{asset('iduka/js/demo/chart-area-demo.js')}}"></script>
-<script src="{{asset('iduka/js/demo/chart-pie-demo.js')}}"></script>
 
 @endsection

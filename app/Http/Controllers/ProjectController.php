@@ -7,6 +7,8 @@ use App\Models\Project;
 use App\Models\Iduka;
 use App\Models\ProjectApply;
 use App\Models\ProjectCategory;
+use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth; 
@@ -15,7 +17,7 @@ class ProjectController extends Controller
 {
     public function create_project()
     {   
-        $categories = ProjectCategory::all();
+        $categories = ProjectCategory::where("status","Aktif")->get();
         $iduka = Auth::user()->iduka;
         return view('iduka.recruitment', ['iduka' => $iduka, 'categories' => $categories]);
     }
@@ -24,44 +26,76 @@ class ProjectController extends Controller
     public function saveProject(Request $request)
     {
         $data = $request->validate([
-
             'name' => 'required|string|max:255',
-            'notes' => 'nullable|string',
-            'content' => 'nullable|string',
+            'notes' => 'required|string',
             'category_id' => 'required',
+            'periode_pendaftaran' => [
+                'required',
+                'regex:/\d{4}-\d{2}-\d{2}\s*-\s*\d{4}-\d{2}-\d{2}/', // Format custom regex
+            ],
+            'periode_pengerjaan' => [
+                'required',
+                'regex:/\d{4}-\d{2}-\d{2}\s*-\s*\d{4}-\d{2}-\d{2}/', // Format custom regex
+            ],
         ]);
-        $data['iduka_id'] = Auth::user()->id;
-        $project = new Project();
-        $project->iduka_id = $data['iduka_id'];
-        $project->name = $data['name'];
-        $project->status = 'aktif';
-        $project->category_id = $data['category_id'];
-        // Menyimpan konten Summernote
-        $notesContent = $data['notes'] ?? '';
-        $summernoteContent = $data['content'] ?? '';
-        $combinedContent = $notesContent . "\n" . $summernoteContent;
-        $project->notes = $combinedContent;
 
-        preg_match_all('/<img[^>]+src="([^"]+)"/', $summernoteContent, $imageMatches);
-        foreach ($imageMatches[1] as $imageSrc) {
-            if (Str::startsWith($imageSrc, 'data:image')) {
-                $extension = explode('/', mime_content_type($imageSrc))[1];
-                $filename = 'summernote/' . Str::random(40) . '.' . $extension;
-                $imageData = base64_decode(preg_replace('/data:image\/(.*?);base64,/', '', $imageSrc));
-                Storage::disk('public')->put($filename, $imageData);
-                $combinedContent = str_replace($imageSrc, asset('storage/' . $filename), $combinedContent);
+        $periode_pendaftaran = explode(" - ", $data['periode_pendaftaran']);
+        $periode_pengerjaan = explode(" - ", $data['periode_pengerjaan']);
+
+        $iduka = Iduka::where("user_id", Auth::user()->id)->firstOrFail();
+
+        try {
+            DB::beginTransaction();
+
+            $project = new Project();
+            $project->iduka_id = $iduka->id;
+            $project->name = $data['name'];
+            $project->status = 'Aktif';
+            $project->category_id = $data['category_id'];
+            $project->level = $request->tingkat_Kesulitan;
+            $project->registration_start_at = $periode_pendaftaran[0];
+            $project->registration_end_at = $periode_pendaftaran[1];
+            $project->work_start_at = $periode_pengerjaan[0];
+            $project->work_end_at = $periode_pengerjaan[1];
+
+            $description = $data['notes'];
+
+            if (!empty($description)) {
+                $dom = new \DomDocument();
+                @$dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $images = $dom->getElementsByTagName('img');
+                foreach ($images as $k => $img) {
+                    $data = $img->getAttribute('src');
+                    list($type, $data) = explode(';', $data);
+                    list(, $data) = explode(',', $data);
+                    $data = base64_decode($data);
+                    $image_name = "/assets/images/project/" . time() . $k . '.png';
+                    $path = public_path() . $image_name;
+                    file_put_contents($path, $data);
+                    $img->removeAttribute('src');
+                    $img->setAttribute('src', $image_name);
+                }
+                $description = $dom->saveHTML();
             }
+
+            $project->notes = $description;
+
+            // Simpan data proyek
+            $project->save();
+
+            DB::commit();
+
+            return redirect()->route('iduka.index')->with('success', 'Proyek berhasil dibuat.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan proyek.');
         }
-
-        $project->notes = $combinedContent;
-
-        // Simpan data proyek
-        $project->save();
-    
-        return redirect()->route('iduka.index')->with('success', 'Project created successfully.');
     }
 
-        public function editProject($projectId)
+
+
+
+    public function editProject($projectId)
     {
         $project = Project::findOrFail($projectId);
         $categories = ProjectCategory::all();
@@ -69,44 +103,76 @@ class ProjectController extends Controller
         return view('iduka.edit', compact('project', 'categories','iduka'));
     }
 
+
     public function updateProject(Request $request, $projectId)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'notes' => 'nullable|string',
-            'status' => 'nullable|string',
-            'content' => 'nullable|string',
+            'notes' => 'required|string',
             'category_id' => 'required',
+            'periode_pendaftaran' => [
+                'required',
+                'regex:/\d{4}-\d{2}-\d{2}\s*-\s*\d{4}-\d{2}-\d{2}/', // Format custom regex
+            ],
+            'periode_pengerjaan' => [
+                'required',
+                'regex:/\d{4}-\d{2}-\d{2}\s*-\s*\d{4}-\d{2}-\d{2}/', // Format custom regex
+            ],
         ]);
 
+        $periode_pendaftaran = explode(" - ", $data['periode_pendaftaran']);
+        $periode_pengerjaan = explode(" - ", $data['periode_pengerjaan']);
+
         $project = Project::findOrFail($projectId);
-        $project->name = $data['name'];
-        $project->status = $data['status'];
-        $project->category_id = $data['category_id'];
 
-        $notesContent = $data['notes'] ?? '';
-        $summernoteContent = $data['content'] ?? '';
-        $combinedContent = $notesContent . "\n" . $summernoteContent;
+        try {
+            DB::beginTransaction();
 
-        preg_match_all('/<img[^>]+src="([^"]+)"/', $summernoteContent, $imageMatches);
-        foreach ($imageMatches[1] as $imageSrc) {
-            if (Str::startsWith($imageSrc, asset('storage/'))) {
-                continue; // Ignore existing images
+            $project->name = $data['name'];
+            $project->category_id = $data['category_id'];
+            $project->level = $request->tingkat_Kesulitan;
+            $project->registration_start_at = $periode_pendaftaran[0];
+            $project->registration_end_at = $periode_pendaftaran[1];
+            $project->work_start_at = $periode_pengerjaan[0];
+            $project->work_end_at = $periode_pengerjaan[1];
+
+            $description = $data['notes'];
+
+            if (!empty($description)) {
+                $dom = new \DomDocument();
+                @$dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $images = $dom->getElementsByTagName('img');
+                foreach ($images as $k => $img) {
+                    $data = $img->getAttribute('src');
+
+                    if ( !strstr( $data, 'project' ) ) {
+                    list($type, $data) = explode(';', $data);
+                    list(, $data) = explode(',', $data);
+                    $data = base64_decode($data);
+                    $image_name = "/assets/images/project/" . time() . $k . '.png';
+                    $path = public_path() . $image_name;
+                    file_put_contents($path, $data);
+                    $img->removeAttribute('src');
+                    $img->setAttribute('src', $image_name);
+                    }
+                }
+                $description = $dom->saveHTML();
             }
-            if (Str::startsWith($imageSrc, 'data:image')) {
-                $extension = explode('/', mime_content_type($imageSrc))[1];
-                $filename = 'summernote/' . Str::random(40) . '.' . $extension;
-                $imageData = base64_decode(preg_replace('/data:image\/(.*?);base64,/', '', $imageSrc));
-                Storage::disk('public')->put($filename, $imageData);
-                $combinedContent = str_replace($imageSrc, asset('storage/' . $filename), $combinedContent);
-            }
+
+            $project->notes = $description;
+
+            // Simpan data proyek
+            $project->save();
+
+            DB::commit();
+
+            return redirect()->route('iduka.index')->with('success', 'Proyek berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui proyek.');
         }
-
-        $project->notes = $combinedContent;
-        $project->save();
-
-        return redirect()->route('iduka.index', ['id' => $projectId])->with('success', 'Project updated successfully.');
     }
+
 
 
         public function editStatus($projectId)
