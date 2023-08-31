@@ -40,13 +40,9 @@
             <a class="collapse-item" href="{{route('iduka.all_project')}}">Semua Project</a>
             <a class="collapse-item" href="{{route('iduka.aktif_project')}}">Project Aktif</a>
             <a class="collapse-item" href="{{route('iduka.selesai_project')}}">Projects selesai</a>
-            
         </div>
     </div>
 </li>
-
-<!-- Divider -->
-<hr class="sidebar-divider">
 
 <!-- Heading -->
 <div class="sidebar-heading">
@@ -63,7 +59,11 @@
         <i class="fas fa-fw fa-table"></i>
         <span>Buat Project</span></a>
 </li>
-
+<li class="nav-item">
+    <a class="nav-link" href="{{route('iduka.ongoing_progress')}}">
+        <i class="fas fa-fw fa-table"></i>
+        <span>Project ongoing</span></a>
+</li>
   <!-- Divider -->
   <hr class="sidebar-divider d-none d-md-block">
 

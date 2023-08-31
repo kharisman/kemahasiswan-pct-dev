@@ -173,7 +173,7 @@
         </a>
         <a class="dropdown-item" href="{{route('iduka.change_email_password')}}">
           <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-          Activity Log
+          Ganti Password
         </a>
         <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -182,7 +182,6 @@
             </a>
         </div>
     </li>
-
   </ul>
 
 </nav>
