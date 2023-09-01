@@ -16,5 +16,10 @@ class Internship extends Model
         return $this->hasMany(ProjectApply::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }
 

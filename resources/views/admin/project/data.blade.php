@@ -40,10 +40,9 @@
                                 <td>{{ $d->work_start_at . ' - ' . $d->work_end_at }}</td>
                                 <td class="text-center" style="width: 300px;">
                                      <div class="row">
-                                        <div class="col-6 mb-2">
+                                        <div class="col-12 mb-2">
                                             <a href="{{ url('admin/project/edit') }}?id={{ $d->id }}" class="btn btn-sm btn-primary">Edit</a>
-                                        </div>
-                                        <div class="col-6">
+                                        
                                             <a href="{{ url('admin/project/delete') }}?id={{ $d->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori project ini?')">Delete</a>
                                         </div>
                                     </div>

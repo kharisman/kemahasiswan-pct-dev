@@ -12,12 +12,14 @@ use App\Models\Category;
 use App\Models\ProjectCategory;
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Models\Event;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class adminController extends Controller
 {
@@ -738,6 +740,141 @@ class adminController extends Controller
         }
     }
 
+
+    public function iduka(){
+        $data = Iduka::get();
+        return view('admin.iduka.data', compact('data'));
+    }
+
+
+    public function iduka_edit(Request $request){
+        
+        $d = Iduka::with("user")->where("id",$request->id)->firstOrFail();
+        return view('admin.iduka.edit',compact('d')) ;
+    }
+
+    public function iduka_edit_p(Request $request){
+        
+        $iduka = Iduka::findOrFail($request->id);
+        $data = $request->validate([
+            'id' => 'required|exists:idukas,id',
+            'nama' => 'required|string|max:255',
+            'address' => 'nullable|string',
+            'phone' => 'nullable|string|max:15',
+            'status' => 'required|in:Aktif,Tidak',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Add validation for image upload
+            'email' => 'nullable|email|max:255|unique:users,email,' . $iduka->user_id,
+            'password' => 'nullable|min:8|same:password_confirmation', // Validasi password harus sama dengan konfirmasi
+            'password_confirmation' => 'nullable|min:8', // Konfirmasi password
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $iduka = Iduka::findOrFail($data['id']);
+            $iduka->name = $data['nama'];
+            $iduka->address = $data['address'];
+            $iduka->phone = $data['phone'];
+            $iduka->status = $data['status'];
+
+            if ($request->hasFile('photo')) {
+                $new_photo = time() . '_' . Str::slug($request->file('photo')->getClientOriginalName());
+                $request->file('photo')->move('images/iduka/', $new_photo);
+                $iduka->photo = 'images/iduka/' . $new_photo;
+            }
+
+            $iduka->save();
+
+            // Update associated user's email and password if provided
+            $user = $iduka->user;
+            $user->username = $request->input('nama');
+            if (!empty($request->has('email'))) {
+                $user->email = $request->input('email');
+            }
+            if (!empty($request->has('password'))) {
+                $user->password = Hash::make($request->input('password'));
+            }
+            $user->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Data berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui data.');
+        }
+    }
+
+
+    public function internship(){
+        $data = Internship::get();
+        return view('admin.internship.data', compact('data'));
+    }
+
+
+    public function internship_edit(Request $request){
+        
+        $d = Internship::with("user")->where("id",$request->id)->firstOrFail();
+        return view('admin.internship.edit',compact('d')) ;
+    }
+
+    public function internship_edit_p(Request $request){
+        
+        $internship = Internship::findOrFail($request->id);
+        $data = $request->validate([
+            'id' => 'required|exists:internships,id',
+            'nama' => 'required|string|max:255',
+            'address' => 'nullable|string',
+            'phone' => 'nullable|string|max:15',
+            'status' => 'required|in:Aktif,Tidak',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Add validation for image upload
+            'email' => 'nullable|email|max:255|unique:users,email,' . $internship->user_id,
+            'password' => 'nullable|min:8|same:password_confirmation', // Validasi password harus sama dengan konfirmasi
+            'password_confirmation' => 'nullable|min:8', // Konfirmasi password
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $internship = Internship::findOrFail($data['id']);
+            $internship->name = $data['nama'];
+            $internship->address = $data['address'];
+            $internship->phone = $data['phone'];
+            $internship->status = $data['status'];
+
+            if ($request->hasFile('photo')) {
+                $new_photo = time() . '_' . Str::slug($request->file('photo')->getClientOriginalName());
+                $request->file('photo')->move('images/internship/', $new_photo);
+                $internship->photo = 'images/internship/' . $new_photo;
+            }
+
+            $internship->save();
+
+            // Update associated user's email and password if provided
+            $user = $internship->user;
+            $user->username = $request->input('nama');
+            if (!empty($request->has('email'))) {
+                $user->email = $request->input('email');
+            }
+            if (!empty($request->has('password'))) {
+                $user->password = Hash::make($request->input('password'));
+            }
+            $user->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Data berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui data.');
+        }
+    }
+
+
+    public function event(){
+        $data = Event::get();
+        return view('admin.event.data', compact('data'));
+    }
 
     
     

@@ -46,12 +46,12 @@
             </div> --}}
 
             <li class="nav-item">
-                <a class="nav-link" href="{{url('admin-confirm-iduka')}}">
+                <a class="nav-link" href="{{url('admin/iduka')}}">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Iduka</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{url('admin-confirm-internship')}}">
+                <a class="nav-link" href="{{url('admin/internship')}}">
                     <i class="fas fa-fw fa-box"></i>
                     <span>Intrendship</span></a>
             </li>
@@ -61,14 +61,9 @@
                     <span>Project</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{url('admin-event')}}">
+                <a class="nav-link" href="{{url('admin/event')}}">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>Event</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{url('admin-artikel')}}">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Artikel</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
@@ -82,11 +77,11 @@
                         <a class="collapse-item" href="{{url('admin/settings/kategori-berita')}}">Kategori Berita</a>
                         <a class="collapse-item" href="{{url('admin/settings/berita')}}">Berita</a>
                         <a class="collapse-item" href="{{url('admin/settings/kategori-project')}}">Kategori Project</a>
+                        
                     </div>
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Manage User:</h6>
-                        <a class="collapse-item" href="{{url('admin-iduka')}}">Users Iduka</a>
-                        <a class="collapse-item" href="{{url('admin-internship')}}">Users Intrendship</a>
+                        <a class="collapse-item" href="{{url('admin/settings/user')}}">Internal User</a>
                     </div>
                 </div>
             </li>
