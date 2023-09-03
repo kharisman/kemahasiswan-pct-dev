@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+
 class IdukaController extends Controller
 {
     public function dashboard_iduka()
@@ -105,45 +106,44 @@ class IdukaController extends Controller
     
     public function updateEmail(Request $request)
     {
-        $user = Auth::user();
-    
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users,email,' . $user->id
-        ]);
-    
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator);
+        try {
+            $user = Auth::user();
+
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email|unique:users,email,' . $user->id
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator);
+            }
+
+            $user->update([
+                'email' => $request->email
+            ]);
+
+            return redirect()->back()->with('success', 'Email berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui email.');
         }
-    
-        $user->update([
-            'email' => $request->email
-        ]);
-    
-        return redirect()->back()->with('success', 'Email berhasil diperbarui.');
     }
-    
+
     public function updatePassword(Request $request)
     {
-        $user = Auth::user();
-    
-        $validator = Validator::make($request->all(), [
-            'old_password' => ['required', function ($attribute, $value, $fail) use ($user) {
-                if (!Hash::check($value, $user->password)) {
-                    $fail(__('The old password is incorrect.'));
-                }
-            }],
-            'password' => 'required|confirmed|min:8',
-        ]);
-    
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator);
+        try {
+            $user = Auth::user();
+
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator);
+            }
+
+            $user->update([
+                'password' => Hash::make($request->password)
+            ]);
+
+            return redirect()->back()->with('success', 'Password berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui password.');
         }
-    
-        $user->update([
-            'password' => Hash::make($request->password)
-        ]);
-    
-        return redirect()->back()->with('success', 'Password berhasil diperbarui.');
     }
     
 

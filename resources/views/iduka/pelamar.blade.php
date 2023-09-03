@@ -29,15 +29,20 @@
                 <a href="{{ route('iduka.detail_apply', ['projectApplyId' => $projectApply->id]) }}" class="btn btn-success btn-circle btn-lg">
                     <i class="fas fa-info-circle"></i>
                 </a>Info profile Intern
-                <form id="form_{{ $projectApply->id }}" class="status-form" action="{{ route('edit.status', ['applyId' => $projectApply->id]) }}" method="POST">
-                    @csrf
-                    <select name="new_status" class="status-dropdown">
+                <div class="container">
+            <form id="form_{{ $projectApply->id }}" class="status-form" action="{{ route('edit.status', ['applyId' => $projectApply->id]) }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="new_status"> Beri Status:</label>
+                    <select name="new_status" class="form-control status-dropdown">
+                    <option value="">Beri status</option>
                         <option value="accepted">Diterima</option>
                         <option value="rejected">Ditolak</option>
-                        <option value="pending">Menunggu</option>
                     </select>
-                    <button type="submit">Simpan</button>
-                </form></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </form>
+        </div>
             </td>
         </tr>
         @endif
