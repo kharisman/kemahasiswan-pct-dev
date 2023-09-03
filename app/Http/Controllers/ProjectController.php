@@ -82,7 +82,6 @@ class ProjectController extends Controller
 
             $project->notes = $description;
 
-            // Simpan data proyek
             $project->save();
 
             DB::commit();
@@ -160,7 +159,6 @@ class ProjectController extends Controller
 
             $project->notes = $description;
 
-            // Simpan data proyek
             $project->save();
 
             DB::commit();
@@ -187,7 +185,6 @@ class ProjectController extends Controller
 
         $project = Project::findOrFail($projectId);
 
-        // Update the project's status
         $project->status = $data['status'];
         $project->save();
 
@@ -276,7 +273,6 @@ class ProjectController extends Controller
             }
         }
 
-        // Delete the project
         $project->delete();
 
         return redirect()->route('iduka.index')->with('success', 'Project deleted successfully.');
@@ -339,50 +335,61 @@ class ProjectController extends Controller
 
     public function edit_status_apply(Request $request, $applyId)
     {
-        $newStatus = $request->input('new_status'); // Ambil status baru dari input form
-        
-        $apply = ProjectApply::find($applyId); // Temukan entitas ProjectApply berdasarkan ID
-        
-        if (!$apply) {
-            return redirect()->back()->with('error', 'Pendaftaran tidak ditemukan');
-        }
-        
-        // Update status dengan status baru
-        $apply->status = $newStatus;
-        $apply->save();
-        
-        return redirect()->back()->with('success', 'Status berhasil diperbarui');
-        } 
-        public function ongoing_progress()
-{   
-    $iduka = Auth::user()->iduka;
-    
-    $projectUpdates = ProjectUpdate::with(['project', 'internship'])
-        ->whereHas('project', function ($query) use ($iduka) {
-            $query->where('iduka_id', $iduka->id);
-        })
-        ->get();
+        try {
+            $newStatus = $request->input('new_status');
 
-    $groupedUpdates = [];
-    
-    foreach ($projectUpdates as $update) {
-        $projectId = $update->project_id;
+            $apply = ProjectApply::find($applyId);
+
+            if (!$apply) {
+                return redirect()->back()->with('error', 'Pendaftaran tidak ditemukan');
+            }
+
+            DB::beginTransaction();
+
+            $apply->status = $newStatus;
+            $apply->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Status berhasil diperbarui');
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui status.');
+        }
+    } 
+
+    public function ongoing_progress()
+    {   
+        $iduka = Auth::user()->iduka;
         
-        if (!isset($groupedUpdates[$projectId])) {
-            $groupedUpdates[$projectId] = [
-                'project' => $update->project,
-                'internships' => []
-            ];
+        $projectUpdates = ProjectUpdate::with(['project', 'internship'])
+            ->whereHas('project', function ($query) use ($iduka) {
+                $query->where('iduka_id', $iduka->id);
+            })
+            ->get();
+
+        $groupedUpdates = [];
+        
+        foreach ($projectUpdates as $update) {
+            $projectId = $update->project_id;
+            
+            if (!isset($groupedUpdates[$projectId])) {
+                $groupedUpdates[$projectId] = [
+                    'project' => $update->project,
+                    'internships' => []
+                ];
+            }
+            
+            $groupedUpdates[$projectId]['internships'][] = $update->internship->name;
         }
         
-        $groupedUpdates[$projectId]['internships'][] = $update->internship->name;
+        return view('iduka.ongoing_progress', [
+            'iduka' => $iduka,
+            'groupedUpdates' => $groupedUpdates
+        ]);
     }
-    
-    return view('iduka.ongoing_progress', [
-        'iduka' => $iduka,
-        'groupedUpdates' => $groupedUpdates
-    ]);
-}
 
         
 
