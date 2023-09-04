@@ -8,6 +8,17 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\LandingController;
 
+
+Route::controller(AuthController::class)->group(function () {
+	Route::get('register', 'register')->name('register');
+	Route::post('register', 'registerSimpan')->name('register.simpan');
+	Route::get('registerIduka', 'registerIduka')->name('registerIduka');
+	Route::post('registerIduka', 'registerIdukaSimpan')->name('registerIduka.simpan');
+	Route::get('login', 'login')->name('login');
+	Route::post('login', 'loginAksi')->name('login.aksi');
+	Route::get('logout', 'logout')->middleware('auth')->name('logout');
+});
+
 Route::get('', [LandingController::class, 'index'])->name('index');
 Route::get('/pengajuan-iduka', [LandingController::class, 'iduka'])->name('iduka');
 Route::get('/pengajuan-intership', [LandingController::class, 'intership'])->name('intership');
@@ -26,8 +37,8 @@ Route::post('internship-data', [InternshipController::class, 'dataInternshipPost
 Route::get('internship-detail-project/{id}', [InternshipController::class, 'projectDetailInternship']);
 Route::get('internship-project-apply/{id}', [InternshipController::class, 'applyProjectInternship']);
 
+Route::middleware(['auth'])->group(function () {
 Route::get('iduka/index', [IdukaController::class, 'dashboard_iduka'])->name('iduka.index');
-//Route::get('iduka/profile', [IdukaController::class, 'profile_iduka'])->name('iduka.profile');
 Route::get('/iduka/{id}/edit', [IdukaController::class, 'edit'])->name('iduka.edit');
 Route::put('/iduka/{id}/update', [IdukaController::class, 'update'])->name('iduka.update');
 Route::get('/iduka/profile', [IdukaController::class, 'profile'])->name('iduka.profile');
@@ -52,21 +63,9 @@ Route::get('iduka/status_diterima', [ProjectController::class, 'data_apply_diter
 Route::get('iduka/status_ditolak', [ProjectController::class, 'data_apply_ditolak'])->name('iduka.data_apply_ditolak');
 Route::get('iduka/detail_pelamar/{projectApplyId}', [ProjectController::class, 'detail_apply'])->name('iduka.detail_apply');
 Route::post('/edit-status/{applyId}', [ProjectController::class, 'edit_status_apply'])->name('edit.status');
-//Route::get('iduka.ongoing_progress', [ProjectController::class, 'ongoing_progress'])->name('iduka.ongoing_progress');
 Route::get('/ongoing_progress', [ProjectController::class, 'ongoing_progress'])->name('iduka.ongoing_progress');
 
 
-Route::controller(AuthController::class)->group(function () {
-	Route::get('register', 'register')->name('register');
-	Route::post('register', 'registerSimpan')->name('register.simpan');
-	Route::get('registerIduka', 'registerIduka')->name('registerIduka');
-	Route::post('registerIduka', 'registerIdukaSimpan')->name('registerIduka.simpan');
-	Route::get('login', 'login')->name('login');
-	Route::post('login', 'loginAksi')->name('login.aksi');
-	Route::get('logout', 'logout')->middleware('auth')->name('logout');
-});
-
-Route::middleware(['auth'])->group(function () {
 	Route::get('/admin-dashboard',[adminController::class,'adminDashboard'])->name("admin.dashboard");	
 	Route::prefix('admin')->group(function () {
 		Route::get('settings/slider',[adminController::class,'slider']);
