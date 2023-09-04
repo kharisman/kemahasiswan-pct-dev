@@ -21,5 +21,10 @@ class Internship extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function socialMediaLinks()
+    {
+        return $this->hasMany(SocialMediaLink::class);
+    }
+
 }
 

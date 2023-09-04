@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="{{asset('internship/vendors/mdi/css/materialdesignicons.min.css')}}">
   <link rel="stylesheet" href="{{asset('internship/vendors/css/vendor.bundle.base.css')}}">
   <link rel="stylesheet" href="{{asset('internship/css/style.css')}}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
   <div class="container-scroller d-flex">
