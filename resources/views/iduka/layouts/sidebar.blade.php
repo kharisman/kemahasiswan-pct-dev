@@ -35,13 +35,11 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Berkas</h6>
                 <a class="collapse-item {{ Request::is('iduka/data_apply*') ? 'active' : '' }}" href="{{ route('iduka.data_apply') }}">Pelamar</a>
-                <a class="collapse-item {{ Request::is('iduka/data_apply_diterima*') ? 'active' : '' }}" href="{{ route('iduka.data_apply_diterima') }}">Diterima</a>
-                <a class="collapse-item {{ Request::is('iduka/data_apply_ditolak*') ? 'active' : '' }}" href="{{ route('iduka.data_apply_ditolak') }}">Ditolak</a>
                 <a class="collapse-item {{ Request::is('iduka/all_project*') ? 'active' : '' }}" href="{{ route('iduka.all_project') }}">Semua Project</a>
-                <a class="collapse-item {{ Request::is('iduka/aktif_project*') ? 'active' : '' }}" href="{{ route('iduka.aktif_project') }}">Project Aktif</a>
-                <a class="collapse-item {{ Request::is('iduka/selesai_project*') ? 'active' : '' }}" href="{{ route('iduka.selesai_project') }}">Projects Selesai</a>
+             
             </div>
         </div>
+    </li>
     </li>
 
     <!-- Heading -->

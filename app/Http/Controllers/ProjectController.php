@@ -391,6 +391,15 @@ class ProjectController extends Controller
         ]);
     }
 
-        
+
+public function showProjectApplies($projectId)
+{
+    $project = Project::findOrFail($projectId);
+    $iduka = Auth::user()->iduka;
+
+    $projectApplies = $project->applies;
+    $projectApplies = ProjectApply::where('project_id', $projectId)->get();
+    return view('iduka.project_apply', compact('project', 'projectApplies', 'iduka'));
+}
 
 }
