@@ -22,7 +22,7 @@
                             <img src="{{$item->photo}}" class="card-img-top p-3" alt="">
                             <div class="card-body">
                                 <h5 class="card-title">{{$item->name}}</h5>
-                                <p>{!! \Illuminate\Support\Str::limit($item->notes, 250) !!}</p>
+                                {{-- <p>{!! \Illuminate\Support\Str::limit($item->notes, 250) !!}</p> --}}
                                 <a href="{{ url('internship-detail-project', ['id' => $item->id]) }}">Selengkapnya</a>
                                 <a href="{{url('internship-project-apply',['id' => $item->id])}}" class="btn btn-primary col-12 mt-3">Apply</a>
                             </div>

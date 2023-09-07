@@ -88,8 +88,6 @@ Route::get('/ongoing_progress', [ProjectController::class, 'ongoing_progress'])-
 		Route::get('settings/berita/edit',[adminController::class,'berita_edit']);
 		Route::post('settings/berita/edit',[adminController::class,'berita_edit_p']);
 		Route::get('settings/berita/delete',[adminController::class,'berita_delete_p']) ;
-
-
 		
 		Route::get('settings/kategori-project',[adminController::class,'kategori_project']);
 		Route::get('settings/kategori-project/add',[adminController::class,'kategori_project_add']);
@@ -101,6 +99,17 @@ Route::get('/ongoing_progress', [ProjectController::class, 'ongoing_progress'])-
 		Route::get('project',[adminController::class,'project']);
 		Route::get('project/edit',[adminController::class,'project_edit']);
 		Route::post('project/edit',[adminController::class,'project_edit_p']);
+		
+		Route::get('iduka',[adminController::class,'iduka']);
+		Route::get('iduka/edit',[adminController::class,'iduka_edit']);
+		Route::post('iduka/edit',[adminController::class,'iduka_edit_p']);
+
+		
+		Route::get('internship',[adminController::class,'internship']);
+		Route::get('internship/edit',[adminController::class,'internship_edit']);
+		Route::post('internship/edit',[adminController::class,'internship_edit_p']);
+
+		Route::get('event',[adminController::class,'event']);
 	});
 });
 
