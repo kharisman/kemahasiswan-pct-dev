@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="{{asset('internship/vendors/mdi/css/materialdesignicons.min.css')}}">
   <link rel="stylesheet" href="{{asset('internship/vendors/css/vendor.bundle.base.css')}}">
   <link rel="stylesheet" href="{{asset('internship/css/style.css')}}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="{{asset('internship/vendors/cssdatatables.css')}}">
 </head>
 <body>
   <div class="container-scroller d-flex">
@@ -26,39 +26,13 @@
         <li class="nav-item">
           <a class="nav-link" href="{{url('internship-project')}}">
             <i class="mdi mdi-view-headline menu-icon"></i>
-            <span class="menu-title">Apply Project</span>
+            <span class="menu-title">Project</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{url('internship-history')}}">
             <i class="mdi mdi-box menu-icon"></i>
-            <span class="menu-title">History Apply</span>
-          </a>
-        </li>
-        <li class="nav-item sidebar-category">
-          <p>Pages</p>
-          <span></span>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-            <i class="mdi mdi-account menu-icon"></i>
-            <span class="menu-title">User Pages</span>
-            <i class="menu-arrow"></i>
-          </a>
-          <div class="collapse" id="auth">
-            <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="{{url('internship-data')}}"> Data User </a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item sidebar-category">
-          <p>Account</p>
-          <span></span>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{url('/')}}">
-            <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-            <span class="menu-title">Landing-Page</span>
+            <span class="menu-title">Riwayat</span>
           </a>
         </li>
       </ul>
@@ -73,12 +47,12 @@
             <a class="navbar-brand brand-logo" href=""><img src="{{asset('landingpage/images/logo-1.jpg')}}" width="50" alt="logo"/></a>
             <a class="navbar-brand brand-logo-mini" href=""><img src="{{asset('landingpage/images/logo-1.jpg')}}" height="55" width="30" alt="logo"/></a>
           </div>
-          <h4 class="font-weight-bold mb-0 d-none d-md-block mt-1">Welcome back, 
+          <h4 class="font-weight-bold mb-0 d-none d-md-block mt-1">Selamat datang, 
             @if (Auth::check())
             <?php
                 $internship = App\Models\Internship::where('user_id', Auth::user()->id)->first();
                 $name = $internship ? $internship->name : '';
-                $dateSign = ($internship->created_at)->format('h'). " hours ago";
+                $dateSign = ($internship->created_at)->format('d'). " days ago";
                 if ($internship->photo <> '') {
                   $photo = $internship->photo;
                 }else {
@@ -94,7 +68,7 @@
                     $condition++;
                 }
 
-                if ($dateSign < 24) {
+                if ($dateSign < 1) {
                     $condition++;
                 }
             ?>
@@ -108,34 +82,13 @@
                 {{ now()->format('F d, Y') }}
               </h4>
             </li>
-            <li class="nav-item dropdown me-1">
-              <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-bs-toggle="dropdown">
-                <i class="mdi mdi-calendar mx-0"></i>
-                <span class="count bg-info">2</span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
-                <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                      <img src="images/faces/face4.jpg" alt="image" class="profile-pic">
-                  </div>
-                  <div class="preview-item-content flex-grow">
-                    <h6 class="preview-subject ellipsis font-weight-normal">Name Project
-                    </h6>
-                    <p class="font-weight-light small-text text-muted mb-0">
-                      Success
-                    </p>
-                  </div>
-                </a>
-              </div>
-            </li>
             <li class="nav-item dropdown me-2">
               <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
                 <i class="mdi mdi-email-open mx-0"></i>
                 <span class="count bg-danger">{{$condition}}</span>
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-                <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+                <p class="mb-0 font-weight-normal float-left dropdown-header">Pesan</p>
                 @if ($internship->phone == "")
                   <a class="dropdown-item preview-item" href="{{url('internship-data')}}">
                     <div class="preview-thumbnail">
@@ -144,9 +97,9 @@
                       </div>
                     </div>
                     <div class="preview-item-content">
-                      <h6 class="preview-subject font-weight-normal">Complleted your profile</h6>
+                      <h6 class="preview-subject font-weight-normal">Lengkapi Data Pribadi</h6>
                       <p class="font-weight-light small-text mb-0 text-muted">
-                        Now for Apply
+                        Sekarang, untuk bisa mendaftar project
                       </p>
                     </div>
                 </a>  
@@ -166,7 +119,7 @@
                   </div>
                 </a>
                 @endif
-                @if ($dateSign < 24)
+                @if ($dateSign < 1)
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-info">
@@ -174,7 +127,7 @@
                     </div>
                   </div>
                   <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                    <h6 class="preview-subject font-weight-normal">Pengguna Baru</h6>
                     <p class="font-weight-light small-text mb-0 text-muted">
                       {{$dateSign}}
                     </p>
@@ -183,22 +136,19 @@
                 @endif
               </div>
             </li>
-          </ul>
-          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-            <span class="mdi mdi-menu"></span>
-          </button>
-        </div>
-        <div class="navbar-menu-wrapper navbar-search-wrapper d-none d-lg-flex align-items-center">
-          <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
                 <img src="{{ asset('images/internship/' . $photo) }}" width="55" alt="profile"/>
                 <span class="nav-profile-name">{{$name}}</span>
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                <a class="dropdown-item">
+                <a class="dropdown-item" href="{{url('internship-data')}}">
                   <i class="mdi mdi-settings text-primary"></i>
                   Settings
+                </a>
+                <a class="dropdown-item" href="{{url('/')}}">
+                  <i class="mdi mdi-menu text-primary"></i>
+                  Landing page
                 </a>
                 <a class="dropdown-item" href="{{url('logout')}}">
                   <i class="mdi mdi-logout text-primary"></i>
@@ -207,6 +157,9 @@
               </div>
             </li>
           </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-menu"></span>
+          </button>
         </div>
       </nav>
       <div class="main-panel">
@@ -224,13 +177,20 @@
     </div>
   </div>
 
+
   <script src="{{asset('internship/vendors/js/vendor.bundle.base.js')}}"></script>
   <script src="{{asset('internship/vendors/chart.js/Chart.min.js')}}"></script>
   <script src="{{asset('internship/js/jquery.cookie.js" type="text/javascript')}}"></script>
   <script src="{{asset('internship/js/off-canvas.js')}}"></script>
   <script src="{{asset('internship/js/hoverable-collapse.js')}}"></script>
   <script src="{{asset('internship/js/template.js')}}"></script>
-  <script src="{{asset('internship/js/jquery.cookie.js" type="text/javascript')}}"></script>
   <script src="{{asset('internship/js/dashboard.js')}}"></script>
+  <script src="{{asset('internship/vendors/jquery.js')}}"></script>
+  <script src="{{asset('internship/vendors/scriptdatatables.js')}}"></script>
+  <script>
+    $(document).ready(function() {
+        $('.table').DataTable();
+    });
+  </script>
 </body>
 </html>

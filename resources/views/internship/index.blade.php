@@ -9,7 +9,7 @@
                             class="d-flex flex-row align-items-center flex-wrap justify-content-md-center justify-content-xl-start py-1">
                             <i class="mdi mdi-checkbox-multiple-marked text-white icon-lg"></i>
                             <div class="ms-3 ml-md-0 ml-xl-3">
-                                <h5 class="text-white font-weight-bold">Complleted Project</h5>
+                                <h5 class="text-white font-weight-bold">Project Selesai</h5>
                                 <p class="mt-2 text-white card-text">{{$completedProject}} Project</p>
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                             class="d-flex flex-row align-items-center flex-wrap justify-content-md-center justify-content-xl-start py-1">
                             <i class="mdi mdi-calendar-remove text-white icon-lg"></i>
                             <div class="ms-3 ml-md-0 ml-xl-3">
-                                <h5 class="text-white font-weight-bold">Reject Project</h5>
+                                <h5 class="text-white font-weight-bold">Project Ditolak</h5>
                                 <p class="mt-2 text-white card-text">{{$rejectProject}} Project</p>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                             class="d-flex flex-row align-items-center flex-wrap justify-content-md-center justify-content-xl-start py-1">
                             <i class="mdi mdi-clipboard-text text-white icon-lg"></i>
                             <div class="ms-3 ml-md-0 ml-xl-3">
-                                <h5 class="text-white font-weight-bold">On Going Project</h5>
+                                <h5 class="text-white font-weight-bold">Project Berjalan</h5>
                                 <p class="mt-2 text-white card-text">{{$onGoingProject}} Project</p>
                             </div>
                         </div>
@@ -49,30 +49,30 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Project On Going</h4>
+                        <h4 class="card-title">Project Sedang Berlangsung</h4>
                         <div class="table-responsive">
-                            <table class="table table-striped">
+                            <table class="table table-bordered border-primary table-hover table-striped">
                                 <thead>
-                                    <tr>
+                                    <tr class="table-dark text-center">
                                         <th>No</th>
-                                        <th>Name Project</th>
-                                        <th>Progress</th>
-                                        <th>Amount</th>
-                                        <th>Deadline</th>
+                                        <th>Nama Project</th>
+                                        <th>Tanggal Mulai</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($onGoingProjectData as $item)
-                                        <tr>
-                                            <td>{{$loop->iteration}}</td>
-                                            <td>{{$item->name}}</td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                            </td>
+                                    @if ($onGoingProject <> 0)
+                                        @foreach ($onGoingProjectData as $item)
+                                            <tr class="table-bordered border-primary">
+                                                <td>{{$loop->iteration}}</td>
+                                                <td>{{$item->name}}</td>
+                                                <td>{{$item->date_start}}</td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr class="text-center">
+                                            <td colspan="4">Tidak ada project yang berlangsung, <a href="{{url('internship-project')}}"> Daftar Sekarang</a></td>
                                         </tr>
-                                    @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
