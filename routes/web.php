@@ -64,6 +64,8 @@ Route::get('iduka/status_ditolak', [ProjectController::class, 'data_apply_ditola
 Route::get('iduka/detail_pelamar/{projectApplyId}', [ProjectController::class, 'detail_apply'])->name('iduka.detail_apply');
 Route::post('/edit-status/{applyId}', [ProjectController::class, 'edit_status_apply'])->name('edit.status');
 Route::get('/ongoing_progress', [ProjectController::class, 'ongoing_progress'])->name('iduka.ongoing_progress');
+Route::get('/project/{id}/applies', [ProjectController::class,'showProjectApplies'])->name('project.applies');
+Route::get('/projects/{id}/applies', [ProjectController::class,'showProjectApplies'])->name('project.applies');
 
 
 	Route::get('/admin-dashboard',[adminController::class,'adminDashboard'])->name("admin.dashboard");	

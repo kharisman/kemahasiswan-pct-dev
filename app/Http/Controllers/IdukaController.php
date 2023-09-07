@@ -132,6 +132,11 @@ class IdukaController extends Controller
         try {
             $user = Auth::user();
 
+            // Periksa validator yang hilang
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|string|min:8|confirmed',
+            ]);
+
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator);
             }
@@ -145,7 +150,4 @@ class IdukaController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui password.');
         }
     }
-    
-
-
 }
