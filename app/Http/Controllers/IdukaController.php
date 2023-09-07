@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use App\Models\ProjectApply;
 
 class IdukaController extends Controller
 {
@@ -23,8 +24,21 @@ class IdukaController extends Controller
         $iduka = Iduka::where("user_id", Auth::user()->id)->firstOrFail();
         $projects = Project::where('iduka_id', $iduka->id)->get();
         $latestProject = Project::where('iduka_id', $iduka->id)->latest()->first();
-        return view('iduka/index', compact('projects', 'categories', 'latestProject','iduka')); // Mengirim data projects dan categories ke tampilan
+        $projectsCount = Project::where('iduka_id', $iduka->id)->count();
+        $applicantsCount = ProjectApply::whereHas('project', function ($query) use ($iduka) {
+            $query->where('iduka_id', $iduka->id);
+        })->count();
+        $applicantsAcceptedCount = ProjectApply::whereHas('project', function ($query) use ($iduka) {
+            $query->where('iduka_id', $iduka->id);
+        })->where('status', 'accepted')->count();
+    
+        // Hitung jumlah pelamar yang ditolak
+        $applicantsRejectedCount = ProjectApply::whereHas('project', function ($query) use ($iduka) {
+            $query->where('iduka_id', $iduka->id);
+        })->where('status', 'rejected')->count();
+        return view('iduka/index', compact('projects', 'categories', 'latestProject', 'iduka', 'projectsCount','applicantsCount','applicantsAcceptedCount', 'applicantsRejectedCount'));
     }
+    
     
     public function profile()
     {
