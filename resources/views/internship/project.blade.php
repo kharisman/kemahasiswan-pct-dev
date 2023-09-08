@@ -17,21 +17,21 @@
                 @if ($internship->phone <> '')
                 <div class="row">
                     @foreach ($projectData as $item)
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-3 mb-3">
                         <div class="card">
                             <img src="{{$item->photo}}" class="card-img-top p-3" alt="">
                             <div class="card-body">
                                 <h5 class="card-title">{{$item->name}}</h5>
                                 {{-- <p>{!! \Illuminate\Support\Str::limit($item->notes, 250) !!}</p> --}}
                                 <a href="{{ url('internship-detail-project', ['id' => $item->id]) }}">Selengkapnya</a>
-                                <a href="{{url('internship-project-apply',['id' => $item->id])}}" class="btn btn-primary col-12 mt-3">Apply</a>
+                                <a href="{{url('internship-project-apply',['id' => $item->id])}}" class="btn btn-primary col-12 mt-3">Daftar</a>
                             </div>
                         </div>
                     </div>
                     @endforeach
                 </div>
                 @else
-                    <div class="h3 text-center">Your Profile Not Complleted Please, Complleted you profile <a href="{{url('internship-data')}}">here</a></div>
+                    <div class="text-center">Data Pengguna Belum Lengkap, Mohon Lengkapi Data Sebelum Mendaftar di project, <a href="{{url('internship-data')}}">Disini</a></div>
                 @endif
             </div>
         </div>
