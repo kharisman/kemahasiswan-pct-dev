@@ -112,6 +112,12 @@ Route::get('/projects/{id}/applies', [ProjectController::class,'showProjectAppli
 		Route::post('internship/edit',[adminController::class,'internship_edit_p']);
 
 		Route::get('event',[adminController::class,'event']);
+		Route::get('event/add',[adminController::class,'event_add']);
+		Route::post('event/add',[adminController::class,'event_add_p']);
+		Route::get('event/edit',[adminController::class,'event_edit']);
+		Route::post('event/edit',[adminController::class,'event_edit_p']);
+		Route::get('event/delete',[adminController::class,'event_delete_p']) ;
+
 	});
 });
 

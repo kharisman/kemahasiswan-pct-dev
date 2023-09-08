@@ -876,6 +876,179 @@ class adminController extends Controller
         return view('admin.event.data', compact('data'));
     }
 
+    public function event_add(Request $request){
+        return view('admin.event.add') ;
+    }
+
+    public function event_add_p(Request $request)
+    {
+        // Memulai transaksi database
+        DB::beginTransaction();
+        // return 1 ;
+
+        try {
+            // Validasi data input
+            $validator = Validator::make($request->all(), [
+                'status' => 'required|in:Aktif,Tidak',
+                'judul_acara' => 'required|max:255',
+                'deskripsi' => 'required',
+                'periode_pendaftaran' => [
+                    'required',
+                    'regex:/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} - \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/',
+                    function ($attribute, $value, $fail) {
+                        $dates = explode(' - ', $value);
+                        $start_date = $dates[0];
+                        $end_date = $dates[1];
+
+                        // Validasi kustom untuk memeriksa periode pendaftaran dan periode acara
+                        if (strtotime($end_date) <= strtotime($start_date)) {
+                            $fail('Periode pendaftaran harus berakhir sebelum periode acara dimulai.');
+                        }
+                    },
+                ],
+                'periode_acara' => [
+                    'required',
+                    'date_format:Y-m-d H:i:s - Y-m-d H:i:s',
+                ]
+            ]);
+
+            // if ($validator->fails()) {
+            //     return back()
+            //         ->withErrors($validator)
+            //         ->withInput();
+            // }
+
+            $d1  = explode(" - ",$request->periode_pendaftaran);
+            $d2  = explode(" - ",$request->periode_acara);
+
+            $description = $request->deskripsi;
+
+            if (!empty($description)) {
+                $dom = new \DomDocument();
+                @$dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $images = $dom->getElementsByTagName('img');
+                foreach ($images as $k => $img) {
+                    $data = $img->getAttribute('src');
+
+                    if ( !strstr( $data, 'event' ) ) {
+                    list($type, $data) = explode(';', $data);
+                    list(, $data) = explode(',', $data);
+                    $data = base64_decode($data);
+                    $image_name = "/assets/images/event/" . time() . $k . '.png';
+                    $path = public_path() . $image_name;
+                    file_put_contents($path, $data);
+                    $img->removeAttribute('src');
+                    $img->setAttribute('src', $image_name);
+                    }
+                }
+                $description = $dom->saveHTML();
+            }
+
+            // Membuat instance Event dan mengisi data dari input form
+            $event = new Event();
+            $event->title = $request->input('judul_acara');
+            $event->status = $request->status;
+            $event->description = $description;
+            $event->start_date = $d1[0];
+            $event->end_date = $d1[1];
+            $event->reg_start = $d2[0];
+            $event->reg_end = $d2[1];
+
+            // Menyimpan data event ke dalam database
+            $event->save();
+
+            // Mengonfirmasi transaksi database
+            DB::commit();
+
+            // Mengarahkan pengguna kembali ke halaman sebelumnya (indeks event)
+            return back()->with('success', 'Event berhasil dibuat!');
+        } catch (\Exception $e) {
+            dd($e);
+            // Rollback transaksi database jika terjadi kesalahan
+            DB::rollback();
+
+            // Handle kesalahan sesuai kebutuhan Anda
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+    
+    public function event_edit(Request $request){
+        
+        $project = Project::where("id",$request->id)->firstOrFail();
+        $categories = ProjectCategory::all();
+        return view('admin.project.edit',compact('project','categories')) ;
+    }
+
+    public function event_edit_p(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'notes' => 'required|string',
+            'category_id' => 'required',
+            'periode_pendaftaran' => [
+                'required',
+                'regex:/\d{4}-\d{2}-\d{2}\s*-\s*\d{4}-\d{2}-\d{2}/', // Format custom regex
+            ],
+            'periode_pengerjaan' => [
+                'required',
+                'regex:/\d{4}-\d{2}-\d{2}\s*-\s*\d{4}-\d{2}-\d{2}/', // Format custom regex
+            ],
+        ]);
+
+        $periode_pendaftaran = explode(" - ", $data['periode_pendaftaran']);
+        $periode_pengerjaan = explode(" - ", $data['periode_pengerjaan']);
+
+        $project = Project::findOrFail($request->id);
+
+        try {
+            DB::beginTransaction();
+
+            $project->name = $data['name'];
+            $project->category_id = $data['category_id'];
+            $project->level = $request->tingkat_Kesulitan;
+            $project->registration_start_at = $periode_pendaftaran[0];
+            $project->registration_end_at = $periode_pendaftaran[1];
+            $project->work_start_at = $periode_pengerjaan[0];
+            $project->work_end_at = $periode_pengerjaan[1];
+
+            $description = $data['notes'];
+
+            if (!empty($description)) {
+                $dom = new \DomDocument();
+                @$dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $images = $dom->getElementsByTagName('img');
+                foreach ($images as $k => $img) {
+                    $data = $img->getAttribute('src');
+
+                    if ( !strstr( $data, 'project' ) ) {
+                    list($type, $data) = explode(';', $data);
+                    list(, $data) = explode(',', $data);
+                    $data = base64_decode($data);
+                    $image_name = "/assets/images/project/" . time() . $k . '.png';
+                    $path = public_path() . $image_name;
+                    file_put_contents($path, $data);
+                    $img->removeAttribute('src');
+                    $img->setAttribute('src', $image_name);
+                    }
+                }
+                $description = $dom->saveHTML();
+            }
+
+            $project->notes = $description;
+
+            // Simpan data proyek
+            $project->save();
+
+            DB::commit();
+
+            return back()->with('success', 'Proyek berhasil diperbarui.');
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            return back()->with('error', 'Terjadi kesalahan saat memperbarui proyek.');
+        }
+    }
+
     
     
 }
