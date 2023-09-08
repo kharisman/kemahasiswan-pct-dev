@@ -14,12 +14,11 @@
                         <thead>
                             <tr class="text-center">
                                 <th>No</th>
-                                <th>Tingkat</th>
-                                <th>Nama Proyek</th>
-                                <th>Kategori</th>
-                                <th>Tingkat Kesulitan</th>
+                                <th>Nama Event</th>
+                                <th>Peserta</th>
                                 <th>Periode Pendaftaran</th>
-                                <th>Periode Pengerjaan</th>
+                                <th>Periode Acara</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -30,18 +29,17 @@
                             @foreach ($data as $d)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ $d->level }}</td>
-                                <td>{{ $d->name }}</td>
-                                <td>{{ $d->category->category }}</td>
-                                <td>{{ $d->level }}</td>
-                                <td>{{ $d->registration_start_at . ' - ' . $d->registration_end_at }}</td>
-                                <td>{{ $d->work_start_at . ' - ' . $d->work_end_at }}</td>
+                                <td>{{ $d->title }}</td>
+                                <td>{{ $d->participants }}</td>
+                                <td>{{ $d->reg_start . ' - ' . $d->reg_end }}</td>
+                                <td>{{ $d->start_date . ' - ' . $d->end_date }}</td>
+                                <td>{{ $d->status}}</td>
                                 <td class="text-center" style="width: 300px;">
                                      <div class="row">
                                         <div class="col-12 mb-2">
-                                            <a href="{{ url('admin/project/edit') }}?id={{ $d->id }}" class="btn btn-sm btn-primary">Edit</a>
+                                            <a href="{{ url('admin/event/edit') }}?id={{ $d->id }}" class="btn btn-sm btn-primary">Edit</a>
                                         
-                                            <a href="{{ url('admin/project/delete') }}?id={{ $d->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori project ini?')">Delete</a>
+                                            <a href="{{ url('admin/event/delete') }}?id={{ $d->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori project ini?')">Delete</a>
                                         </div>
                                     </div>
                                 </td>

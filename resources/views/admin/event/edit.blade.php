@@ -3,8 +3,8 @@
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Project</h1>
-                <a href="{{url('admin/project')}}" class=" btn btn-sm btn-primary shadow-sm"><i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali</a>
+                <h1 class="h3 mb-0 text-gray-800">Event</h1>
+                <a href="{{url('admin/event')}}" class=" btn btn-sm btn-primary shadow-sm"><i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali</a>
             </div>
 
             <div class="row">
@@ -18,48 +18,74 @@
                              @if(session('success'))
                                 <div class="alert alert-success">{{ session('success') }}</div>
                             @endif
-
-                            <form id="projectForm"  method="POST" class="project">
+                            <form id="projectForm" method="POST" class="project"  enctype="multipart/form-data">
+                                <input type="hidden" name="id" value="{{ $event->id }}">
                                 @csrf
                                 @method('POST')
-                                <input type="hidden" name="id" class="form-control" id="id" value="{{ Auth::user()->id }}" readonly>
+
+                                 <div class="form-group">
+                                    <label for="images">Cover:</label>
+                                    <input type="file" class="form-control-file @error('images') is-invalid @enderror" name="images" accept="image/jpeg,image/png,image/jpg">
+                                    @error('images')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <img src="{{$event->cover}}" alt="" srcset="">
 
                                 <div class="form-group">
-                                    <label for="category_id">Kategori Project</label>
-                                    <select name="category_id" class="form-control" id="category_id">
-                                        @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" {{ $project->category_id == $category->id ? 'selected' : '' }}>{{ $category->category }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="judul_acara">Judul Acara</label>
+                                    <input type="text" name="judul_acara" class="form-control @error('judul_acara') is-invalid @enderror" id="judul_acara" value="{{ old('judul_acara', $event->title) }}" required>
+                                    @error('judul_acara')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="status">Status Project</label>
-                                    <input type="text" name="status" class="form-control" id="status" value="{{ $project->status }}" readonly>
+                                    <label for="jumlah_peserta">Jumlah Peserta</label>
+                                    <input type="number" name="jumlah_peserta" class="form-control @error('jumlah_peserta') is-invalid @enderror" id="jumlah_peserta" value="{{ old('jumlah_peserta', $event->participants) }}" required>
+                                    @error('jumlah_peserta')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                <div class="form-group">
-                                    <label for="name">Title Project</label>
-                                    <input type="text" name="name" class="form-control" id="name" value="{{ $project->name }}">
-                                </div>
+
                                 <div class="form-group">
                                     <label for="periode_pendaftaran">Periode Pendaftaran</label>
-                                    <input type="text" name="periode_pendaftaran" class="form-control datetimepicker" id="periode_pendaftaran" value="{{ old('periode_pendaftaran', $project->registration_start_at . ' - ' . $project->registration_end_at) }}" placeholder="yyyy-mm-dd - yyyy-mm-dd">
+                                    <input type="text" name="periode_pendaftaran" class="form-control datetimepicker @error('periode_pendaftaran') is-invalid @enderror" id="periode_pendaftaran" value="{{ old('periode_pendaftaran', $event->reg_start." - ".$event->reg_end) }}" placeholder="yyyy-mm-dd - yyyy-mm-dd" required>
+                                    @error('periode_pendaftaran')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="periode_pengerjaan">Periode Pengerjaan</label>
-                                    <input type="text" name="periode_pengerjaan" class="form-control datetimepicker" id="periode_pengerjaan" value="{{ old('periode_pengerjaan', $project->work_start_at . ' - ' . $project->work_end_at) }}" placeholder="yyyy-mm-dd - yyyy-mm-dd">
+                                    <label for="periode_acara">Periode Acara</label>
+                                    <input type="text" name="periode_acara" class="form-control datetimepicker @error('periode_acara') is-invalid @enderror" id="periode_acara" value="{{ old('periode_acara', $event->start_date." - ".$event->end_date) }}" placeholder="yyyy-mm-dd - yyyy-mm-dd" required>
+                                    @error('periode_acara')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="tingkat_Kesulitan">Tingkat Kesulitan</label>
-                                    <select name="tingkat_Kesulitan" class="form-control" id="tingkat_Kesulitan">
-                                        <option value="Mudah" {{ $project->level === 'Mudah' ? 'selected' : '' }}>Mudah</option>
-                                        <option value="Sedang" {{ $project->level === 'Sedang' ? 'selected' : '' }}>Sedang</option>
-                                        <option value="Susah" {{ $project->level === 'Susah' ? 'selected' : '' }}>Susah</option>
+                                    <label for="status">Status</label>
+                                    <select class="form-control @error('status') is-invalid @enderror" name="status" required>
+                                        <option value="Aktif" {{ old('status', $event->status) === 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                                        <option value="Tidak" {{ old('status', $event->status) === 'Tidak' ? 'selected' : '' }}>Tidak</option>
                                     </select>
+                                    @error('status')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                <label for="notes">Notes</label>
-                                <textarea class=" form-control summernote"  name="notes" id="notes" cols="30" rows="10">{{ old('notes', $project->notes) }}</textarea>
-                                <button id="confirmButton" type="button" class="btn btn-primary">Update</button>
+
+                                <label for="deskripsi">Deskripsi Acara</label>
+                                <textarea class="form-control summernote @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi" cols="30" rows="10">{{ old('deskripsi', $event->description) }}</textarea>
+                                @error('deskripsi')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </form>
+
+
                             
                         </div>
                     </div>
@@ -67,26 +93,7 @@
             </div>
         </div>
 
-        <!-- Status Confirmation Modal -->
-<div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-labelledby="projectModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="projectModalLabel">Confirm Project Update</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Yakin ingin mengubah isi project?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button id="finalConfirmButton" type="button" class="btn btn-primary">Confirm</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.css" integrity="sha512-ngQ4IGzHQ3s/Hh8kMyG4FC74wzitukRMIcTOoKT3EyzFZCILOPF0twiXOQn75eDINUfKBYmzYn2AA8DkAk8veQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.js" integrity="sha512-ZESy0bnJYbtgTNGlAD+C2hIZCt4jKGF41T5jZnIXy4oP8CQqcrBGWyxNP16z70z/5Xy6TS/nUZ026WmvOcjNIQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -95,10 +102,12 @@
 <script>
     $(document).ready(function() {
         $('#periode_pendaftaran').daterangepicker({
+            timePicker: true, // Menambahkan picker waktu
+            timePicker24Hour: true, // Menggunakan format waktu 24 jam
             singleDatePicker: false,
             showDropdowns: true,
             locale: {
-                format: 'YYYY-MM-DD',
+                format: 'YYYY-MM-DD HH:mm:ss', // Format datetime yang digunakan
                 separator: ' - ',
                 applyLabel: 'Apply',
                 cancelLabel: 'Cancel',
@@ -112,11 +121,13 @@
             }
         });
 
-        $('#periode_pengerjaan').daterangepicker({
+        $('#periode_acara').daterangepicker({
+            timePicker: true, // Menambahkan picker waktu
+            timePicker24Hour: true, // Menggunakan format waktu 24 jam
             singleDatePicker: false,
             showDropdowns: true,
             locale: {
-                format: 'YYYY-MM-DD',
+                format: 'YYYY-MM-DD HH:mm:ss', // Format datetime yang digunakan
                 separator: ' - ',
                 applyLabel: 'Apply',
                 cancelLabel: 'Cancel',

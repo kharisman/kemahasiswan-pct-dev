@@ -18,10 +18,19 @@
                              @if(session('success'))
                                 <div class="alert alert-success">{{ session('success') }}</div>
                             @endif
-                            <form id="projectForm" method="POST" class="project">
+                            <form id="projectForm" method="POST" class="project" enctype="multipart/form-data">
                                 @csrf
                                 @method('POST')
                                 <input type="hidden" name="id" class="form-control" id="id" value="{{ Auth::user()->id }}" readonly>
+
+
+                                <div class="form-group">
+                                    <label for="images">Cover:</label>
+                                    <input type="file" class="form-control-file @error('images') is-invalid @enderror" name="images" accept="image/jpeg,image/png,image/jpg">
+                                    @error('images')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
                                 <div class="form-group">
                                     <label for="judul_acara">Judul Acara</label>
@@ -30,6 +39,15 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="jumlah_peserta">Jumlah Peserta</label>
+                                    <input type="number" name="jumlah_peserta" class="form-control @error('jumlah_peserta') is-invalid @enderror" id="jumlah_peserta" value="{{ old('jumlah_peserta') }}" required>
+                                    @error('jumlah_peserta')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
 
                                 <div class="form-group">
                                     <label for="periode_pendaftaran">Periode Pendaftaran</label>
@@ -64,7 +82,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
 
-                                <button type="submit" class="btn btn-primary">Update</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
                             </form>
 
                             
