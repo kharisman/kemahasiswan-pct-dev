@@ -24,8 +24,11 @@ class LandingController extends Controller
 		
         $new_posts = Post::with("categories.category")->where("status","Aktif")->OrderBy("created_at","DESC")->get();
         $pop_posts = Post::with("categories.category")->where("status","Aktif")->OrderBy("views","DESC")->get();
+
+		$projects = Project::where("status","Aktif")->with("iduka")->get();
+
 		// return $new_posts ;
-		return view('beranda',compact('Sliders','new_posts','pop_posts'));
+		return view('beranda',compact('Sliders','new_posts','pop_posts','projects'));
 	}
 
     public function iduka()
@@ -103,6 +106,30 @@ class LandingController extends Controller
 		$filter = $request->get('filter'); 
 
 		return view('berita', compact('posts','categories','filter'));
+	}
+
+	public function project_detail(Request $request, $id, $judul)
+	{
+		
+        $project = Project::with("iduka")->where("status","Aktif")->where("id",$id)->firstOrFail();
+
+		
+		$ip = request()->ip();
+		$userAgent = request()->header('User-Agent'); // Mendapatkan informasi User-Agent
+
+		// Generate a unique cache key based on IP and User-Agent
+		$cacheKey = md5($ip . $userAgent)."p".$project->id;
+
+		// Check if the cache key exists
+		if (!Cache::has($cacheKey)) {
+			// Increment the views counter
+			$project->increment('views');
+
+			// Cache the cache key to prevent further increment
+			Cache::put($cacheKey, true, now()->addDay());
+		}
+
+    	return view('project_detail', compact("project"));
 	}
 
 }

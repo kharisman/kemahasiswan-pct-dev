@@ -28,6 +28,9 @@ Route::get('/kontak', [LandingController::class, 'kontak'])->name('kontak');
 Route::get('/berita', [LandingController::class, 'berita'])->name('berita');
 Route::get('/berita/{id}/{judul}', [LandingController::class, 'berita_detail']);
 
+
+Route::get('/project/{id}/{judul}', [LandingController::class, 'project_detail']);
+
 Route::get('internship-index', [InternshipController::class, 'dashboardInternship'])->name('internship.index');
 Route::get('internship-project', [InternshipController::class, 'projectInternship']);
 Route::post('internship-project', [InternshipController::class, 'projectInternshipPost']);
@@ -112,6 +115,12 @@ Route::get('/projects/{id}/applies', [ProjectController::class,'showProjectAppli
 		Route::post('internship/edit',[adminController::class,'internship_edit_p']);
 
 		Route::get('event',[adminController::class,'event']);
+		Route::get('event/add',[adminController::class,'event_add']);
+		Route::post('event/add',[adminController::class,'event_add_p']);
+		Route::get('event/edit',[adminController::class,'event_edit']);
+		Route::post('event/edit',[adminController::class,'event_edit_p']);
+		Route::get('event/delete',[adminController::class,'event_delete_p']) ;
+
 	});
 });
 

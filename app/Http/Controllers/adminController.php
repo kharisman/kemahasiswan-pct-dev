@@ -876,6 +876,295 @@ class adminController extends Controller
         return view('admin.event.data', compact('data'));
     }
 
+    public function event_add(Request $request){
+        return view('admin.event.add') ;
+    }
+
+    public function event_add_p(Request $request)
+    {
+        // Memulai transaksi database
+        DB::beginTransaction();
+        // return 1 ;
+
+        try {
+            // Validasi data input
+            $validator = Validator::make($request->all(), [
+                'images' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'status' => 'required|in:Aktif,Tidak',
+                'judul_acara' => 'required|max:255',
+                'deskripsi' => 'required',
+                'jumlah_peserta' => 'required|integer',
+                'periode_pendaftaran' => [
+                    'required',
+                    'regex:/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} - \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/',
+                    function ($attribute, $value, $fail) {
+                        $dates = explode(' - ', $value);
+                        $start_date = $dates[0];
+                        $end_date = $dates[1];
+
+                        // Validasi kustom untuk memeriksa periode pendaftaran dan periode acara
+                        if (strtotime($end_date) <= strtotime($start_date)) {
+                            $fail('Periode pendaftaran harus berakhir sebelum periode acara dimulai.');
+                        }
+                    },
+                ],
+                'periode_acara' => [
+                    'required'
+                ]
+            ]);
+
+            if ($validator->fails()) {
+                return back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            $d1  = explode(" - ",$request->periode_pendaftaran);
+            $d2  = explode(" - ",$request->periode_acara);
+
+            $description = $request->deskripsi;
+
+            if (!empty($description)) {
+                $dom = new \DomDocument();
+                @$dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $images = $dom->getElementsByTagName('img');
+                foreach ($images as $k => $img) {
+                    $data = $img->getAttribute('src');
+
+                    if ( !strstr( $data, 'event' ) ) {
+                    list($type, $data) = explode(';', $data);
+                    list(, $data) = explode(',', $data);
+                    $data = base64_decode($data);
+                    $image_name = "/assets/images/event/" . time() . $k . '.png';
+                    $path = public_path() . $image_name;
+                    file_put_contents($path, $data);
+                    $img->removeAttribute('src');
+                    $img->setAttribute('src', $image_name);
+                    }
+                }
+                $description = $dom->saveHTML();
+            }
+
+            if ($request->hasFile('images')) {
+                // Get the uploaded image file
+                $image = $request->file('images');
     
+                // Set the desired width and height
+                $width = 1200;
+                $height = 500;
+    
+                // Set the storage path for the new image
+                $publicPath = 'assets/images/event/';
+    
+                // Generate a unique filename for the new image
+                $filename = "cover-".uniqid() . '.' . $image->getClientOriginalExtension();
+    
+                // Create a new instance of Intervention Image
+                $image = Image::make($image);
+    
+                // Resize the image while maintaining aspect ratio
+                $image->resize($width, $height, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $image->save(public_path($publicPath . $filename));
+                $url = asset($publicPath . $filename);
+            } else {
+                // No image was uploaded, set the URL to null or a default value
+                $url = null;
+                $filename = null;
+            }
+
+            // Membuat instance Event dan mengisi data dari input form
+            $event = new Event();
+            $event->title = $request->input('judul_acara');
+            $event->cover = $url;
+            $event->status = $request->status;
+            $event->description = $description;
+            $event->participants = $request->jumlah_peserta;
+            $event->start_date = $d2[0];
+            $event->end_date = $d2[1];
+            $event->reg_start = $d1[0];
+            $event->reg_end = $d1[1];
+
+            // Menyimpan data event ke dalam database
+            $event->save();
+
+            // Mengonfirmasi transaksi database
+            DB::commit();
+
+            // Mengarahkan pengguna kembali ke halaman sebelumnya (indeks event)
+            return back()->with('success', 'Event berhasil dibuat!');
+        } catch (\Exception $e) {
+            dd($e);
+            // Rollback transaksi database jika terjadi kesalahan
+            DB::rollback();
+
+            // Handle kesalahan sesuai kebutuhan Anda
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+    
+    public function event_edit(Request $request){
+        
+        $event = Event::where("id",$request->id)->firstOrFail();
+        return view('admin.event.edit',compact('event')) ;
+    }
+
+    
+    public function event_edit_p(Request $request)
+    {
+        // Memulai transaksi database
+        DB::beginTransaction();
+        // return 1 ;
+
+        try {
+            // Validasi data input
+            $validator = Validator::make($request->all(), [
+                'images' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'status' => 'required|in:Aktif,Tidak',
+                'judul_acara' => 'required|max:255',
+                'deskripsi' => 'required',
+                'jumlah_peserta' => 'required|integer',
+                'periode_pendaftaran' => [
+                    'required',
+                    'regex:/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} - \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/',
+                    function ($attribute, $value, $fail) {
+                        $dates = explode(' - ', $value);
+                        $start_date = $dates[0];
+                        $end_date = $dates[1];
+
+                        // Validasi kustom untuk memeriksa periode pendaftaran dan periode acara
+                        if (strtotime($end_date) <= strtotime($start_date)) {
+                            $fail('Periode pendaftaran harus berakhir sebelum periode acara dimulai.');
+                        }
+                    },
+                ],
+                'periode_acara' => [
+                    'required'
+                ]
+            ]);
+
+            if ($validator->fails()) {
+                return back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            $d1  = explode(" - ",$request->periode_pendaftaran);
+            $d2  = explode(" - ",$request->periode_acara);
+
+            $description = $request->deskripsi;
+
+            if (!empty($description)) {
+                $dom = new \DomDocument();
+                @$dom->loadHtml($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $images = $dom->getElementsByTagName('img');
+                foreach ($images as $k => $img) {
+                    $data = $img->getAttribute('src');
+
+                    if ( !strstr( $data, 'event' ) ) {
+                    list($type, $data) = explode(';', $data);
+                    list(, $data) = explode(',', $data);
+                    $data = base64_decode($data);
+                    $image_name = "/assets/images/event/" . time() . $k . '.png';
+                    $path = public_path() . $image_name;
+                    file_put_contents($path, $data);
+                    $img->removeAttribute('src');
+                    $img->setAttribute('src', $image_name);
+                    }
+                }
+                $description = $dom->saveHTML();
+            }
+
+            if ($request->hasFile('images')) {
+                // Get the uploaded image file
+                $image = $request->file('images');
+    
+                // Set the desired width and height
+                $width = 1200;
+                $height = 500;
+    
+                // Set the storage path for the new image
+                $publicPath = 'assets/images/event/';
+    
+                // Generate a unique filename for the new image
+                $filename = "cover-".uniqid() . '.' . $image->getClientOriginalExtension();
+    
+                // Create a new instance of Intervention Image
+                $image = Image::make($image);
+    
+                // Resize the image while maintaining aspect ratio
+                $image->resize($width, $height, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $image->save(public_path($publicPath . $filename));
+                $url = asset($publicPath . $filename);
+            } else {
+                // No image was uploaded, set the URL to null or a default value
+                $url = $event->cover;
+                $filename = null;
+            }
+
+            // Membuat instance Event dan mengisi data dari input form
+            $event = Event::where("id",$request->id)->firstOrFail();
+            $event->title = $request->input('judul_acara');
+            $event->cover = $url;
+            $event->status = $request->status;
+            $event->description = $description;
+            $event->participants = $request->jumlah_peserta;
+            $event->start_date = $d2[0];
+            $event->end_date = $d2[1];
+            $event->reg_start = $d1[0];
+            $event->reg_end = $d1[1];
+
+            // Menyimpan data event ke dalam database
+            $event->save();
+
+            // Mengonfirmasi transaksi database
+            DB::commit();
+
+            // Mengarahkan pengguna kembali ke halaman sebelumnya (indeks event)
+            return back()->with('success', 'Event berhasil diupdate!');
+        } catch (\Exception $e) {
+            dd($e);
+            // Rollback transaksi database jika terjadi kesalahan
+            DB::rollback();
+
+            // Handle kesalahan sesuai kebutuhan Anda
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function event_delete_p(Request $request)
+    {
+        // Memulai transaksi database
+        DB::beginTransaction();
+        // return 1 ;
+
+        try {
+            // Validasi data input
+
+
+
+            // Membuat instance Event dan mengisi data dari input form
+            $event = Event::where("id",$request->id)->firstOrFail();
+
+            // Menyimpan data event ke dalam database
+            $event->delete();
+
+            // Mengonfirmasi transaksi database
+            DB::commit();
+
+            // Mengarahkan pengguna kembali ke halaman sebelumnya (indeks event)
+            return back()->with('success', 'Event berhasil dihapus!');
+        } catch (\Exception $e) {
+            dd($e);
+            // Rollback transaksi database jika terjadi kesalahan
+            DB::rollback();
+
+            // Handle kesalahan sesuai kebutuhan Anda
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
     
 }

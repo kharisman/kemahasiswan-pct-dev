@@ -1086,3 +1086,40 @@ h1, h2, h3, h4, h5,
   100% {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -136px; } }
+
+  
+.desc-3 {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2; /* Ubah angka ini menjadi jumlah baris yang Anda inginkan */
+      -webkit-box-orient: vertical;
+      font-size: small !important;
+}
+
+
+.status-open {
+  background-color: green !important;
+  color: white;
+}
+
+.status-not-open {
+  background-color: gray !important;
+  color: white;
+}
+
+.status-closed {
+  background-color: red !important;
+  color: white;
+}
+
+.status-finished {
+  background-color: blue !important;
+  color: white;
+}
+
+.status-ongoing {
+  background-color: orange !important;
+  color: white;
+}
+
