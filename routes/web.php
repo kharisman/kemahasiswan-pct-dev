@@ -33,12 +33,14 @@ Route::get('/project/{id}/{judul}', [LandingController::class, 'project_detail']
 
 Route::get('internship-index', [InternshipController::class, 'dashboardInternship'])->name('internship.index');
 Route::get('internship-project', [InternshipController::class, 'projectInternship']);
+Route::get('internship-project-filter/{data}', [InternshipController::class, 'projectInternshipFilter']);
 Route::post('internship-project', [InternshipController::class, 'projectInternshipPost']);
 Route::get('internship-history', [InternshipController::class, 'historyInternship']);
 Route::get('internship-data', [InternshipController::class, 'dataInternship']);
 Route::post('internship-data', [InternshipController::class, 'dataInternshipPost']);
 Route::get('internship-detail-project/{id}', [InternshipController::class, 'projectDetailInternship']);
 Route::get('internship-project-apply/{id}', [InternshipController::class, 'applyProjectInternship']);
+Route::post('internship-project-apply/{id}', [InternshipController::class, 'applyProjectInternshipPost']);
 
 Route::middleware(['auth'])->group(function () {
 Route::get('iduka/index', [IdukaController::class, 'dashboard_iduka'])->name('iduka.index');

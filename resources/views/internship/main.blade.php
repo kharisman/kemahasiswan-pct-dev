@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="{{asset('internship/vendors/css/vendor.bundle.base.css')}}">
   <link rel="stylesheet" href="{{asset('internship/css/style.css')}}">
   <link rel="stylesheet" href="{{asset('internship/vendors/cssdatatables.css')}}">
+  <link rel="stylesheet" href="{{asset('internship/css/sweetalert2.min.css')}}">
 </head>
 <body>
   <div class="container-scroller d-flex">
@@ -24,7 +25,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{url('internship-project')}}">
+          <a class="nav-link" href="{{ url('internship-project') }}">
             <i class="mdi mdi-view-headline menu-icon"></i>
             <span class="menu-title">Project</span>
           </a>
@@ -52,7 +53,7 @@
             <?php
                 $internship = App\Models\Internship::where('user_id', Auth::user()->id)->first();
                 $name = $internship ? $internship->name : '';
-                $dateSign = ($internship->created_at)->format('d'). " days ago";
+                $dateSign = ($internship->created_at)->format('j'). " days ago";
                 if ($internship->photo <> '') {
                   $photo = $internship->photo;
                 }else {
@@ -85,7 +86,9 @@
             <li class="nav-item dropdown me-2">
               <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
                 <i class="mdi mdi-email-open mx-0"></i>
-                <span class="count bg-danger">{{$condition}}</span>
+                @if ($condition >= 1)
+                  <span class="count bg-danger">{{$condition}}</span>
+                @endif
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
                 <p class="mb-0 font-weight-normal float-left dropdown-header">Pesan</p>
@@ -105,16 +108,16 @@
                 </a>  
                 @endif
                 @if (session('success'))
-                <a class="dropdown-item preview-item">
+                <a class="dropdown-item preview-item" href="{{url('internship-index')}}">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-success">
                       <i class="mdi mdi-settings mx-0"></i>
                     </div>
                   </div>
                   <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-normal">{{ session('success') }}</h6>
+                    <h6 class="preview-subject font-weight-normal">Pendaftaran Project Sedang tinjau</h6>
                     <p class="font-weight-light small-text mb-0 text-muted">
-                      Aplly Send
+                      Proses Berhasil
                     </p>
                   </div>
                 </a>
@@ -180,12 +183,12 @@
 
   <script src="{{asset('internship/vendors/js/vendor.bundle.base.js')}}"></script>
   <script src="{{asset('internship/vendors/chart.js/Chart.min.js')}}"></script>
-  <script src="{{asset('internship/js/jquery.cookie.js" type="text/javascript')}}"></script>
   <script src="{{asset('internship/js/off-canvas.js')}}"></script>
   <script src="{{asset('internship/js/hoverable-collapse.js')}}"></script>
   <script src="{{asset('internship/js/template.js')}}"></script>
   <script src="{{asset('internship/js/dashboard.js')}}"></script>
-  <script src="{{asset('internship/vendors/jquery.js')}}"></script>
+  <script src="{{asset('internship/css/jquery.js')}}"></script>
+  <script src="{{asset('internship/css/sweetalert2.all.min.js')}}"></script>
   <script src="{{asset('internship/vendors/scriptdatatables.js')}}"></script>
   <script>
     $(document).ready(function() {

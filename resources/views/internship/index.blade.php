@@ -1,6 +1,26 @@
 @extends('internship/main')
 @section('contentInternship')
     <div class="content-wrapper">
+        @if(session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire(
+                'Data Berhasil Dikirimkan!',
+                'Status project dalam tinjau Mohon Cek Pesan secara berskala',
+                'success'
+            );
+            });
+        </script>
+        @endif
+        @if ($errors->any())
+        <div class="alert alert-danger w-100">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         <div class="row">
             <div class="col-md-4 grid-margin stretch-card">
                 <div class="card bg-facebook d-flex align-items-center">
