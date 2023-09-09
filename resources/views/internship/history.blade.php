@@ -26,9 +26,9 @@
                                     <td>
                                     @if ($item->update_at <> "")
                                         <a class="btn btn-disable btn-sm btn-success">Selesai</a>
-                                    @elseif ($item->status == "REJECT")
+                                    @elseif ($item->status == "rejected")
                                         <a class="btn btn-disable btn-sm btn-danger">Ditolak</a>
-                                    @elseif ($item->status == "ACCEPT")
+                                    @elseif ($item->status == "accepted")
                                     <a class="btn btn-disable btn-sm btn-warning">Diterima</a>
                                     @elseif ($item->update_at == "")
                                     <a class="btn btn-disable btn-sm btn-info">Proses Daftar</a>
