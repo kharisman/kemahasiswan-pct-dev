@@ -200,11 +200,11 @@
         <!-- Tombol "Update" -->
         <div class="card mb-3">
             <div class="card-header">
-                <button type="submit" class="btn btn-warning btn-sm text-center w-100">Update</button>
+                <button type="submit" class="btn btn-warning btn-sm text-center w-100 h3"><i class="mdi mdi-pencil-box-outline"></i> Update</button>
             </div>
         </div>
     </form>
-
+{{-- 
     <script>
         
         $(document).ready(function() {
@@ -244,7 +244,7 @@
         });
     })
 
-    </script>
+    </script> --}}
 
 </div>
 @endsection
