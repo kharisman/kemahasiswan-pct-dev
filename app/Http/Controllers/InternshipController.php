@@ -35,19 +35,36 @@ class InternshipController extends Controller
 			->get();
 		return view('internship/index', compact('completedProject','onGoingProject','rejectProject','onGoingProjectData'));
 	}
+    public function projectInternshipFilter($data){
+		$id = Auth::user()->id;
+		$internship = Internship::where('user_id', $id)->first();
+		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo')
+			->join('idukas','projects.iduka_id','=','idukas.id')
+			->join('project_categories','projects.category_id','=','project_categories.id')
+			->orderBy($data)
+			->get();
+		return view('internship/project', compact('projectData', 'internship'));
+	}
     public function projectInternship(){
 		$id = Auth::user()->id;
 		$internship = Internship::where('user_id', $id)->first();
-		$projectData = Project::join('idukas','projects.iduka_id','=','idukas.id')->limit(10)->inRandomOrder()
+		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo')
+			->join('idukas','projects.iduka_id','=','idukas.id')
+			->join('project_categories','projects.category_id','=','project_categories.id')
+			->limit(10)->inRandomOrder()
 			->get();
-		return view('internship.project', compact('projectData', 'internship'));
+		return view('internship/project', compact('projectData', 'internship'));
 	}
     public function projectInternshipPost(Request $r){
-		$projectData = Project::join('idukas','projects.iduka_id','=','idukas.id')
+		$id = Auth::user()->id;
+		$internship = Internship::where('user_id', $id)->first();
+		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo')
+		->join('idukas','projects.iduka_id','=','idukas.id')
+		->join('project_categories','projects.category_id','=','project_categories.id')
 		->where('projects.name','like',"%$r->search%")
 		->orWhere('idukas.name','like',"%$r->search%")
 		->get();
-		return view('internship/project', compact('projectData'));
+		return view('internship/project', compact('projectData', 'internship'));
 	}
     public function historyInternship(){
 		$applyProjectData = ProjectApply::join('projects', 'project_applies.project_id', '=', 'projects.id')->select('project_applies.*','projects.name')->get();
@@ -150,22 +167,57 @@ class InternshipController extends Controller
 			return back()->with('error', 'Data Pribadi gagal diperbarui. Coba kembali. Error: ' . $e->getMessage());
 		}
 	}
+
     public function projectDetailInternship(Request $r, $id){
-		$projectData = Project::join('idukas','projects.iduka_id','=','idukas.id')->findOrFail($id);
+		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address')
+			->join('idukas','projects.iduka_id','=','idukas.id')
+			->join('project_categories','projects.category_id','=','project_categories.id')
+			->findOrFail($id);
 		
 		return view('internship/detail_project', compact('projectData'));
 	}
+
 	public function applyProjectInternship(Request $r, $id){
+		$userId = Auth::user()->id;
+		$projectId = Project::findOrFail($id);
+		return view('internship/apply_project', compact('projectId'));
+	}
+
+	public function applyProjectInternshipPost(Request $r){
 		$id = Auth::user()->id;
 		$data = Internship::where('user_id', $id)->first();
 		$dataId = $data->id;
 		$new = new ProjectApply;
-		$new->project_id = $id;
+		$new->project_id = $r->projectId;
 		$new->internship_id = $dataId;
 		$new->status = "";
 		$new->created_at = now();
 		$new->updated_at = null;
 		$new->save();
-		return redirect('internship-index')->with('success', 'Data lamaran berhasil dikirim. ');
+					
+
+			// Mengunggah surat lamaran dan sertifikat
+			if ($r->hasFile('application_letter') && $r->hasFile('certificate')) {
+				$application_letter = $r->file('application_letter');
+				$certificate = $r->file('certificate');
+
+				if ($application_letter && $certificate) {
+					$newApplicationLetter = $id . "_application_letter." . $application_letter->getClientOriginalExtension();
+					$application_letter->move('images/internship/', $newApplicationLetter);
+
+					$newCertificate = $id . "_certificate." . $certificate->getClientOriginalExtension();
+					$certificate->move('images/internship/', $newCertificate);
+
+					// Menyimpan data surat lamaran dan sertifikat
+					$newDocument = new Document;
+					$newDocument->internship_id = $dataId;
+					$newDocument->application_letter = $newApplicationLetter;
+					$newDocument->certificate = $newCertificate;
+					$newDocument->save();
+				} else {
+					return back()->with('error', 'File surat lamaran dan/atau sertifikat tidak ditemukan.');
+				}
+			}
+		return redirect('internship-index')->with('success', 'Status project dalam tinjau Mohon Cek Pesan secara berskala');
 	}
 }

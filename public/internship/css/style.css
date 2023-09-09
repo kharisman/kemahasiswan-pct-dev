@@ -21233,7 +21233,9 @@ code {
   border-left: 1px solid #f3f3f3;
   border-top: 1px solid #f3f3f3;
 }
-
+.border-left-primary {
+  border-left: 0.25rem solid #4e73df !important;
+}
 .icons-list > div {
   background: #ffffff;
   border-bottom: 1px solid #f3f3f3;
@@ -21713,6 +21715,18 @@ dl li {
   z-index: 999;
 }
 
+.card-loop{
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  height: 300px;
+}
+
+.img-loop{
+  width: 70%;
+  object-fit: cover;
+}
+
 .sidebar .nav .nav-item .nav-link {
   display: -webkit-flex;
   display: flex;
@@ -21903,6 +21917,7 @@ dl li {
   width: 100%;
   height: 65px;
 }
+
 
 @media (max-width: 991px) {
   .navbar .navbar-menu-wrapper {
