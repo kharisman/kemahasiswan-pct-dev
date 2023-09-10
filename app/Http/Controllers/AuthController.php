@@ -51,7 +51,7 @@ class AuthController extends Controller
 			$internship->education = "";
 			$internship->interest = "";
 			$internship->photo = "";
-			$internship->status = "Tidak";
+			$internship->status = "Aktif";
 			$internship->updated_at = null;
 			$internship->save();
 			DB::commit();
