@@ -85,6 +85,7 @@ class InternshipController extends Controller
 					->join('project_categories','projects.category_id','=','project_categories.id')
 					->whereDate('registration_start_at', '<=', $today)
 					->whereDate('registration_end_at', '>=', $today)
+					->where('projects.status','Aktif')
 					->orderBy('registration_start_at', 'desc')
 					->get();
 			}elseif ($data === "best") {
@@ -93,6 +94,7 @@ class InternshipController extends Controller
 					->join('project_categories','projects.category_id','=','project_categories.id')
 					->whereDate('registration_start_at', '<=', $today)
 					->whereDate('registration_end_at', '>=', $today)
+					->where('projects.status','Aktif')
 					->orderBy('views', 'desc')
 					->get();
 			}else {
@@ -109,6 +111,7 @@ class InternshipController extends Controller
 			->join('project_categories','projects.category_id','=','project_categories.id')
 			->whereDate('registration_start_at', '<=', $today)
     		->whereDate('registration_end_at', '>=', $today)
+			->where('projects.status','Aktif')
 			->get();
 		return view('internship/project', compact('projectData', 'internship'));
 	}
@@ -123,11 +126,12 @@ class InternshipController extends Controller
 		->orWhere('idukas.name','like',"%$r->search%")
 		->whereDate('registration_start_at', '<=', $today)
 		->whereDate('registration_end_at', '>=', $today)
+		->where('projects.status','Aktif')
 		->get();
 		return view('internship/project', compact('projectData', 'internship'));
 	}
     public function historyInternship(){
-		$applyProjectData = ProjectApply::join('projects', 'project_applies.project_id', '=', 'projects.id')->select('project_applies.*','projects.name')->get();
+		$applyProjectData = ProjectApply::join('projects', 'project_applies.project_id', '=', 'projects.id')->select('project_applies.*','projects.name','projects.work_end_at')->get();
 		return view('internship/history', compact('applyProjectData'));
 	}
     public function dataInternship(){
@@ -244,9 +248,6 @@ class InternshipController extends Controller
 	}
 
 	public function applyProjectInternshipPost(Request $r){
-		DB::beginTransaction();
-		try {
-
 			$validator = Validator::make($r->all(), [
 				'projectId' => 'required',
 				'application_letter' => 'required|mimes:pdf',
@@ -260,6 +261,7 @@ class InternshipController extends Controller
 			$id = Auth::user()->id;
 			$data = Internship::where('user_id', $id)->first();
 			$dataId = $data->id;	
+			$projectId = $r->projectId;
 
 			// Mengunggah surat lamaran
 			if ($r->hasFile('application_letter')) {
@@ -274,7 +276,7 @@ class InternshipController extends Controller
 			if ($r->has('curriculum_vitae')) {
 				if ($r->hasFile('curriculum_vitae_new')) {
 					$curriculum_vitae_new = $r->file('curriculum_vitae_new');
-					$newCurriculumVitae = $id . $r->projectId . "_curriculum_vitae_apply." . $curriculum_vitae_new->getClientOriginalExtension();
+					$newCurriculumVitae = $id . $projectId . "_curriculum_vitae_apply." . $curriculum_vitae_new->getClientOriginalExtension();
 					$curriculum_vitae_new->move('images/internship/', $newCurriculumVitae);
 				} else {
 					// Jika checkbox dicentang, tetapi tidak ada file CV yang diunggah,
@@ -298,15 +300,20 @@ class InternshipController extends Controller
 			$newDocument->curriculum_vitae = $newCurriculumVitae;
 			$newDocument->certificate = $oldCertificate;
 			$newDocument->save();
+
+			// menubah data Project views
+			$newProject = Project::findOrFail($projectId);
+			$newProject->increment('views');
+			$newProject->save();
 				
 
-				$existingData = ProjectApply::where('project_id', $r->projectId)
+				$existingData = ProjectApply::where('project_id', $projectId)
 				->where('internship_id', $dataId)
 				->first();
 
 				if (!$existingData) {
 					$new = new ProjectApply;
-					$new->project_id = $r->projectId;
+					$new->project_id = $projectId;
 					$new->internship_id = $dataId;
 					$new->status = "";
 					$new->created_at = now();
@@ -317,10 +324,5 @@ class InternshipController extends Controller
 				}
 
 			return redirect('internship-index')->with('success', 'Status project dalam di tinjau Mohon Cek Pesan secara berskala');
-		} catch (\Throwable $e) {
-			dd($e);
-			DB::rollback();
-			return back()->with('error', 'Data Lamaran gagal dikirim. Coba kembali. Error: ' . $e->getMessage());
-		}
 	}
 }
