@@ -13,7 +13,7 @@
                                 <tr class="table-dark text-center">
                                     <th scope="col">No</th>
                                     <th scope="col">Nama Project</th>
-                                    <th scope="col">Tanggal Mulai</th>
+                                    <th scope="col">Tanggal Daftar</th>
                                     <th scope="col">Status</th>
                                 </tr>
                             </thead>
@@ -22,7 +22,7 @@
                                 <tr class="table-bordered border-dark">
                                     <th scope="row">{{$loop->iteration}}</th>
                                     <td>{{$item->name}}</td>
-                                    <td>{{$item->created_at}}</td>
+                                    <td>{{$item->created_at->format('d M Y')}}</td>
                                     <td>
                                     @if ($item->update_at <> "")
                                         <a class="btn btn-disable btn-sm btn-success">Selesai</a>
@@ -31,7 +31,7 @@
                                     @elseif ($item->status == "accepted")
                                     <a class="btn btn-disable btn-sm btn-warning">Diterima</a>
                                     @elseif ($item->update_at == "")
-                                    <a class="btn btn-disable btn-sm btn-info">Proses Daftar</a>
+                                    <a class="btn btn-disable btn-sm btn-info">Sedang Ditinjau</a>
                                     @endif
                                     </td>
                                 </tr>

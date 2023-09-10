@@ -115,7 +115,7 @@
                     </div>
                   </div>
                   <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-normal">Pendaftaran Project Sedang tinjau</h6>
+                    <h6 class="preview-subject font-weight-normal">Pendaftaran Project Sedang ditinjau</h6>
                     <p class="font-weight-light small-text mb-0 text-muted">
                       Proses Berhasil
                     </p>
