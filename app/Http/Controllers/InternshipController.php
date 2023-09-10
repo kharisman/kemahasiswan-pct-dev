@@ -20,20 +20,59 @@ use Illuminate\Support\Carbon;
 class InternshipController extends Controller
 {
     public function dashboardInternship(){
-		$user_id = Internship::where('user_id', Auth::user()->id)->get('id');
-		$completedProject = ProjectUpdate::whereNotNull('date_finish')
-			->where('internship_id', $user_id)
-			->count();
-		$onGoingProject = ProjectUpdate::whereNull('date_finish')
-			->where('internship_id', $user_id)
-			->count();
-		$rejectProject = ProjectApply::where('internship_id', $user_id)
-			->where('status', 'reject')
-			->count();
-		$onGoingProjectData = ProjectUpdate::join('projects', 'project_updates.project_id', '=', 'projects.id')
-			->whereNull('date_finish')
-			->where('internship_id', $user_id)
-			->get();
+		// Mendapatkan tanggal saat ini
+		$today = Carbon::now()->toDateString();
+
+		$id = Auth::user()->id;
+		$data = Internship::where('user_id', $id)->first();
+		$dataId = $data->id;
+
+			// Mendapatkan catatan dari tabel project_applies yang memenuhi kriteria
+			$acceptedApplies = DB::table('project_applies')
+				->join('projects', 'project_applies.project_id', '=', 'projects.id')
+				->where('project_applies.status', 'accepted')
+				->where('project_applies.internship_id', $dataId)
+				->whereDate('projects.work_start_at', '<=', $today)
+				->whereDate('projects.work_end_at', '>=', $today)
+				->select('project_applies.project_id', 'project_applies.internship_id')
+				->get();
+			
+			// Menyalin data ke tabel project_updates
+			foreach ($acceptedApplies as $apply) {
+				    // Memeriksa apakah data sudah ada dalam tabel project_updates
+					$existingUpdate = DB::table('project_updates')
+					->where('project_id', $apply->project_id)
+					->where('internship_id', $apply->internship_id)
+					->first();
+			
+				// Jika data belum ada, maka baru disimpan
+				if (!$existingUpdate) {
+					DB::table('project_updates')->insert([
+						'project_id' => $apply->project_id,
+						'internship_id' => $apply->internship_id,
+						'date_start' => DB::raw("(SELECT work_start_at FROM projects WHERE id = $apply->project_id)"),
+						'date_finish' => DB::raw("(SELECT work_end_at FROM projects WHERE id = $apply->project_id)"),
+					]);
+				}
+			}	
+
+			$completedProject = ProjectUpdate::where('date_finish','<',$today)
+				->where('internship_id', $dataId)
+				->count();
+			$onGoingProject = ProjectUpdate::where('date_finish','>=',$today)
+				->where('date_start','<=',$today)
+				->where('internship_id', $dataId)
+				->count();
+			$rejectProject = ProjectApply::where('internship_id', $dataId)
+				->where('status', 'rejected')
+				->count();
+			$onGoingProjectData = ProjectUpdate::join('projects','project_updates.project_id','=','projects.id')
+				->select('project_updates.*', 'projects.name')
+				->where('date_start','<=',$today)
+				->where('date_finish','>=',$today)
+				->where('internship_id', $dataId)
+				->get();
+			
 		return view('internship/index', compact('completedProject','onGoingProject','rejectProject','onGoingProjectData'));
 	}
     public function projectInternshipFilter($data){

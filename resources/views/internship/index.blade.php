@@ -83,9 +83,9 @@
                                     @if ($onGoingProject <> 0)
                                         @foreach ($onGoingProjectData as $item)
                                             <tr class="table-bordered border-primary">
-                                                <td>{{$loop->iteration}}</td>
+                                                <td class="text-center">{{$loop->iteration}}</td>
                                                 <td>{{$item->name}}</td>
-                                                <td>{{$item->date_start}}</td>
+                                                <td class="text-center">{{$item->date_start}}</td>
                                             </tr>
                                         @endforeach
                                     @else
