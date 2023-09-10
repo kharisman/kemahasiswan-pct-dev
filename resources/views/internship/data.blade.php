@@ -173,22 +173,22 @@
             </div>
             <div class="collapse" id="collapseExample2">
                 <div class="card card-body">
-                    <!-- Surat Lamaran -->
-                    <div class="row mb-3 text-end">
-                        <label for="application_letter" class="col-sm-4 col-form-label text-start">Surat Lamaran</label>
-                        <div class="col-sm-8">
-                            <input id="application_letter" class="form-control" type="file" name="application_letter">
-                            @error('application_letter')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
                     <!-- Sertifikat Lomba -->
                     <div class="row mb-3 text-end">
                         <label for="certificate" class="col-sm-4 col-form-label text-start">Sertifikat Lomba</label>
                         <div class="col-sm-8">
                             <input id="certificate" class="form-control" type="file" name="certificate">
                             @error('certificate')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <!-- cv -->
+                    <div class="row mb-3 text-end">
+                        <label for="curriculum_vitae" class="col-sm-4 col-form-label text-start">Curriculum Vitae</label>
+                        <div class="col-sm-8">
+                            <input id="curriculum_vitae" class="form-control" type="file" name="curriculum_vitae">
+                            @error('curriculum_vitae')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>

@@ -15,6 +15,7 @@ use Illuminate\support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class InternshipController extends Controller
 {
@@ -36,26 +37,44 @@ class InternshipController extends Controller
 		return view('internship/index', compact('completedProject','onGoingProject','rejectProject','onGoingProjectData'));
 	}
     public function projectInternshipFilter($data){
+		$today = Carbon::now()->toDateString();
 		$id = Auth::user()->id;
 		$internship = Internship::where('user_id', $id)->first();
-		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo')
-			->join('idukas','projects.iduka_id','=','idukas.id')
-			->join('project_categories','projects.category_id','=','project_categories.id')
-			->orderBy($data)
-			->get();
+			if ($data === "new") {
+				$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.photo')
+					->join('idukas','projects.iduka_id','=','idukas.id')
+					->join('project_categories','projects.category_id','=','project_categories.id')
+					->whereDate('registration_start_at', '<=', $today)
+					->whereDate('registration_end_at', '>=', $today)
+					->orderBy('registration_start_at', 'desc')
+					->get();
+			}elseif ($data === "best") {
+				$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.photo')
+					->join('idukas','projects.iduka_id','=','idukas.id')
+					->join('project_categories','projects.category_id','=','project_categories.id')
+					->whereDate('registration_start_at', '<=', $today)
+					->whereDate('registration_end_at', '>=', $today)
+					->orderBy('views', 'desc')
+					->get();
+			}else {
+				return back()->with('error', 'File surat lamaran tidak ditemukan.');
+			}
 		return view('internship/project', compact('projectData', 'internship'));
 	}
     public function projectInternship(){
+		$today = Carbon::now()->toDateString();
 		$id = Auth::user()->id;
 		$internship = Internship::where('user_id', $id)->first();
 		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo')
 			->join('idukas','projects.iduka_id','=','idukas.id')
 			->join('project_categories','projects.category_id','=','project_categories.id')
-			->limit(10)->inRandomOrder()
+			->whereDate('registration_start_at', '<=', $today)
+    		->whereDate('registration_end_at', '>=', $today)
 			->get();
 		return view('internship/project', compact('projectData', 'internship'));
 	}
     public function projectInternshipPost(Request $r){
+		$today = Carbon::now()->toDateString();
 		$id = Auth::user()->id;
 		$internship = Internship::where('user_id', $id)->first();
 		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo')
@@ -63,6 +82,8 @@ class InternshipController extends Controller
 		->join('project_categories','projects.category_id','=','project_categories.id')
 		->where('projects.name','like',"%$r->search%")
 		->orWhere('idukas.name','like',"%$r->search%")
+		->whereDate('registration_start_at', '<=', $today)
+		->whereDate('registration_end_at', '>=', $today)
 		->get();
 		return view('internship/project', compact('projectData', 'internship'));
 	}
@@ -91,8 +112,8 @@ class InternshipController extends Controller
 				'education' => 'required',
 				'interest' => 'required',
 				'phone' => 'required',
-				'application_letter' => 'mimes:pdf',
-				'certificate' => 'mimes:pdf',
+				'curriculum_vitae' => 'required|mimes:pdf',
+				'certificate' => 'required|mimes:pdf',
 			]);
 
 			if ($validator->fails()) {
@@ -136,26 +157,26 @@ class InternshipController extends Controller
 
 			
 
-			// Mengunggah surat lamaran dan sertifikat
-			if ($r->hasFile('application_letter') && $r->hasFile('certificate')) {
-				$application_letter = $r->file('application_letter');
+			// Mengunggah cv dan sertifikat
+			if ($r->hasFile('curriculum_vitae') && $r->hasFile('certificate')) {
+				$curriculum_vitae = $r->file('curriculum_vitae');
 				$certificate = $r->file('certificate');
 
-				if ($application_letter && $certificate) {
-					$newApplicationLetter = $id . "_" . $r->name . "_application_letter." . $application_letter->getClientOriginalExtension();
-					$application_letter->move('images/internship/', $newApplicationLetter);
+				if ($curriculum_vitae && $certificate) {
+					$newCurriculumVitae = $id . "_" . $r->name . "_curriculum_vitae." . $curriculum_vitae->getClientOriginalExtension();
+					$curriculum_vitae->move('images/internship/', $newCurriculumVitae);
 
 					$newCertificate = $id . "_" . $r->name . "_certificate." . $certificate->getClientOriginalExtension();
 					$certificate->move('images/internship/', $newCertificate);
 
-					// Menyimpan data surat lamaran dan sertifikat
+					// Menyimpan data cv dan sertifikat
 					$newDocument = new Document;
 					$newDocument->internship_id = $dataId;
-					$newDocument->application_letter = $newApplicationLetter;
+					$newDocument->curriculum_vitae = $newCurriculumVitae;
 					$newDocument->certificate = $newCertificate;
 					$newDocument->save();
 				} else {
-					return back()->with('error', 'File surat lamaran dan/atau sertifikat tidak ditemukan.');
+					return back()->with('error', 'File CV dan/atau sertifikat tidak ditemukan.');
 				}
 			}
 
@@ -184,40 +205,83 @@ class InternshipController extends Controller
 	}
 
 	public function applyProjectInternshipPost(Request $r){
-		$id = Auth::user()->id;
-		$data = Internship::where('user_id', $id)->first();
-		$dataId = $data->id;
-		$new = new ProjectApply;
-		$new->project_id = $r->projectId;
-		$new->internship_id = $dataId;
-		$new->status = "";
-		$new->created_at = now();
-		$new->updated_at = null;
-		$new->save();
-					
+		DB::beginTransaction();
+		try {
 
-			// Mengunggah surat lamaran dan sertifikat
-			if ($r->hasFile('application_letter') && $r->hasFile('certificate')) {
-				$application_letter = $r->file('application_letter');
-				$certificate = $r->file('certificate');
+			$validator = Validator::make($r->all(), [
+				'projectId' => 'required',
+				'application_letter' => 'required|mimes:pdf',
+				'curriculum_vitae_new' => 'mimes:pdf',
+			]);
 
-				if ($application_letter && $certificate) {
-					$newApplicationLetter = $id . "_application_letter." . $application_letter->getClientOriginalExtension();
-					$application_letter->move('images/internship/', $newApplicationLetter);
-
-					$newCertificate = $id . "_certificate." . $certificate->getClientOriginalExtension();
-					$certificate->move('images/internship/', $newCertificate);
-
-					// Menyimpan data surat lamaran dan sertifikat
-					$newDocument = new Document;
-					$newDocument->internship_id = $dataId;
-					$newDocument->application_letter = $newApplicationLetter;
-					$newDocument->certificate = $newCertificate;
-					$newDocument->save();
-				} else {
-					return back()->with('error', 'File surat lamaran dan/atau sertifikat tidak ditemukan.');
-				}
+			if ($validator->fails()) {
+				return back()->withErrors($validator)->withInput();
 			}
-		return redirect('internship-index')->with('success', 'Status project dalam tinjau Mohon Cek Pesan secara berskala');
+
+			$id = Auth::user()->id;
+			$data = Internship::where('user_id', $id)->first();
+			$dataId = $data->id;	
+
+			// Mengunggah surat lamaran
+			if ($r->hasFile('application_letter')) {
+				$application_letter = $r->file('application_letter');
+				$newapplication_letter = $id . "_application_letter_apply." . $application_letter->getClientOriginalExtension();
+				$application_letter->move('images/internship/', $newapplication_letter);
+			} else {
+				return back()->with('error', 'File surat lamaran tidak ditemukan.');
+			}
+
+			// Mengunggah Curriculum Vitae (CV) baru jika checkbox dicentang
+			if ($r->has('curriculum_vitae')) {
+				if ($r->hasFile('curriculum_vitae_new')) {
+					$curriculum_vitae_new = $r->file('curriculum_vitae_new');
+					$newCurriculumVitae = $id . $r->projectId . "_curriculum_vitae_apply." . $curriculum_vitae_new->getClientOriginalExtension();
+					$curriculum_vitae_new->move('images/internship/', $newCurriculumVitae);
+				} else {
+					// Jika checkbox dicentang, tetapi tidak ada file CV yang diunggah,
+					// gunakan CV lama
+					$documentData = Document::where('internship_id', $dataId)->first();
+					$newCurriculumVitae = $documentData->curriculum_vitae;
+				}
+			} else {
+				// Jika checkbox tidak dicentang, gunakan CV lama
+				$documentData = Document::where('internship_id', $dataId)->first();
+				$newCurriculumVitae = $documentData->curriculum_vitae;
+			}
+
+			// Mengupdate data dokumen
+			$oldCertificate = $documentData->certificate;
+
+			// Menyimpan data surat lamaran dan Curriculum Vitae (CV)
+			$newDocument = new Document;
+			$newDocument->internship_id = $dataId;
+			$newDocument->application_letter = $newapplication_letter;
+			$newDocument->curriculum_vitae = $newCurriculumVitae;
+			$newDocument->certificate = $oldCertificate;
+			$newDocument->save();
+				
+
+				$existingData = ProjectApply::where('project_id', $r->projectId)
+				->where('internship_id', $dataId)
+				->first();
+
+				if (!$existingData) {
+					$new = new ProjectApply;
+					$new->project_id = $r->projectId;
+					$new->internship_id = $dataId;
+					$new->status = "";
+					$new->created_at = now();
+					$new->updated_at = null;
+					$new->save();
+				} else {
+					return redirect()->back()->with('error', 'Anda sudah mendaftar project ini sebelumnya.');
+				}
+
+			return redirect('internship-index')->with('success', 'Status project dalam di tinjau Mohon Cek Pesan secara berskala');
+		} catch (\Throwable $e) {
+			dd($e);
+			DB::rollback();
+			return back()->with('error', 'Data Lamaran gagal dikirim. Coba kembali. Error: ' . $e->getMessage());
+		}
 	}
 }

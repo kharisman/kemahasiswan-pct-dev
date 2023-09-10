@@ -22,8 +22,8 @@
                     <div class="tab-pane fade show active" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
                         <div class="card border-left-primary shadow h-100 py-2">
                             <div class="card-header text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                <h3>Nama Project</h3>
-                                {{$projectData->name}}
+                                <h3>{{$projectData->name}}</h3>
+                                
                             </div>
                             <div class="card-body">
                                 <h3>Deskripsi Project</h3>
@@ -35,8 +35,7 @@
                         <div class="tab-pane fade show active" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-header text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    <h3>Nama Project</h3>
-                                    {{$projectData->name}}
+                                    <h3>{{$projectData->name}}</h3>
                                 </div>
                                 <div class="card-body">
                                     <h3>Kategori Project</h3>
