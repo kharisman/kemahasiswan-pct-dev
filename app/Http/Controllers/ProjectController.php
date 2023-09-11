@@ -52,7 +52,6 @@ class ProjectController extends Controller
             $project = new Project();
             $project->iduka_id = $iduka->id;
             $project->name = $data['name'];
-            $project->status = 'Aktif';
             $project->category_id = $data['category_id'];
             $project->level = $request->tingkat_Kesulitan;
             $project->registration_start_at = $periode_pendaftaran[0];

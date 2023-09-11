@@ -65,7 +65,7 @@
                     $condition++;
                 }
 
-                if (session('success')) {
+                if (session('successProject')) {
                     $condition++;
                 }
 
@@ -107,7 +107,7 @@
                     </div>
                 </a>  
                 @endif
-                @if (session('success'))
+                @if (session('successProject'))
                 <a class="dropdown-item preview-item" href="{{url('internship-index')}}">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-success">
