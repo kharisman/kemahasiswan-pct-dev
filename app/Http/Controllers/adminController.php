@@ -26,8 +26,16 @@ class adminController extends Controller
     //
 
     public function __construct()
-    {
-        $this->middleware('auth'); // Melindungi semua method dalam controller ini
+    {	
+		$this->middleware('auth');
+		$this->middleware(function ($request, $next) {
+			// dd(auth()->user()->roles);
+			if (auth()->user()->roles !== 'admin') {
+				abort(403, 'Unauthorized'); // Jika pengguna bukan "admin", kembalikan kode 403 (Akses Ditolak)
+			}
+			return $next($request);
+		});
+    
     }
 
     public function adminDashboard(){

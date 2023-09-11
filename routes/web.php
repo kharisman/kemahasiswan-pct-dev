@@ -29,6 +29,7 @@ Route::get('/berita', [LandingController::class, 'berita'])->name('berita');
 Route::get('/berita/{id}/{judul}', [LandingController::class, 'berita_detail']);
 
 
+Route::get('/project', [LandingController::class, 'project'])->name('project');
 Route::get('/project/{id}/{judul}', [LandingController::class, 'project_detail']);
 
 Route::get('internship-index', [InternshipController::class, 'dashboardInternship'])->name('internship.index');
@@ -67,7 +68,7 @@ Route::get('iduka/pelamar', [ProjectController::class, 'data_apply'])->name('idu
 Route::get('iduka/status_diterima', [ProjectController::class, 'data_apply_diterima'])->name('iduka.data_apply_diterima');
 Route::get('iduka/status_ditolak', [ProjectController::class, 'data_apply_ditolak'])->name('iduka.data_apply_ditolak');
 Route::get('iduka/detail_pelamar/{projectApplyId}', [ProjectController::class, 'detail_apply'])->name('iduka.detail_apply');
-Route::post('/edit-status/{applyId}', [ProjectController::class, 'edit_status_apply'])->name('edit.status');
+Route::post('/edit-status', [ProjectController::class, 'edit_status_apply'])->name('edit.status');
 Route::get('/ongoing_progress', [ProjectController::class, 'ongoing_progress'])->name('iduka.ongoing_progress');
 Route::get('/project/{id}/applies', [ProjectController::class,'showProjectApplies'])->name('project.applies');
 Route::get('/projects/{id}/applies', [ProjectController::class,'showProjectApplies'])->name('project.applies');

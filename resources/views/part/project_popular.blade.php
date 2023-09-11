@@ -66,5 +66,7 @@
                 </div>
             </div>
         </div>
+
+        <center><a class="btn btn-primary" href="{{url("project")}}" target="_blank" rel="noopener noreferrer"> Lihat Semua</a></center>
     </div>
 </div>

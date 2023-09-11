@@ -109,8 +109,14 @@ public function registerIdukaSimpan(Request $request)
     }
 }
 
-	public function login()
+	public function login(Request $request)
 	{
+		$lastUrl = $request->id;
+		// dd($lastUrl);
+		if (!empty($lastUrl)){
+			$lastUrl = url('internship-project-apply/'.$lastUrl);
+		}
+		session()->put('last_url', $lastUrl);
 		return view('landingpage/login');
 	}
 
@@ -132,6 +138,10 @@ public function registerIdukaSimpan(Request $request)
 		if ($user->hasRole('iduka')) {
 			return redirect()->route('iduka.index');
 		} else if ($user->hasRole('internship')) {
+			// dd(session()->get('last_url'));
+			if (!empty(session()->get('last_url'))){
+				return redirect(session()->get('last_url'));
+			}
 			return redirect()->route('internship.index');
 		} else if ($user->hasRole('admin')) {
 			return redirect()->route('admin.dashboard');

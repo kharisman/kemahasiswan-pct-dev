@@ -197,13 +197,19 @@ class ProjectController extends Controller
         $categories = ProjectCategory::all();
 
         $search = $request->input('search');
+        $level = $request->level;
+        $status_pengerjaan = $request->status_pengerjaan;
 
         $query = Project::where('iduka_id', $iduka->id);
 
         if (!empty($search)) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%');
-            });
+
+            $query = $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($level)) {
+
+            $query = $query->where('level', $level);
         }
 
         $projects = $query->get();
@@ -278,15 +284,40 @@ class ProjectController extends Controller
         return redirect()->route('iduka.index')->with('success', 'Project deleted successfully.');
     }
     
-    public function data_apply()
+    public function data_apply(Request $request)
     {   
         $iduka = Auth::user()->iduka;
+        $project_name = $request->project_name ;
+        $status=$request->status ;
+        $id=$request->id ;
         
         $projectApplies = ProjectApply::with(['project', 'internship'])
-            ->whereHas('project', function ($query) use ($iduka) {
-                $query->where('iduka_id', $iduka->id);
-            })
-            ->get();
+        ->whereHas('project', function ($query) use ($iduka) {
+            $query->where('iduka_id', $iduka->id);
+        });
+
+        if (!empty($status)){
+            if ($status=="3"){
+                $projectApplies = $projectApplies->where("status","rejected");
+            } else  if ($status=="2") {
+                $projectApplies = $projectApplies->where("status","accepted");          
+            } else {
+                $projectApplies = $projectApplies->where("status","");
+            }
+        }
+
+        if (!empty($project_name)) {
+            $projectApplies = $projectApplies->whereHas('project', function ($query) use ($project_name) {
+                $query->where('name', 'like', '%' . $project_name . '%');
+            });
+        }
+
+        if (!empty($id)) {
+            $projectApplies = $projectApplies->where('id', $id);
+        }
+  
+  
+         $projectApplies =    $projectApplies->get();
         
         return view('iduka.pelamar', [
             'iduka' => $iduka,
@@ -333,12 +364,12 @@ class ProjectController extends Controller
         return view('iduka/detail_pelamar', compact('projectApply', 'iduka'));
     }
 
-    public function edit_status_apply(Request $request, $applyId)
+    public function edit_status_apply(Request $request)
     {
         try {
             $newStatus = $request->input('new_status');
 
-            $apply = ProjectApply::find($applyId);
+            $apply = ProjectApply::find($request->projectApplyId);
 
             if (!$apply) {
                 return redirect()->back()->with('error', 'Pendaftaran tidak ditemukan');

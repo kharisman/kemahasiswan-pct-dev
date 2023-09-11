@@ -19,10 +19,10 @@ class Project extends Model
 
     protected $fillable = ['iduka_id', 'name', 'category_id','notes', 'updated_at', 'created_at'];
     
-    public function categories()
-    {
-        return $this->belongsToMany(Project_Category::class, 'projectcategory');
-    }
+    // public function categories()
+    // {
+    //     return $this->belongsToMany(Project_Category::class, 'projectcategory');
+    // }
 
     public function iduka()
     {

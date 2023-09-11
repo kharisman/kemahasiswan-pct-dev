@@ -13,10 +13,23 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
-use App\Models\ProjectApply;
+use App\Models\ProjectApply; 
 
 class IdukaController extends Controller
 {
+
+    public function __construct()
+    {	
+		$this->middleware('auth');
+		$this->middleware(function ($request, $next) {
+			// dd(auth()->user()->roles);
+			if (auth()->user()->roles !== 'iduka') {
+				abort(403, 'Unauthorized'); // Jika pengguna bukan "iduka", kembalikan kode 403 (Akses Ditolak)
+			}
+			return $next($request);
+		});
+    
+    }
     public function dashboard_iduka()
     {
         $user = Auth::user();
