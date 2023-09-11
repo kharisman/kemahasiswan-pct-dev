@@ -13,6 +13,7 @@ use App\Models\Project;
 use App\Models\Category;
 use App\Models\ProjectCategory;
 use App\Models\PostCategory;
+
 use Illuminate\Support\Facades\Cache;
 
 class LandingController extends Controller
@@ -21,10 +22,8 @@ class LandingController extends Controller
     public function index()
 	{
 		$Sliders = Slider::where("status","Aktif")->OrderBy("sort","ASC")->get();
-		
         $new_posts = Post::with("categories.category")->where("status","Aktif")->OrderBy("created_at","DESC")->get();
         $pop_posts = Post::with("categories.category")->where("status","Aktif")->OrderBy("views","DESC")->get();
-
 		$projects = Project::where("status","Aktif")->with("iduka")->get();
 
 		// return $new_posts ;
@@ -130,6 +129,42 @@ class LandingController extends Controller
 		}
 
     	return view('project_detail', compact("project"));
+	}
+
+	public function project(Request $request)
+	{
+		$query = Project::with("iduka")->with("category")->where("status","Aktif");
+
+		// Filter berdasarkan judul dan konten
+		if ($request->has('search')) {
+			$search = $request->search;
+			// dd($search);
+			$query->where('name', 'like', '%' . $search . '%')->orWhere('notes', 'like', '%' . $search . '%');
+			
+		}
+
+		// Filter pilihan: terbaru atau populer
+		if ($request->has('filter')) {
+			if ($request->input('filter') === 'terbaru') {
+				$query->orderBy('created_at', 'DESC');
+			} elseif ($request->input('filter') === 'populer') {
+				$query->orderBy('views', 'DESC');
+			}
+		}
+
+		// Filter berdasarkan kategori
+		if ($request->has('kategori')) {
+			$kategoriId = $request->input('kategori');
+				$query->where('category_id', $kategoriId);
+			
+		}
+
+		$posts = $query->get();
+
+		$categories = ProjectCategory::all(); // Mendapatkan daftar kategori
+		$filter = $request->get('filter'); 
+
+		return view('project', compact('posts','categories','filter'));
 	}
 
 }

@@ -19,8 +19,21 @@ use Illuminate\Support\Carbon;
 
 class InternshipController extends Controller
 {
+	public function __construct()
+    {	
+		$this->middleware('auth');
+		$this->middleware(function ($request, $next) {
+			// dd(auth()->user()->roles);
+			if (auth()->user()->roles !== 'internship') {
+				abort(403, 'Unauthorized'); // Jika pengguna bukan "internship", kembalikan kode 403 (Akses Ditolak)
+			}
+			return $next($request);
+		});
+    
+    }
     public function dashboardInternship(){
 		// Mendapatkan tanggal saat ini
+		
 		$today = Carbon::now()->toDateString();
 
 		$id = Auth::user()->id;
@@ -131,7 +144,12 @@ class InternshipController extends Controller
 		return view('internship/project', compact('projectData', 'internship'));
 	}
     public function historyInternship(){
-		$applyProjectData = ProjectApply::join('projects', 'project_applies.project_id', '=', 'projects.id')->select('project_applies.*','projects.name','projects.work_end_at')->get();
+		
+		$id = Auth::user()->id;
+		$internship = Internship::where('user_id', $id)->first();
+		$applyProjectData = ProjectApply::join('projects', 'project_applies.project_id', '=', 'projects.id')
+		->where("internship_id",$internship->id)
+		->select('project_applies.*','projects.name','projects.work_end_at')->get();
 		return view('internship/history', compact('applyProjectData'));
 	}
     public function dataInternship(){

@@ -70,10 +70,14 @@
 
                 @if (now()->between($project->registration_start_at, $project->registration_end_at))
                     
-                <a href="" class="btn btn-success"> Daftar Sekarang</a>
+                    @if (Auth::check())
+                        <a href="{{ url('internship-project-apply/' . $project->id) }}" class="btn btn-success">Daftar Sekarang</a>
+                    @else
+                        <a href="{{ url('login') }}?id={{$project->id}}" class="btn btn-success">Daftar Sekarang</a>
+                    @endif
                 @else
                 
-                <a href="" class="btn btn-warning"> Pendaftaran SUdah Ditutup</a>
+                <a href="" class="btn btn-warning"> Pendaftaran Sudah Ditutup</a>
                 @endif
             </div>
         </div>
