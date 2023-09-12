@@ -102,7 +102,7 @@ class InternshipController extends Controller
 			->join('project_categories','projects.category_id','=','project_categories.id')
 			->whereDate('registration_start_at', '<=', $today)
     		->whereDate('registration_end_at', '>=', $today)
-			->where('projects.status','Belum Dimulai')
+			->where('projects.status','Aktif')
 			->get();
 		return view('internship/project', compact('projectData', 'internship'));
 	}
@@ -117,7 +117,7 @@ class InternshipController extends Controller
 				->join('project_categories','projects.category_id','=','project_categories.id')
 				->whereDate('registration_start_at', '<=', $today)
 				->whereDate('registration_end_at', '>=', $today)
-				->where('projects.status','Belum Dimulai')
+				->where('projects.status','Aktif')
 				->orderBy('registration_start_at', 'desc')
 				->get();
 		}elseif ($data === "best") {
@@ -126,7 +126,7 @@ class InternshipController extends Controller
 				->join('project_categories','projects.category_id','=','project_categories.id')
 				->whereDate('registration_start_at', '<=', $today)
 				->whereDate('registration_end_at', '>=', $today)
-				->where('projects.status','Belum Dimulai')
+				->where('projects.status','Aktif')
 				->orderBy('views', 'desc')
 				->get();
 		}else {
@@ -137,7 +137,7 @@ class InternshipController extends Controller
 			->orWhere('idukas.name','like',"%$r->search%")
 			->whereDate('registration_start_at', '<=', $today)
 			->whereDate('registration_end_at', '>=', $today)
-			->where('projects.status','Belum Dimulai')
+			->where('projects.status','Aktif')
 			->get();
 		}
 		return view('internship/project', compact('projectData', 'internship'));
