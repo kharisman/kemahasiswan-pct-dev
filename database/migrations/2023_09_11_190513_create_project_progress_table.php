@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('project_progress', function (Blueprint $table) {
             $table->id();
             $table->integer('project_id');
-            $table->string('notes');
+            $table->text('notes');
             $table->timestamps();
         });
     }
