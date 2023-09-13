@@ -16,11 +16,10 @@
         <div class="col-md-4">
         <img src="{{ asset('images/internship/' . $projectApply->internship->photo) }}" id="profile-picture" class="img-fluid rounded-circle mb-3" alt="Profile Picture" width="300">
 
-</div>
-
+        </div>
             <div class="col-md-8">
                 <h4 class="card-title">Internship Profile</h4>
-                <form>
+                <form> 
                     <div class="form-group">
                         <label for="name">Nama</label>
                         <input type="text" class="form-control" name="name" id="name" value="{{ $projectApply->internship->name}}" readonly>
@@ -30,7 +29,7 @@
                         <input type="text" class="form-control" id="age" value="{{ $projectApply->internship->gender}}" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="name">Nama</label>
+                        <label for="name">Tanggal Lahir</label>
                         <input type="text" class="form-control" name="name" id="name" value="{{ $projectApply->internship->date_of_birth}}" readonly>
                     </div>
                     <div class="form-group">
@@ -38,20 +37,55 @@
                         <input type="text" class="form-control" id="address" value="{{ $projectApply->internship->address}}" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="name">Nama</label>
+                        <label for="name">No Handphone</label>
                         <input type="text" class="form-control" name="name" id="name" value="{{ $projectApply->internship->phone}}" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="name">Nama</label>
+                        <label for="name">Warga Negara</label>
                         <input type="text" class="form-control" name="name" id="name" value="{{ $projectApply->internship->nationality}}" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="notelpon">Nomor telepon</label>
+                        <label for="notelpon">Pendidikan</label>
                         <input type="text" class="form-control" id="age" value="{{ $projectApply->internship->education}}" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="name">Nama</label>
+                        <label for="name">Hoby</label>
                         <input type="text" class="form-control" name="name" id="name" value="{{ $projectApply->internship->interest}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="instagram">Instagram:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-instagram"></i></span>
+                            </div>
+                            <a href="https://www.instagram.com/{{ $projectApply->internship->instagram }}" target="_blank" class="form-control" id="instagram" readonly>
+                                {{ $projectApply->internship->instagram }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- LinkedIn -->
+                    <div class="form-group">
+                        <label for="linkedin">LinkedIn:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-linkedin"></i></span>
+                            </div>
+                            <a href="https://linkedin.com/{{ $projectApply->internship->linkedin }}" target="_blank" class="form-control" id="linkedin" readonly>
+                            {{ $projectApply->internship->linkedin}}</a>
+                        </div>
+                    </div>
+
+                    <!-- GitHub -->
+                    <div class="form-group">
+                        <label for="github">GitHub:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-github"></i></span>
+                            </div>
+                            <a href="https://github.com/{{ $projectApply->internship->github}}" target="_blank" class="form-control" id="github" readonly>
+                            {{ $projectApply->internship->github}}</a>
+                        </div>
                     </div>
                     
                 </form>

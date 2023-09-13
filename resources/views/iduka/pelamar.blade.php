@@ -29,7 +29,7 @@
     </div>
 </div>
 
-
+<div class="table-responsive">
         <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
@@ -54,7 +54,7 @@
                         Menunggu
                         @endif
                     </td>
-                    <td>{{ $projectApply->created_at }}</td>
+                    <td>{{ $projectApply->created_at->format('d.m.y ') }}</td>
                     <td>
                         <a href="{{ route('iduka.detail_apply', ['projectApplyId' => $projectApply->id]) }}" class="btn btn-success ">
                             <i class="fas fa-info-circle"></i> Info profile Intern
@@ -69,7 +69,7 @@
         </table>
     </div>
 </div>
-
+</div>
 <!-- Modal di luar foreach -->
 <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -124,4 +124,20 @@
 
 </script>
 
+<script>
+    // JavaScript untuk mengisi formulir modal dengan data yang sesuai saat tombol "Ubah Status" diklik
+    $('.open-modal').click(function() {
+        var projectApplyId = $(this).data('projectapplyid');
+        var currentStatus = $(this).closest('tr').find('td:nth-child(4)').text().trim(); 
+
+        if (currentStatus === "accepted" || currentStatus === "rejected") {
+            $('.status-dropdown').prop('disabled', true);
+        } else {
+            $('.status-dropdown').prop('disabled', false);
+        }
+        
+        $('#projectApplyId').val(projectApplyId);
+    });
+
+</script>
 @endsection

@@ -24,7 +24,6 @@ Route::get('/pengajuan-iduka', [LandingController::class, 'iduka'])->name('iduka
 Route::get('/pengajuan-intership', [LandingController::class, 'intership'])->name('intership');
 Route::get('/kontak', [LandingController::class, 'kontak'])->name('kontak');
 
-
 Route::get('/berita', [LandingController::class, 'berita'])->name('berita');
 Route::get('/berita/{id}/{judul}', [LandingController::class, 'berita_detail']);
 
@@ -72,6 +71,15 @@ Route::post('/edit-status', [ProjectController::class, 'edit_status_apply'])->na
 Route::get('/ongoing_progress', [ProjectController::class, 'ongoing_progress'])->name('iduka.ongoing_progress');
 Route::get('/project/{id}/applies', [ProjectController::class,'showProjectApplies'])->name('project.applies');
 Route::get('/projects/{id}/applies', [ProjectController::class,'showProjectApplies'])->name('project.applies');
+Route::get('iduka/ongoing_progress/{id}', [ProjectController::class,'ongoingProgressByProject'])->name('iduka.ongoing_progress.project');
+Route::get('/iduka/create_task/{project}', [ProjectController::class, 'createTask'])->name('tasks.create');
+Route::post('/tasks/{project_id}', [ProjectController::class, 'store'])->name('tasks.store');
+Route::get('/tasks/{project_id}', [ProjectController::class, 'showByProject'])->name('tasks.show');
+Route::get('/projects/{project_id}/tasks', [ProjectController::class,'showTasksByProject'])->name('tasks.byProject');
+Route::get('/tasks/{task_id}/edit', [ProjectController::class, 'edit'])->name('tasks.edit');
+Route::get('/projects/{project_id}/tasks', [ProjectController::class, 'showTasksByProject'])->name('tasks.byProject');
+Route::put('/tasks/{task_id}', [ProjectController::class, 'update'])->name('tasks.update');
+
 
 
 	Route::get('/admin-dashboard',[adminController::class,'adminDashboard'])->name("admin.dashboard");	
