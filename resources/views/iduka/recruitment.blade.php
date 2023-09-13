@@ -12,9 +12,11 @@
                     <select name="category_id" class="form-control" id="category_id">
                         <option value="" disabled selected>Pilih Kategori</option>
                         @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                            {{ $category->category }}
-                        </option>
+                            @if ($category->status == 'Aktif')
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->category }}
+                                </option>
+                            @endif
                         @endforeach
                     </select>
                     @error('category_id')

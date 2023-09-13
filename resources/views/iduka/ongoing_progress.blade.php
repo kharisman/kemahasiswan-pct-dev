@@ -1,6 +1,6 @@
 @extends('iduka.layouts.app')
 
-@section('title', 'Daftar Pelamar Project')
+@section('title', 'Daftar Internship Diterima Project')
 
 @section('contents')
 <table class="table">
@@ -10,8 +10,8 @@
             <th>Project Name</th>
             <th>Internship Name</th>
             <th>Status</th>
-            <th>Tanggal Apply</th>
-            <th>Aksi</th>
+            <th>Tanggal</th>
+            <th>Status Pengerjaan</th>
         </tr>
     </thead>
     <tbody>
@@ -28,11 +28,9 @@
             <td>
                 <span id="status_{{ $projectData['project']->id }}">{{ $projectData['project']->status }}</span>
             </td>
-            <td>{{ $projectData['project']->created_at }}</td>
+            <td>{{ $projectData['project']->work_start_at}} Hingga {{ $projectData['project']->work_end_at}}</td>
             <td>
-                <a href="{{ route('iduka.detail_apply', ['projectApplyId' => $projectData['project']->id]) }}" class="btn btn-success btn-circle btn-lg">
-                    <i class="fas fa-info-circle"></i>
-                </a>
+          {{ $projectData['project']->status_work}}
             </td>
         </tr>
     

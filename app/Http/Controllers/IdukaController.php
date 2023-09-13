@@ -36,7 +36,7 @@ class IdukaController extends Controller
         $categories = ProjectCategory::all();
         $iduka = Iduka::where("user_id", Auth::user()->id)->firstOrFail();
         $projects = Project::where('iduka_id', $iduka->id)->get();
-        $latestProject = Project::where('iduka_id', $iduka->id)->latest()->first();
+        $latestProject = Project::where('iduka_id', $iduka->id)->latest()->take(3)->get();
         $projectsCount = Project::where('iduka_id', $iduka->id)->count();
         $applicantsCount = ProjectApply::whereHas('project', function ($query) use ($iduka) {
             $query->where('iduka_id', $iduka->id);
@@ -44,8 +44,7 @@ class IdukaController extends Controller
         $applicantsAcceptedCount = ProjectApply::whereHas('project', function ($query) use ($iduka) {
             $query->where('iduka_id', $iduka->id);
         })->where('status', 'accepted')->count();
-    
-        // Hitung jumlah pelamar yang ditolak
+
         $applicantsRejectedCount = ProjectApply::whereHas('project', function ($query) use ($iduka) {
             $query->where('iduka_id', $iduka->id);
         })->where('status', 'rejected')->count();
