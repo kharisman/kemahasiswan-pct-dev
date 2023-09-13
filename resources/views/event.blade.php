@@ -5,8 +5,8 @@
     <div class="container">
         <div class="row align-items-end">
             <div class="col-lg-7">
-                <h2 class="mb-0">Project</h2>
-                <p>Kumpulan project terbaru dan terpopuler</p>
+                <h2 class="mb-0">Event</h2>
+                <p>Kumpulan event terbaru dan terpopuler</p>
             </div>
         </div>
     </div>
@@ -18,11 +18,11 @@
         <span class="mx-3 icon-keyboard_arrow_right"></span>
         <a href="#">
             @if ($filter === 'terbaru')
-            Berita Terbaru
+            Event Terbaru
             @elseif ($filter === 'populer')
-            Berita Terpopuler
+            Event Terpopuler
             @else
-            Semua Berita
+            Semua Event
             @endif
         </a>
     </div>
@@ -30,9 +30,9 @@
     <div class="news-updates">
         <div class="container">
 
-            <form class="form-inline mb-5" action="{{ route('project') }}" method="GET">
+            <form class="form-inline mb-5" action="{{ route('event') }}" method="GET">
                 <div class="form-group col-md-3 mb-2">
-                    <input type="text" class="form-control w-100" name="search" placeholder="Cari project..." value="{{ request('search') }}">
+                    <input type="text" class="form-control w-100" name="search" placeholder="Cari event..." value="{{ request('search') }}">
                 </div>
                 <div class="form-group col-md-3 mb-2">
                     <select class="form-control w-100" name="filter">
@@ -41,16 +41,7 @@
                         <option value="populer" {{ request('filter') === 'populer' ? 'selected' : '' }}>Populer</option>
                     </select>
                 </div>
-                <div class="form-group col-md-3 mb-2">
-                    <select class="form-control w-100" name="kategori">
-                        <option value="">Semua Kategori</option>
-                        @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" {{ request('kategori') == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
+                
                 <div class="form-group col-md-3">
                     <button type="submit" class="btn btn-primary w-100">Cari</button>
                 </div>
@@ -63,26 +54,25 @@
                         <div class="col-lg-12">
                             @foreach ($posts as $post )
                             @php
-                            $slug = Str::slug(preg_replace('/\s+/', ' ', preg_replace('/[^a-zA-Z0-9\s]/', '', strtolower($post->name))), '-')
+                            $slug = Str::slug(preg_replace('/\s+/', ' ', preg_replace('/[^a-zA-Z0-9\s]/', '', strtolower($post->title))), '-')
                             @endphp
 
                             <div class="post-entry-big horizontal d-flex mb-4">
-                                <a href="{{url('')}}/project/{{$post->id}}/{{$slug}}" class="img-link mr-4"><img src="{{$post->iduka->photo}}" alt="Image" class="img-fluid"></a>
+                                <a href="{{url('')}}/event/{{$post->id}}/{{$slug}}" class="img-link mr-4"><img src="{{$post->cover}}" alt="Image" class="img-fluid"></a>
                                 <div class="post-content">
                                     <div class="post-meta">
-                                        <a href="{{url('')}}/project/{{$post->id}}/{{$slug}}">{{$post->created_at->translatedFormat('d F Y')}}</a>
+                                        <a href="{{url('')}}/event/{{$post->id}}/{{$slug}}">{{$post->created_at->translatedFormat('d F Y')}}</a>
                                         <span class="mx-1">/</span>
-                                        <a href="">{{$post->category->category}}</a>
-                                        <span class="mx-1">/</span>
+                                        
 
-                                        @if (now()->between($post->registration_start_at, $post->registration_end_at))
+                                        @if (now()->between($post->reg_start, $post->reg_end))
                                         <a class="badge badge-danger text-white" href="">Dibuka</a>
                                         @else
                                         <a class="badge badge-primary text-white" href="">Tutup</a>
                                         @endif
                                     </div>
 
-                                    <h3 class="post-heading"><a href="{{url('')}}/project/{{$post->id}}/{{$slug}}">{{$post->name}}</a></h3>
+                                    <h3 class="post-heading"><a href="{{url('')}}/event/{{$post->id}}/{{$slug}}">{{$post->title}}</a></h3>
                                 </div>
                             </div>
 

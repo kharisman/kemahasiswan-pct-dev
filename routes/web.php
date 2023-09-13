@@ -32,6 +32,11 @@ Route::get('/berita/{id}/{judul}', [LandingController::class, 'berita_detail']);
 Route::get('/project', [LandingController::class, 'project'])->name('project');
 Route::get('/project/{id}/{judul}', [LandingController::class, 'project_detail']);
 
+
+Route::get('/event', [LandingController::class, 'event'])->name('event');
+Route::get('/event/{id}/{judul}', [LandingController::class, 'event_detail']);
+Route::post('/event/{id}/{judul}', [LandingController::class, 'event_p']);
+
 Route::get('internship-index', [InternshipController::class, 'dashboardInternship'])->name('internship.index');
 Route::get('internship-project', [InternshipController::class, 'projectInternship']);
 Route::get('internship-project-filter/{data}', [InternshipController::class, 'projectInternshipFilter']);

@@ -23,9 +23,9 @@
     <div class="container">
         <a href="index.html">Home</a>
         <span class="mx-3 icon-keyboard_arrow_right"></span>
-        <a href="courses.html">Berita</a>
+        <a href="{{url('')}}/project">Project</a>
         <span class="mx-3 icon-keyboard_arrow_right"></span>
-        <a href="courses.html">{{$project->title}}</a>
+        <a href="courses.html">{{$project->name}}</a>
     </div>
 </div>
 

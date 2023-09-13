@@ -1,7 +1,7 @@
 @extends('layout')
 @section('content')
 
-<div class="site-section ftco-subscribe-1 site-blocks-cover pb-4" >
+<div class="site-section ftco-subscribe-1 site-blocks-cover pb-4" style="background-image: url('{{url('')}}/landingpage/images/bg_1.jpg')">
     <div class="container">
         <div class="row align-items-end">
             <div class="col-lg-7">
@@ -16,13 +16,19 @@
     <div class="container">
         <a href="index.html">Home</a>
         <span class="mx-3 icon-keyboard_arrow_right"></span>
-        <a href="courses.html">Berita</a>
+        <a href="#">
+            @if ($filter === 'terbaru')
+                Berita Terbaru
+            @elseif ($filter === 'populer')
+                Berita Terpopuler
+            @else
+                Semua Berita
+            @endif
+        </a>
 </div>
-
 <div class="news-updates">
     <div class="container">
-        
-        <form class="form-inline mb-4" action="{{ route('berita') }}" method="GET">
+        <form class="form-inline mb-5" action="{{ route('berita') }}" method="GET">
             <div class="form-group col-md-3 mb-2">
                 <input type="text" class="form-control w-100" name="search" placeholder="Cari berita..." value="{{ request('search') }}">
             </div>
@@ -49,17 +55,8 @@
         </form>
 
         <div class="row">
-            
             <div class="col-lg-12">
-                 <div class="section-heading">
-                    @if ($filter === 'terbaru')
-                        <h2 class="text-black">Berita Terbaru</h2>
-                    @elseif ($filter === 'populer')
-                        <h2 class="text-black">Berita Terpopuler</h2>
-                    @else
-                        <h2 class="text-black">Semua Berita</h2>
-                    @endif
-                </div>
+                 
                 <div class="row">
                     <div class="col-lg-12">
                           @foreach ($posts as $post )

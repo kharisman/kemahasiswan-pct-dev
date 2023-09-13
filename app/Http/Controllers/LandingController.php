@@ -13,6 +13,12 @@ use App\Models\Project;
 use App\Models\Category;
 use App\Models\ProjectCategory;
 use App\Models\PostCategory;
+use App\Models\Event;
+use App\Models\EventRegistration;
+use Illuminate\support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Cache;
 
@@ -165,6 +171,100 @@ class LandingController extends Controller
 		$filter = $request->get('filter'); 
 
 		return view('project', compact('posts','categories','filter'));
+	}
+
+	public function event_detail(Request $request, $id, $judul)
+	{
+		
+        $project = Event::where("id",$id)->firstOrFail();
+
+		
+		$ip = request()->ip();
+		$userAgent = request()->header('User-Agent'); // Mendapatkan informasi User-Agent
+
+		// Generate a unique cache key based on IP and User-Agent
+		$cacheKey = md5($ip . $userAgent)."e".$project->id;
+
+		// Check if the cache key exists
+		if (!Cache::has($cacheKey)) {
+			// Increment the views counter
+			$project->increment('views');
+
+			// Cache the cache key to prevent further increment
+			Cache::put($cacheKey, true, now()->addDay());
+		}
+
+    	return view('event_detail', compact("project"));
+	}
+
+	public function event_p(Request $request, $id, $judul)
+	{
+		// Validasi input
+		$request->validate([
+			'name' => 'required|string|max:255',
+			'email' => 'required|email|max:255|unique:event_registrations',
+			'phone' => 'required|string|max:20|unique:event_registrations',
+			'activity' => 'required|string|max:255',
+		]);
+
+		// Dapatkan ID pengguna yang sedang masuk
+		$user = Auth::user()->id;
+
+		// Gunakan transaksi database untuk memastikan konsistensi
+		DB::beginTransaction();
+
+		try {
+			// Simpan data pendaftaran ke dalam tabel event_registrations
+			$save = new EventRegistration();
+			$save->event_id = $id;
+			$save->user_id = (int)$user;
+			$save->name = $request->name;
+			$save->email = $request->email;
+			$save->phone = $request->phone;
+			$save->activity = $request->activity;
+			$save->save();
+
+			// Commit transaksi ke database
+			DB::commit();
+
+			// Redirect atau berikan respons sukses
+			return redirect()->back()->with('success', 'Pendaftaran berhasil!');
+		} catch (\Exception $e) {
+			// Jika ada kesalahan, rollback transaksi dan berikan respons kesalahan
+			DB::rollback();
+			return redirect()->back()->with('error', 'Terjadi kesalahan saat pendaftaran. Silakan coba lagi.');
+		}
+	}
+
+
+	public function event(Request $request)
+	{
+		$query = Event::where("status","Aktif");
+
+		// Filter berdasarkan judul dan konten
+		if ($request->has('search')) {
+			$search = $request->search;
+			// dd($search);
+			$query->where('title', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');
+			
+		}
+
+		// Filter pilihan: terbaru atau populer
+		if ($request->has('filter')) {
+			if ($request->input('filter') === 'terbaru') {
+				$query->orderBy('created_at', 'DESC');
+			} elseif ($request->input('filter') === 'populer') {
+				$query->orderBy('views', 'DESC');
+			}
+		}
+
+		
+
+		$posts = $query->get();
+
+		$filter = $request->get('filter'); 
+
+		return view('event', compact('posts','filter'));
 	}
 
 }
