@@ -21,6 +21,12 @@
     <link rel="stylesheet" href="{{url('')}}/landingpage/fonts/flaticon/font/flaticon.css">
 
     <link rel="stylesheet" href="{{url('')}}/landingpage/css/aos.css">
+
+    
+    <script src="{{url('')}}/landingpage/js/jquery-3.3.1.min.js"></script>
+    <script src="{{url('')}}/landingpage/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link href="css/jquery.mb.YTPlayer.min.css" media="all" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="{{url('')}}/landingpage/css/style.css">
@@ -82,6 +88,15 @@
                                     <a href="{{route('berita')}}" class="nav-link text-left">Berita</a>
                                 </li>
 
+                                <li class="{{ Request::route()->getName() == 'project' ? 'active' : '' }}">
+                                    <a href="{{route('project')}}" class="nav-link text-left">Project</a>
+                                </li>
+
+
+                                 <li class="{{ Request::route()->getName() == 'event' ? 'active' : '' }}">
+                                    <a href="{{route('event')}}" class="nav-link text-left">Event</a>
+                                </li>
+
                                 {{-- <li class="{{ Request::route()->getName() == 'kontak' ? 'active' : '' }}">
                                     <a href="{{route('kontak')}}" class="nav-link text-left">Kontak Kami</a>
                                 </li> --}}
@@ -113,6 +128,45 @@
             </div>
 
         </header>
+
+
+        @if(Session::has('success'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    title: 'Berhasil !'
+                    , text: '{{ Session::get('
+                    success ') }}'
+                    , icon: 'success'
+                    , confirmButtonText: 'Tutup'
+                })
+            });
+
+        </script>
+        @php
+        Session::forget('success');
+        @endphp
+        @endif
+
+
+        @if(Session::has('error'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    title: 'Gagal !'
+                    , text: '{{ Session::get('
+                    error ') }}'
+                    , icon: 'error'
+                    , confirmButtonText: 'Tutup'
+                })
+            });
+
+        </script>
+        @php
+        Session::forget('error');
+        @endphp
+        @endif
+
 
         @yield('content')
 
@@ -175,8 +229,6 @@
     <div id="loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#51be78"/></svg></div>
     -->
 
-    <script src="{{url('')}}/landingpage/js/jquery-3.3.1.min.js"></script>
-    <script src="{{url('')}}/landingpage/js/jquery-migrate-3.0.1.min.js"></script>
     <script src="{{url('')}}/landingpage/js/jquery-ui.js"></script>
     <script src="{{url('')}}/landingpage/js/popper.min.js"></script>
     <script src="{{url('')}}/landingpage/js/bootstrap.min.js"></script>

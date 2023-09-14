@@ -4,8 +4,6 @@
 
 @section('contents')
 
-
-
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
@@ -61,7 +59,6 @@
                     <th>Tanggal Registrasi</th>
                     <th>Akan Mulai</th>
                     <th>Status Work</th>
-                    <th>Notes</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -75,7 +72,6 @@
                     <td>{{ date('d, M Y', strtotime($project->registration_start_at)) }} Hingga {{ date('d, M Y', strtotime($project->registration_end_at)) }}</td>
                     <td>{{ date('d, M Y', strtotime($project->work_start_at)) }} Hingga {{ date('d, M Y', strtotime($project->work_end_at)) }}</td>
                     <td>{{ $project->status_work }}</td>
-                    <td>{!! $project->notes !!}</td>
                     <td> <a href="{{ route('iduka.data_apply', ['id' => $project->id]) }}" class="btn btn-success">Pelamar Project</a>
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

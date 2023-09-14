@@ -31,6 +31,11 @@ Route::get('/berita/{id}/{judul}', [LandingController::class, 'berita_detail']);
 Route::get('/project', [LandingController::class, 'project'])->name('project');
 Route::get('/project/{id}/{judul}', [LandingController::class, 'project_detail']);
 
+
+Route::get('/event', [LandingController::class, 'event'])->name('event');
+Route::get('/event/{id}/{judul}', [LandingController::class, 'event_detail']);
+Route::post('/event/{id}/{judul}', [LandingController::class, 'event_p']);
+
 Route::get('internship-index', [InternshipController::class, 'dashboardInternship'])->name('internship.index');
 Route::get('internship-project', [InternshipController::class, 'projectInternship']);
 Route::post('internship-project', [InternshipController::class, 'projectInternshipPost']);
@@ -79,6 +84,9 @@ Route::get('/projects/{project_id}/tasks', [ProjectController::class,'showTasksB
 Route::get('/tasks/{task_id}/edit', [ProjectController::class, 'edit'])->name('tasks.edit');
 Route::get('/projects/{project_id}/tasks', [ProjectController::class, 'showTasksByProject'])->name('tasks.byProject');
 Route::put('/tasks/{task_id}', [ProjectController::class, 'update'])->name('tasks.update');
+
+Route::get('/task/{task}/edit', [ProjectController::class, 'task_edit'])->name('task.edit');
+Route::post('/task/{task}/edit', [ProjectController::class, 'task_edit_p'])->name('task.update');
 
 
 

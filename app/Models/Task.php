@@ -8,7 +8,7 @@ class Task extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'project_id', 'internship_id'];
+    protected $fillable = ['name', 'description', 'project_id', 'internship_id',"status_task"];
 
     // Relasi ke model Project
     public function project()
@@ -22,8 +22,14 @@ class Task extends Model
         return $this->belongsTo(Internship::class);
     }
     public function internships()
-{
-    return $this->belongsToMany(Internship::class);
-    
-}
+    {
+        return $this->belongsToMany(Internship::class);
+        
+    }
+
+
+    public function taskHistories()
+    {
+        return $this->hasMany(TaskHistory::class);
+    }
 }
