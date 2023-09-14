@@ -24,7 +24,7 @@
                                     <td>{{$item->name}}</td>
                                     <td>{{$item->created_at->format('d M Y')}}</td>
                                     <td>
-                                    @if ($item->work_end_at < now()->toDateString())
+                                    @if ($item->status_work == "selesai")
                                         <a class="btn btn-disable btn-sm btn-success">Selesai</a>
                                     @elseif ($item->status == "rejected")
                                         <a class="btn btn-disable btn-sm btn-danger">Ditolak</a>

@@ -1,7 +1,7 @@
 @extends('internship/main')
 @section('contentInternship')
     <div class="content-wrapper">
-        @if(session('success'))
+        @if(session('successProject'))
         <script>
             document.addEventListener('DOMContentLoaded', function () {
             Swal.fire(

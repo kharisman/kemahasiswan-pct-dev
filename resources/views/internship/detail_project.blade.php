@@ -53,15 +53,17 @@
                     <div class="tab-pane fade" id="tentangiduka-tab-pane" role="tabpanel" aria-labelledby="tentangiduka-tab" tabindex="0">
                         <div class="card border-left-primary shadow h-100 py-2">
                             <div class="card-header text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                <h3>Nama Project</h3>
-                                {{$projectData->name}}
+                                <h3>{{$projectData->name}}</h3>
                             </div>
                             <div class="card-body">
-                                <h3>Tentang Iduka</h3>
-                                {{$projectData->idukaName}}
+                                <h3>
+                                    {{$projectData->idukaName}}
+                                </h3>
                                 <br>
                                 <h3>Alamat Iduka</h3>
-                                {{$projectData->address}}
+                                <p>
+                                    {{$projectData->address}}
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -11,6 +11,8 @@ use App\Models\Internship;
 use App\Models\Iduka;
 use App\Models\Document;
 use App\Models\SocialMediaLink;
+use App\Models\ProjectProgress;
+use App\Models\Task;
 use Illuminate\support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -69,7 +71,8 @@ class InternshipController extends Controller
 				}
 			}	
 
-			$completedProject = ProjectUpdate::where('date_finish','<',$today)
+			$completedProject = ProjectUpdate::join('projects','project_updates.project_id','=','projects.id')
+				->where('status_work', 'Selesai')
 				->where('internship_id', $dataId)
 				->count();
 			$onGoingProject = ProjectUpdate::where('date_finish','>=',$today)
@@ -89,9 +92,16 @@ class InternshipController extends Controller
 		return view('internship/index', compact('completedProject','onGoingProject','rejectProject','onGoingProjectData'));
 	}
     public function progressInternship($id){
-		$today = Carbon::now()->toDateString();
-		$progressData = ProjectProgress::where('project_id', $id)->get();
-		return view('internship/progress', compact('progressData'));
+		$idIntership = Auth::user()->id;
+		$data = Internship::where('user_id', $idIntership)->first();
+		$dataId = $data->id;
+		$progressData = Project::findOrFail($id);
+		$taskData = Task::join('internship_task','tasks.id','=','internship_task.task_id')
+		->where('internship_task.internship_id', $dataId)
+		->where('project_id', $id)
+		->where('status_task', '<>', 'Belum Dimulai')
+		->get();
+		return view('internship/progress', compact('progressData','taskData','dataId'));
 	}
     public function projectInternship(){
 		$today = Carbon::now()->toDateString();
@@ -266,6 +276,8 @@ class InternshipController extends Controller
 	}
 
 	public function applyProjectInternshipPost(Request $r){
+		DB::beginTransaction();
+		try {
 			$validator = Validator::make($r->all(), [
 				'projectId' => 'required',
 				'application_letter' => 'required|mimes:pdf',
@@ -341,6 +353,12 @@ class InternshipController extends Controller
 					return redirect()->back()->with('error', 'Anda sudah mendaftar project ini sebelumnya.');
 				}
 
-			return redirect('internship-index')->with('successProject', 'Status project dalam di tinjau Mohon Cek Pesan secara berskala');
+				DB::commit();
+			return redirect('internship-index')->with('successProject', 'Status project sedang di tinjau Mohon Cek Pesan secara berskala');
+		} catch (\Throwable $e) {
+			dd($e);
+			DB::rollback();
+			return back()->with('error', 'Data gagal dikirimkan. Coba kembali. Error: ' . $e->getMessage());
+		}
 	}
 }
