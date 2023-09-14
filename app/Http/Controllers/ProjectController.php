@@ -11,6 +11,7 @@ use App\Models\ProjectUpdate;
 use App\Models\Internship;
 use App\Models\InternshipsApply;
 use App\Models\Task;
+use App\Models\TaskHistory;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -318,7 +319,7 @@ class ProjectController extends Controller
         }
 
         if (!empty($id)) {
-            $projectApplies = $projectApplies->where('id', $id);
+            $projectApplies = $projectApplies->where('project_id', $id);
         }
   
   
@@ -503,8 +504,7 @@ public function store(Request $request, $project_id)
 
     $task->internships()->attach($data['internship_id']);
 
-    return redirect()->route('iduka.index', ['project_id' => $project_id, 'task_id' => $task->id])
-        ->with('success', 'Tugas berhasil ditambahkan!');
+    return back()->with('success', 'Tugas berhasil ditqmbahkan!');
 }
 public function showTasksByProject($project_id)
 {
@@ -533,6 +533,62 @@ public function update(Request $request, $task_id)
     return redirect()->route('tasks.byProject', ['project_id' => $task->project_id])
         ->with('success', 'Status task berhasil diperbarui!');
 }
+
+
+public function task_edit($task)
+{
+    // return $task ;
+    $task = Task::with("taskHistories")->findOrFail($task);
+    $iduka = Auth::user()->iduka;
+    return view('iduka/tasks_edit', compact('task','iduka'));
+}
+
+
+
+public function task_edit_p(Request $request, $task)
+{
+    // Validasi data
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+        'status_task' => 'required|string',
+    ]);
+
+    try {
+        // Memulai transaksi
+        DB::beginTransaction();
+
+        // Temukan tugas berdasarkan ID
+        $task = Task::findOrFail($task);
+
+        // Perbarui tugas dengan data yang divalidasi
+        $task->update($validatedData);
+
+        $taskHistory = new TaskHistory();
+        $taskHistory->task_id = $task->id;
+        $taskHistory->user_id = auth()->user()->id; 
+        $taskHistory->description = $task->description;
+        $taskHistory->save();
+        DB::commit();
+        
+        // return $task ;
+        return back()->with('success', 'Tugas berhasil diperbarui!');
+    } catch (\Exception $e) {
+        // Rollback transaksi jika terjadi kesalahan
+        DB::rollback();
+
+        return back()->with('error', 'Gagal memperbarui tugas: ' . $e->getMessage());
+    }
+}
+
+
+
+
+
+
+
+
+
 
 
 }

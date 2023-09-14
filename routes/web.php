@@ -85,6 +85,9 @@ Route::get('/tasks/{task_id}/edit', [ProjectController::class, 'edit'])->name('t
 Route::get('/projects/{project_id}/tasks', [ProjectController::class, 'showTasksByProject'])->name('tasks.byProject');
 Route::put('/tasks/{task_id}', [ProjectController::class, 'update'])->name('tasks.update');
 
+Route::get('/task/{task}/edit', [ProjectController::class, 'task_edit'])->name('task.edit');
+Route::post('/task/{task}/edit', [ProjectController::class, 'task_edit_p'])->name('task.update');
+
 
 
 	Route::get('/admin-dashboard',[adminController::class,'adminDashboard'])->name("admin.dashboard");	

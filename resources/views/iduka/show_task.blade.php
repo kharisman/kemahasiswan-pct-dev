@@ -1,10 +1,18 @@
 @extends('iduka.layouts.app')
 
+@section('title', 'Daftar Tugas')
+@section('toolbar')
+    <a  href="{{ route('tasks.create', ['project' => $project->id]) }}" class=" btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Tambah Tugas</a>
+@endsection
 @section('contents')
-<div class="container">
-    <h1>Daftar Tugas untuk Proyek: {{ $project->name }}</h1>
 
-    <table class="table">
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Daftar Tugas untuk Proyek: {{ $project->name }}</h6>
+    </div>
+
+     <div class="card-body">
+    <table class="table" id="dataTable">
         <thead>
             <tr>
                 <th>Nama Tugas</th>
@@ -23,62 +31,29 @@
                     @foreach ($task->internships as $internship)
                     {{ $internship->name }}
                     @if (!$loop->last)
-                    , <!-- Jika bukan internship terakhir, tambahkan koma -->
+                    ,
+                    <!-- Jika bukan internship terakhir, tambahkan koma -->
                     @endif
                     @endforeach
                 </td>
                 <td>
-                    {{ $task->status_task }}</td> <td>
-                    <button class="btn btn-primary open-modal" data-toggle="modal" data-target="#editStatusTaskModal" data-taskid="{{ $task->id }}">
-                        Edit Status
-                    </button>
+                    {{ $task->status_task }}</td>
+                <td>
+                    <a class="btn btn-primary"  href="{{ route('task.edit', ['task' => $task->id]) }}">
+                        Edit 
+                    </a>
 
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
-
-    <!-- Modal Edit Status Task -->
-    <div class="modal fade" id="editStatusTaskModal" tabindex="-1" role="dialog" aria-labelledby="editStatusTaskModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <form action="{{ route('tasks.update', ['task_id' => $task->id]) }}" method="POST">
-    @csrf
-    @method('PUT')
-    <!-- Tambahkan input tersembunyi untuk mengirim task_id -->
-    <input type="hidden" name="task_id" value="{{ $task->id }}">
-
-    <div class="modal-header">
-        <!-- ... -->
     </div>
 
-    <div class="modal-body">
-        <div class="form-group">
-            <label for="status_task">Beri Status:</label>
-            <select name="status_task" class="form-control status-dropdown">
-            <option value="">Beri status</option>
-                <option value="Belum Dimulai">Belum Dimulai</option>
-                <option value="Sedang Dikerjakan">Sedang Dikerjakan</option>
-                <option value="Selesai">Selesai</option>
-                <option value="Batal">Batal</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-    </div>
-</form>
-
-
-                  
-            
-            </div>
-        </div>
-    </div>
+    
 </div>
+
+
 
 <!-- DataTables (pastikan Anda sudah mengunduh dan memasangnya) -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
@@ -92,4 +67,6 @@
     });
 
 </script>
+
+
 @endsection
