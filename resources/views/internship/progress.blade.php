@@ -1,20 +1,39 @@
 @extends('internship/main')
 @section('contentInternship')
     <div class="content-wrapper">
-        <div class="row">
-            <div class="card border-left-primary shadow h-100 py-2">
+        <div class="row mb-3">
+            <div class="card border-left-primary shadow h-100 py-2 mb-3">
                 <div class="card-header text-xs font-weight-bold text-primary text-uppercase mb-1">
-                    <h3>Progress Data Project</h3>
+                    <h3>Progress Project</h3>
                     
                 </div>
                 <div class="card-body">
-                    <ol class="list-group list-group-numbered">
-                        @foreach ($progressData as $item)
-                        <li class="list-group-item">
-                            <p>{!! $item->notes !!}</p><br>
-                        </li>
+                    <div class="bd-example mb-3">
+                        <dl>
+                          <dt>Nama Project</dt>
+                          <dd>{{$progressData->name}}</dd>
+                          <dt>Periode</dt>
+                          <dd>{{$progressData->work_start_at}} sampai dengan {{$progressData->work_end_at}}</dd>
+                        </dl>
+                      </div>
+                </div>
+            </div>
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-header text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    <h3>Task Data Project</h3>
+                    
+                </div>
+                <div class="card-body">
+                        @foreach ($taskData as $item)
+                        <div class="bd-example mb-3">
+                            <details open="">
+                              <summary>{!! $item->name !!}</summary>
+                              <div class="text-end">{!! $item->status_task !!}</div>
+                              <hr class="border border-primary border-2 opacity-50">
+                              <p>{!! $item->description !!}</p>
+                            </details>
+                        </div>
                         @endforeach
-                    </ol>
                 </div>
             </div>
         </div>

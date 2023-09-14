@@ -504,7 +504,7 @@ public function store(Request $request, $project_id)
 
     $task->internships()->attach($data['internship_id']);
 
-    return back()->with('success', 'Tugas berhasil ditqmbahkan!');
+    return back()->with('success', 'Tugas berhasil ditambahkan!');
 }
 public function showTasksByProject($project_id)
 {

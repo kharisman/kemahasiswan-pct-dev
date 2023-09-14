@@ -29,7 +29,7 @@
                     </div>
                     <!-- Checkbox untuk CV -->
                     <div class="row mb-3 text-start">
-                        <label for="curricullum_vitae" class="col-sm-4 col-form-label text-start">Gunakan CV Lama</label>
+                        <label for="curricullum_vitae" class="col-sm-4 col-form-label text-start">Checklist jika ingin gunakan CV Lama</label>
                         <div class="input-group mb-3">
                             <div class="input-group-text">
                               <input id="curricullum_vitae" name="curricullum_vitae" class="form-check-input mt-0 border-dark" type="checkbox" value="curricullum_vitae" aria-label="Checkbox for following text input">
