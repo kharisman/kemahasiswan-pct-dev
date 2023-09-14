@@ -35,12 +35,13 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="status_pengerjaan">Status Pengerjaan:</label>
-                    <select name="status_pengerjaan" id="status_pengerjaan" class="form-control">
-                        <option value="">Semua Status Pengerjaan</option>
-                        <option value="Sedang Dikerjakan" {{ request('status_pengerjaan') == 'Sedang Dikerjakan' ? 'selected' : '' }}>Sedang Dikerjakan</option>
-                        <option value="Selesai" {{ request('status_pengerjaan') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
-                        <option value="Belum Dimulai" {{ request('status_pengerjaan') == 'Belum Dimulai' ? 'selected' : '' }}>Belum Dimulai</option>
+                    <label for="status_work">Status work:</label>
+                    <select name="status_work" id="status_work" class="form-control">
+                        <option value="">Semua Status work</option>
+                        <option value="Belum Dimulai" {{ request('status_work') == 'Belum Dimulai' ? 'selected' : '' }}>Belum Dimulai</option>
+                        <option value="Sedang Dikerjakan" {{ request('status_work') == 'Sedang Dikerjakan' ? 'selected' : '' }}>Sedang Dikerjakan</option>
+                        <option value="Selesai" {{ request('status_work') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                        <option value="Batal" {{ request('status_work') == 'Batal' ? 'selected' : '' }}>Batal</option>
                     </select>
                 </div>
             </div>
@@ -50,7 +51,7 @@
         </div>
         
         </form>
-
+        <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
@@ -59,6 +60,8 @@
                     <th>Level</th>
                     <th>Tanggal Registrasi</th>
                     <th>Akan Mulai</th>
+                    <th>Status Work</th>
+                    <th>Notes</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -69,8 +72,10 @@
                     <td>{{ $project->name }}</td>
                     <td>{{ $project->status }}</td>
                     <td>{{ $project->level }}</td>
-                    <td>{{ $project->registration_start_at }} sampai dengan {{ $project->registration_end_at }}</td>
-                    <td>{{ $project->work_start_at }} sampai dengan {{ $project->work_end_at }}</td>
+                    <td>{{ date('d, M Y', strtotime($project->registration_start_at)) }} Hingga {{ date('d, M Y', strtotime($project->registration_end_at)) }}</td>
+                    <td>{{ date('d, M Y', strtotime($project->work_start_at)) }} Hingga {{ date('d, M Y', strtotime($project->work_end_at)) }}</td>
+                    <td>{{ $project->status_work }}</td>
+                    <td>{!! $project->notes !!}</td>
                     <td> <a href="{{ route('iduka.data_apply', ['id' => $project->id]) }}" class="btn btn-success">Pelamar Project</a>
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -79,9 +84,12 @@
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ route('edit_project', ['id' => $project->id]) }}">Edit</a>
                                 <a class="dropdown-item" href="{{ route('edit_status', ['id' => $project->id]) }}">Change status</a>
+                                <a class="dropdown-item" href="{{ route('iduka.ongoing_progress.project', ['id' => $project->id]) }}" >Intern Terkait</a>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteModal-{{ $project->id }}">Delete</a>
+                                <a class="dropdown-item" href="{{ route('tasks.create', ['project' => $project->id]) }}">Tambah Tugas</a>
+                                <a class="dropdown-item" href="{{ route('tasks.byProject', ['project_id' => $project->id]) }}">Lihat Tugas Proyek</a>
 
-
+            
                             </div>
                         </div>
                     </td>
@@ -130,7 +138,7 @@
         </table>
     </div>
 </div>
-
+</div>
 <!-- DataTables (pastikan Anda sudah mengunduh dan memasangnya) -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>

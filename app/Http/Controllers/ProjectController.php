@@ -9,12 +9,15 @@ use App\Models\ProjectApply;
 use App\Models\ProjectCategory;
 use App\Models\ProjectUpdate;
 use App\Models\Internship;
+use App\Models\InternshipsApply;
+use App\Models\Task;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Http\UploadedFile;
+
 class ProjectController extends Controller
 {
     public function create_project()
@@ -52,7 +55,7 @@ class ProjectController extends Controller
             $project = new Project();
             $project->iduka_id = $iduka->id;
             $project->name = $data['name'];
-            $project->status = 'Aktif';
+            $project->status = "Aktif";
             $project->category_id = $data['category_id'];
             $project->level = $request->tingkat_Kesulitan;
             $project->registration_start_at = $periode_pendaftaran[0];
@@ -198,7 +201,7 @@ class ProjectController extends Controller
 
         $search = $request->input('search');
         $level = $request->level;
-        $status_pengerjaan = $request->status_pengerjaan;
+        $status_work = $request->status_work;
 
         $query = Project::where('iduka_id', $iduka->id);
 
@@ -211,7 +214,9 @@ class ProjectController extends Controller
 
             $query = $query->where('level', $level);
         }
-
+        if (!empty($status_work)) {
+            $query = $query->where('status_work', $status_work);
+        }
         $projects = $query->get();
 
         return view('iduka.project', compact('projects', 'categories', 'iduka'));
@@ -295,7 +300,7 @@ class ProjectController extends Controller
         ->whereHas('project', function ($query) use ($iduka) {
             $query->where('iduka_id', $iduka->id);
         });
-
+        
         if (!empty($status)){
             if ($status=="3"){
                 $projectApplies = $projectApplies->where("status","rejected");
@@ -422,15 +427,112 @@ class ProjectController extends Controller
         ]);
     }
 
+    public function showProjectApplies($projectId)
+    {
+        $project = Project::findOrFail($projectId);
+        $iduka = Auth::user()->iduka;
+        $projectApplies = $project->applies;
+        $projectApplies = ProjectApply::where('project_id', $projectId)->get();
+        return view('iduka.project_apply', compact('project', 'projectApplies', 'iduka'));
+    }
 
-public function showProjectApplies($projectId)
+    public function ongoingProgressByProject($id)
+    {
+        $iduka = Auth::user()->iduka;
+
+        $projectUpdates = ProjectUpdate::with(['project', 'internship'])
+            ->where('project_id', $id)
+            ->get();
+    
+        $groupedUpdates = [];
+    
+        foreach ($projectUpdates as $update) {
+            $projectId = $update->project_id;
+    
+            if (!isset($groupedUpdates[$projectId])) {
+                $groupedUpdates[$projectId] = [
+                    'project' => $update->project,
+                    'internships' => []
+                ];
+            }
+    
+            $groupedUpdates[$projectId]['internships'][] = $update->internship->name;
+        }
+       
+        return view('iduka.ongoing_progress', [
+            'iduka' => $iduka,
+            'groupedUpdates' => $groupedUpdates,
+            
+        ]);
+    }
+
+   
+    public function createTask($project_id)
 {
-    $project = Project::findOrFail($projectId);
+    $project = Project::findOrFail($project_id);
     $iduka = Auth::user()->iduka;
+    $internships = Internship::all();
 
-    $projectApplies = $project->applies;
-    $projectApplies = ProjectApply::where('project_id', $projectId)->get();
-    return view('iduka.project_apply', compact('project', 'projectApplies', 'iduka'));
+    $groupedUpdates = ProjectUpdate::with(['project', 'internship'])
+        ->where('project_id', $project_id)
+        ->get();
+
+    $projectApplies = ProjectApply::with(['project', 'internship'])
+        ->whereHas('project', function ($query) use ($iduka) {
+            $query->where('iduka_id', $iduka->id);
+        })
+        ->get();
+
+    return view('iduka.create_task', compact('project', 'internships', 'iduka', 'groupedUpdates', 'projectApplies'));
 }
+
+public function store(Request $request, $project_id)
+{
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'internship_id' => 'required|array', 
+        'internship_id.*' => 'integer|exists:internships,id',
+    ]);
+
+    $data['project_id'] = $project_id;
+
+    $taskData = collect($data)->except('internship_id')->toArray();
+
+    $task = Task::create($taskData);
+
+    $task->internships()->attach($data['internship_id']);
+
+    return redirect()->route('iduka.index', ['project_id' => $project_id, 'task_id' => $task->id])
+        ->with('success', 'Tugas berhasil ditambahkan!');
+}
+public function showTasksByProject($project_id)
+{
+    $project = Project::findOrFail($project_id);
+    $tasks = Task::where('project_id', $project_id)->get();
+    $iduka = Auth::user()->iduka;
+    return view('iduka.show_task', compact('project', 'tasks','iduka'));
+}
+
+public function edit($task_id)
+{
+    $task = Task::findOrFail($task_id);
+    $iduka = Auth::user()->iduka;
+    return view('iduka/tasks_edit', compact('task','iduka'));
+}
+public function update(Request $request, $task_id)
+{
+    $data = $request->validate([
+        'status_task' => 'required|string|max:255',
+    ]);
+
+    $task = Task::findOrFail($task_id);
+    $task->status_task = $request->input('status_task');
+    $task->save();
+
+    return redirect()->route('tasks.byProject', ['project_id' => $task->project_id])
+        ->with('success', 'Status task berhasil diperbarui!');
+}
+
 
 }

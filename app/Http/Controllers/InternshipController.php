@@ -88,38 +88,16 @@ class InternshipController extends Controller
 			
 		return view('internship/index', compact('completedProject','onGoingProject','rejectProject','onGoingProjectData'));
 	}
-    public function projectInternshipFilter($data){
+    public function progressInternship($id){
 		$today = Carbon::now()->toDateString();
-		$id = Auth::user()->id;
-		$internship = Internship::where('user_id', $id)->first();
-			if ($data === "new") {
-				$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.photo')
-					->join('idukas','projects.iduka_id','=','idukas.id')
-					->join('project_categories','projects.category_id','=','project_categories.id')
-					->whereDate('registration_start_at', '<=', $today)
-					->whereDate('registration_end_at', '>=', $today)
-					->where('projects.status','Aktif')
-					->orderBy('registration_start_at', 'desc')
-					->get();
-			}elseif ($data === "best") {
-				$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.photo')
-					->join('idukas','projects.iduka_id','=','idukas.id')
-					->join('project_categories','projects.category_id','=','project_categories.id')
-					->whereDate('registration_start_at', '<=', $today)
-					->whereDate('registration_end_at', '>=', $today)
-					->where('projects.status','Aktif')
-					->orderBy('views', 'desc')
-					->get();
-			}else {
-				return back()->with('error', 'File surat lamaran tidak ditemukan.');
-			}
-		return view('internship/project', compact('projectData', 'internship'));
+		$progressData = ProjectProgress::where('project_id', $id)->get();
+		return view('internship/progress', compact('progressData'));
 	}
     public function projectInternship(){
 		$today = Carbon::now()->toDateString();
 		$id = Auth::user()->id;
 		$internship = Internship::where('user_id', $id)->first();
-		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo')
+		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo','projects.views')
 			->join('idukas','projects.iduka_id','=','idukas.id')
 			->join('project_categories','projects.category_id','=','project_categories.id')
 			->whereDate('registration_start_at', '<=', $today)
@@ -131,16 +109,37 @@ class InternshipController extends Controller
     public function projectInternshipPost(Request $r){
 		$today = Carbon::now()->toDateString();
 		$id = Auth::user()->id;
+		$data = $r->data;
 		$internship = Internship::where('user_id', $id)->first();
-		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo')
-		->join('idukas','projects.iduka_id','=','idukas.id')
-		->join('project_categories','projects.category_id','=','project_categories.id')
-		->where('projects.name','like',"%$r->search%")
-		->orWhere('idukas.name','like',"%$r->search%")
-		->whereDate('registration_start_at', '<=', $today)
-		->whereDate('registration_end_at', '>=', $today)
-		->where('projects.status','Aktif')
-		->get();
+		if ($data === "new") {
+			$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.photo','projects.views')
+				->join('idukas','projects.iduka_id','=','idukas.id')
+				->join('project_categories','projects.category_id','=','project_categories.id')
+				->whereDate('registration_start_at', '<=', $today)
+				->whereDate('registration_end_at', '>=', $today)
+				->where('projects.status','Aktif')
+				->orderBy('registration_start_at', 'desc')
+				->get();
+		}elseif ($data === "best") {
+			$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.photo','projects.views')
+				->join('idukas','projects.iduka_id','=','idukas.id')
+				->join('project_categories','projects.category_id','=','project_categories.id')
+				->whereDate('registration_start_at', '<=', $today)
+				->whereDate('registration_end_at', '>=', $today)
+				->where('projects.status','Aktif')
+				->orderBy('views', 'desc')
+				->get();
+		}else {
+			$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo','projects.views')
+			->join('idukas','projects.iduka_id','=','idukas.id')
+			->join('project_categories','projects.category_id','=','project_categories.id')
+			->where('projects.name','like',"%$r->search%")
+			->orWhere('idukas.name','like',"%$r->search%")
+			->whereDate('registration_start_at', '<=', $today)
+			->whereDate('registration_end_at', '>=', $today)
+			->where('projects.status','Aktif')
+			->get();
+		}
 		return view('internship/project', compact('projectData', 'internship'));
 	}
     public function historyInternship(){
@@ -234,6 +233,7 @@ class InternshipController extends Controller
 					$newDocument = new Document;
 					$newDocument->internship_id = $dataId;
 					$newDocument->curriculum_vitae = $newCurriculumVitae;
+					$newDocument->application_letter = "";
 					$newDocument->certificate = $newCertificate;
 					$newDocument->save();
 				} else {
@@ -341,6 +341,6 @@ class InternshipController extends Controller
 					return redirect()->back()->with('error', 'Anda sudah mendaftar project ini sebelumnya.');
 				}
 
-			return redirect('internship-index')->with('success', 'Status project dalam di tinjau Mohon Cek Pesan secara berskala');
+			return redirect('internship-index')->with('successProject', 'Status project dalam di tinjau Mohon Cek Pesan secara berskala');
 	}
 }

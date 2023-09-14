@@ -5,30 +5,27 @@
             <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Program Project</h1>
-                    <div class="col text-end me-3">
-                            Urutkan : 
-                            <div class="btn-group dropend">
-                              <button type="button" class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                Filter Program Project
-                              </button>
-                              <ul class="dropdown-menu">
-                                <li><a class="dropdown-item">Rekomendasi Project</a></li>
-                                <li><a class="dropdown-item" href="{{ url('internship-project-filter', ['data' => 'new']) }}">Project Terbaru</a></li>
-                                <li><a class="dropdown-item" href="{{ url('internship-project-filter', ['data' => 'best']) }}">View Terbaik</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item">Program</a></li>
-                              </ul>
-                            </div>
-                    </div>
-                    <form action="{{url('internship-project')}}" method="post">
-                        <div class="input-group">
-                            @csrf
-                            <input type="text" class="form-control" placeholder="Program Project..."
-                                aria-label="Recipient's username" aria-describedby="button-addon2" name="search">
-                            <button class="btn btn-outline-light btn-primary" type="submit" id="button-addon2">Button</button>
-                        </div>
-                    </form>
                 </div>
+                <form method="POST" class="form-inline">
+                    @csrf
+                    <div class="row mb-3">
+                        <div class="col input-group mb-3">
+                            <span class="input-group-text border-dark">Filter berdasarkan:</span>
+                            <select name="data" id="filter" class="form-control border-dark">
+                                <option value="">Filter Program</option>
+                                <option value="new">Terbaru</option>
+                                <option value="best">Banyak Diminati</option>
+                            </select>
+                        </div>
+                            <div class="col input-group mb-3">
+                                <span class="input-group-text border-dark">Project:</span>
+                                <input type="text" name="search" id="search" class="form-control border-dark" placeholder="Ketikkan Nama Proyek">
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary">Cari</button>
+                            </div>
+                        </div>
+                        </form>
 
 
                 @if ($internship->phone <> '')
@@ -49,6 +46,9 @@
                                         {{$item->registration_start_at}} / {{$item->registration_end_at}}
                                         <br>
                                     </p>
+                                    <div class="text-end">
+                                        <i class="mdi mdi-eye"></i> {{$item->views}}
+                                    </div>
                                     {{-- <p>{!! \Illuminate\Support\Str::limit($item->notes, 250) !!}</p> --}}
                                     {{-- <a href="{{url('internship-project-apply',['id' => $item->id])}}" class="btn btn-primary col-12 mt-3">Daftar</a> --}}
                                 </div>
