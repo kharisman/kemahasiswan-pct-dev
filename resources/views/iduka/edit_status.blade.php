@@ -19,10 +19,10 @@
                 <option value="Tidak" {{ $project->status === 'Tidak' ? 'selected' : '' }}>Tidak Aktif</option>
             </select>
         </div>
-        <button id="confirmButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#statusModal">Save Changes</button>
+        <button id="confirmButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#statusModal">Save Changes</button><p></p>
     </form>
-</div></div>
-</div>
+
+
 <!-- /.container-fluid -->
 
 <!-- Status Modal -->
@@ -44,8 +44,7 @@
             </div>
         </div>
     </div>
-</div>
-</div>
+    </div>
 <script>
     // Trigger the final confirmation when the "Confirm" button in the modal is clicked
     document.getElementById('finalConfirmButton').addEventListener('click', function () {
@@ -58,5 +57,5 @@
     });
 </script>
 <!-- End of Main Content -->
-</div>
+</div></div>
 @endsection

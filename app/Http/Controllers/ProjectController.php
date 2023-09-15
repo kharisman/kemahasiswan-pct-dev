@@ -20,7 +20,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Http\UploadedFile;
 
-
 class ProjectController extends Controller
 {
     public function create_project()
@@ -295,7 +294,7 @@ class ProjectController extends Controller
     public function data_apply(Request $request)
     {   
         $iduka = Auth::user()->iduka;
-        $idname = $request->idname ;
+        $project_name = $request->project_name ;
         $status=$request->status ;
         $id=$request->id ;
         
@@ -314,14 +313,14 @@ class ProjectController extends Controller
             }
         }
 
-        if (!empty($idname)) {
-            $projectApplies = $projectApplies->whereHas('project', function ($query) use ($idname) {
-                $query->where('name', 'like', '%' . $idname . '%');
+        if (!empty($project_name)) {
+            $projectApplies = $projectApplies->whereHas('project', function ($query) use ($project_name) {
+                $query->where('name', 'like', '%' . $project_name . '%');
             });
         }
 
         if (!empty($id)) {
-            $projectApplies = $projectApplies->where('idid', $id);
+            $projectApplies = $projectApplies->where('project_id', $id);
         }
   
   
@@ -412,7 +411,7 @@ class ProjectController extends Controller
         $groupedUpdates = [];
         
         foreach ($projectUpdates as $update) {
-            $projectId = $update->idid;
+            $projectId = $update->project_id;
             
             if (!isset($groupedUpdates[$projectId])) {
                 $groupedUpdates[$projectId] = [
@@ -435,8 +434,8 @@ class ProjectController extends Controller
         $project = Project::findOrFail($projectId);
         $iduka = Auth::user()->iduka;
         $projectApplies = $project->applies;
-        $projectApplies = ProjectApply::where('idid', $projectId)->get();
-        return view('iduka.idapply', compact('project', 'projectApplies', 'iduka'));
+        $projectApplies = ProjectApply::where('project_id', $projectId)->get();
+        return view('iduka.project_apply', compact('project', 'projectApplies', 'iduka'));
     }
 
     public function ongoingProgressByProject($id)
@@ -444,13 +443,13 @@ class ProjectController extends Controller
         $iduka = Auth::user()->iduka;
         $project = Project::findOrFail($id);
         $projectUpdates = ProjectUpdate::with(['project', 'internship'])
-            ->where('idid', $id)
+            ->where('project_id', $id)
             ->get();
     
         $groupedUpdates = [];
     
         foreach ($projectUpdates as $update) {
-            $projectId = $update->idid;
+            $projectId = $update->project_id;
     
             if (!isset($groupedUpdates[$projectId])) {
                 $groupedUpdates[$projectId] = [
@@ -469,181 +468,222 @@ class ProjectController extends Controller
         ]);
     }
 
-   
-    public function createTask($idid)
-{
-    $project = Project::findOrFail($idid);
-    $iduka = Auth::user()->iduka;
-    $internships = Internship::all();
-
-    $groupedUpdates = ProjectUpdate::with(['project', 'internship'])
-        ->where('idid', $idid)
-        ->get();
-
-    $projectApplies = ProjectApply::with(['project', 'internship'])
-        ->whereHas('project', function ($query) use ($iduka) {
-            $query->where('iduka_id', $iduka->id);
-        })
-        ->get();
-
-    return view('iduka.create_task', compact('project', 'internships', 'iduka', 'groupedUpdates', 'projectApplies'));
-}
-
-public function store(Request $request, $idid)
-{
-    $data = $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'nullable|string',
-        'internship_id' => 'required|array', 
-        'internship_id.*' => 'integer|exists:internships,id',
-    ]);
-
-    $data['idid'] = $idid;
-
-    $taskData = collect($data)->except('internship_id')->toArray();
-
-    $task = Task::create($taskData);
-
-    $task->internships()->attach($data['internship_id']);
-
-    return back()->with('success', 'Tugas berhasil ditambahkan!');
-}
-
-public function showTasksByProject($idid)
-{
-    $project = Project::findOrFail($idid);
-    $tasks = Task::where('idid', $idid)->get();
-    $iduka = Auth::user()->iduka;
-    return view('iduka.show_task', compact('project', 'tasks','iduka'));
-}
-
-public function edit($task_id)
-{
-    $task = Task::findOrFail($task_id);
-    $iduka = Auth::user()->iduka;
-    return view('iduka/tasks_edit', compact('task','iduka'));
-}
-public function update(Request $request, $task_id)
-{
-    $data = $request->validate([
-        'status_task' => 'required|string|max:255',
-    ]);
-
-    $task = Task::findOrFail($task_id);
-    $task->status_task = $request->input('status_task');
-    $task->save();
-
-    return redirect()->route('tasks.byProject', ['idid' => $task->idid])
-        ->with('success', 'Status task berhasil diperbarui!');
-}
-
-
-public function task_edit($task)
-{
-    // return $task ;
-    $task = Task::with("taskHistories")->findOrFail($task);
-    $iduka = Auth::user()->iduka;
-    return view('iduka/tasks_edit', compact('task','iduka'));
-}
-
-
-
-public function task_edit_p(Request $request, $task)
-{
-    // Validasi data
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'required|string',
-        'status_task' => 'required|string',
-    ]);
-
-    try {
-        // Memulai transaksi
-        DB::beginTransaction();
-
-        // Temukan tugas berdasarkan ID
-        $task = Task::findOrFail($task);
-
-        // Perbarui tugas dengan data yang divalidasi
-        $task->update($validatedData);
-
-        $taskHistory = new TaskHistory();
-        $taskHistory->task_id = $task->id;
-        $taskHistory->user_id = auth()->user()->id; 
-        $taskHistory->description = $task->description;
-        $taskHistory->save();
-        DB::commit();
-        
-        // return $task ;
-        return back()->with('success', 'Tugas berhasil diperbarui!');
-    } catch (\Exception $e) {
-        // Rollback transaksi jika terjadi kesalahan
-        DB::rollback();
-
-        return back()->with('error', 'Gagal memperbarui tugas: ' . $e->getMessage());
+    public function createTask($project_id)
+    {
+        try {
+            $project = Project::findOrFail($project_id);
+            $iduka = Auth::user()->iduka;
+            $internships = Internship::all();
+    
+            $groupedUpdates = ProjectUpdate::with(['project', 'internship'])
+                ->where('project_id', $project_id)
+                ->get();
+    
+            $projectApplies = ProjectApply::with(['project', 'internship'])
+                ->whereHas('project', function ($query) use ($iduka) {
+                    $query->where('iduka_id', $iduka->id);
+                })
+                ->get();
+    
+            return view('iduka.create_task', compact('project', 'internships', 'iduka', 'groupedUpdates', 'projectApplies'));
+        } catch (\Exception $e) {
+            
+            return view('error.page')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
-}
+    public function store(Request $request, $project_id)
+    {
+        try {
+            $data = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'internship_id' => 'required|array', 
+                'internship_id.*' => 'integer|exists:internships,id',
+            ]);
 
-public function editStatusWork($projectId)
-    {   
+            $data['project_id'] = $project_id;
+
+            $taskData = collect($data)->except('internship_id')->toArray();
+
+            $task = Task::create($taskData);
+
+            $task->internships()->attach($data['internship_id']);
+
+            return back()->with('success', 'Tugas berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function showTasksByProject($project_id)
+    {
+        try {
+            $project = Project::findOrFail($project_id);
+            $tasks = Task::where('project_id', $project_id)->get();
+            $iduka = Auth::user()->iduka;
+            return view('iduka.show_task', compact('project', 'tasks', 'iduka'));
+        } catch (\Exception $e) {
+            return view('error.page')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+        
+    public function edit($task_id)
+    {
+        $task = Task::findOrFail($task_id);
         $iduka = Auth::user()->iduka;
-        $project = Project::findOrFail($projectId);
-        return view('iduka/edit_status_work', compact('project','iduka'));
+        return view('iduka/tasks_edit', compact('task','iduka'));
+        }
+    public function update(Request $request, $task_id)
+    {
+        $data = $request->validate([
+            'status_task' => 'required|string|max:255',
+        ]);
+
+        $task = Task::findOrFail($task_id);
+        $task->status_task = $request->input('status_task');
+        $task->save();
+
+        return redirect()->route('tasks.byProject', ['project_id' => $task->project_id])
+            ->with('success', 'Status task berhasil diperbarui!');
+    }
+
+
+    public function task_edit($task)
+    {
+        // return $task ;
+        $task = Task::with("taskHistories")->findOrFail($task);
+        $iduka = Auth::user()->iduka;
+        return view('iduka/tasks_edit', compact('task','iduka'));
+    }
+
+    public function task_edit_p(Request $request, $task)
+    {
+        // Validasi data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'status_task' => 'required|string',
+        ]);
+
+        try {
+            // Memulai transaksi
+            DB::beginTransaction();
+
+            // Temukan tugas berdasarkan ID
+            $task = Task::findOrFail($task);
+
+            // Perbarui tugas dengan data yang divalidasi
+            $task->update($validatedData);
+
+            $taskHistory = new TaskHistory();
+            $taskHistory->task_id = $task->id;
+            $taskHistory->user_id = auth()->user()->id; 
+            $taskHistory->description = $task->description;
+            $taskHistory->save();
+            DB::commit();
+            
+            // return $task ;
+            return back()->with('success', 'Tugas berhasil diperbarui!');
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi kesalahan
+            DB::rollback();
+
+            return back()->with('error', 'Gagal memperbarui tugas: ' . $e->getMessage());
+        }
+    }
+
+    public function editStatusWork($projectId)
+    {   
+        try {
+            $iduka = Auth::user()->iduka;
+            $project = Project::findOrFail($projectId);
+            return view('iduka/edit_status_work', compact('project', 'iduka'));
+        } catch (\Exception $e) {
+
+            return view('error.page')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     public function updateStatusWork(Request $request, $projectId)
     {
-        $data = $request->validate([
-            'status_work' => 'required|string|max:255',
-        ]);
-
-        $project = Project::findOrFail($projectId);
-
-        $project->status_work = $data['status_work'];
-        $project->save();
-
-        return redirect()->route('iduka.index')->with('success', 'Status updated successfully.');
+        try {
+            $data = $request->validate([
+                'status_work' => 'required|string|max:255',
+            ]);
+            $project = Project::findOrFail($projectId);
+            $project->status_work = $data['status_work'];
+            $project->save();
+            return redirect()->route('iduka.index')->with('success', 'Status updated successfully.');
+        } catch (\Exception $e) {
+            
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
-
     public function calculateTask()
     {
-        $projects = Project::with('tasks')->get();
+        try {
+            $projects = Project::with('tasks')->get();
     
-        foreach ($projects as $project) {
-            $totalTasks = $project->tasks->count();
+            foreach ($projects as $project) {
+                $totalTasks = $project->tasks->count();
     
-            $completedTasks = $project->tasks->where('status_task', 'Selesai')->count();
+                $completedTasks = $project->tasks->where('status_task', 'Selesai')->count();
     
-            if ($totalTasks > 0) {
-                $completionPercentage = ($completedTasks / $totalTasks) * 100;
-            } else {
-                $completionPercentage = 0; // Avoid division by zero if there are no tasks in the project.
+                if ($totalTasks > 0) {
+                    $completionPercentage = ($completedTasks / $totalTasks) * 100;
+                } else {
+                    $completionPercentage = 0; // Avoid division by zero if there are no tasks in the project.
+                }
+    
+                $project->completionPercentage = $completionPercentage;
             }
     
-            $project->completionPercentage = $completionPercentage;
+            return view('iduka.index', compact('projects'));
+        } catch (\Exception $e) {
+           
+            return view('error.page')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-    
-        return view('iduka.index', compact('projects'));
     }
     
-    
-public function tambahNotes($id)
+    public function tambahNotes($id)
     {   
-        $iduka = Auth::user()->iduka;
-        $project = Project::findOrFail($id);
-        return view('iduka.tambahNotes', compact('project','iduka'));
+        try {
+            $iduka = Auth::user()->iduka;
+            $project = Project::findOrFail($id);
+            return view('iduka.tambahNotes', compact('project', 'iduka'));
+        } catch (\Exception $e) {
+  
+            return view('error.page')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
-
+    
     public function storeNotes(Request $request, $id)
     {
-        
-        $progress = new ProjectProgress;
-        $progress->project_id = $id; 
-        $progress->notes = $request->input('notes');
-        $progress->save();
+        try {
+            $progress = new ProjectProgress;
+            $progress->project_id = $id; 
+            $progress->notes = $request->input('notes');
+            $progress->save();
     
-        return redirect()->route('iduka.index', ['id' => $id])->with('success', 'Catatan proyek berhasil disimpan.');
+            return redirect()->route('iduka.index', ['id' => $id])->with('success', 'Catatan proyek berhasil disimpan.');
+        } catch (\Exception $e) {
+            
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
+    public function showProjectDetails($projectId)
+    {
+        try {
+            $iduka = Auth::user()->iduka;
+            $project = Project::findOrFail($projectId);
+            $categories = ProjectCategory::get();
+            return view('iduka.project_details', compact('project', 'iduka','categories'));
+        } catch (\Exception $e) {
+           
+            return view('error.page')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 
 }
