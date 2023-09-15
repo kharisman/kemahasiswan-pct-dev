@@ -3,11 +3,14 @@
 @section('title', 'Daftar Internship Diterima Project')
 
 @section('contents')
+<div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Internship Yang ada di Project {{$project->name}}</h6>
+            </div>
 <table class="table">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Project Name</th>
             <th>Internship Name</th>
             <th>Status</th>
             <th>Tanggal</th>
@@ -19,7 +22,7 @@
         
         <tr>
             <td>{{ $projectId }}</td>
-            <td>{{ $projectData['project']->name }}</td>
+           
             <td>
                 @foreach ($projectData['internships'] as $internshipName)
                     {{ $internshipName }}<br>
@@ -36,5 +39,5 @@
     
         @endforeach
     </tbody>
-</table>
+</table></div></div></div>
 @endsection

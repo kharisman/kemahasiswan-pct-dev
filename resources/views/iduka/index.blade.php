@@ -127,13 +127,40 @@
     </div>
 </div>
 
-
-
+<!-- persentase task -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Persentase Tasks selesai</h6>
+    </div>
+    <div class="card-body">
+        @foreach ($projects as $project)
+            <h4 class="small font-weight-bold">Project 
+                {{ $project->name }}
+                <span class="float-right">{{ number_format($project->completionPercentage, 2) }}%</span>
+            </h4>
+            <div class="progress mb-4">
+                @if ($project->completionPercentage < 100)
+                    <div class="progress-bar bg-danger" role="progressbar"
+                         style="width: {{ $project->completionPercentage }}%"
+                         aria-valuenow="{{ $project->completionPercentage }}"
+                         aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                @else
+                    <div class="progress-bar bg-success" role="progressbar"
+                         style="width: {{ $project->completionPercentage }}%"
+                         aria-valuenow="{{ $project->completionPercentage }}"
+                         aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                @endif
+            </div>
+        @endforeach
+    </div>
+</div>
 
     <!-- Illustrations -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Documentasi</h6>
         </div>
         <div class="card-body">
             <div class="text-center">

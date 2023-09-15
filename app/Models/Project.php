@@ -24,6 +24,7 @@ class Project extends Model
     //     return $this->belongsToMany(Project_Category::class, 'projectcategory');
     // }
 
+
     public function iduka()
     {
         return $this->belongsTo(Iduka::class, 'iduka_id', 'id');
@@ -32,5 +33,21 @@ class Project extends Model
     public function projectApplies()
     {
         return $this->hasMany(ProjectApply::class);
+    }
+    protected $appends = ['completionPercentage'];
+    public function tasks()
+{
+    return $this->hasMany(Task::class);
+}
+    public function getCompletionPercentageAttribute()
+    {
+        $totalTasks = $this->tasks->count();
+        $completedTasks = $this->tasks->where('status_task', 'Selesai')->count();
+
+        if ($totalTasks > 0) {
+            return ($completedTasks / $totalTasks) * 100;
+        } else {
+            return 0; // Hindari pembagian oleh nol jika tidak ada tugas dalam proyek.
+        }
     }
 }

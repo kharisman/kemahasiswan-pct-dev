@@ -68,7 +68,8 @@
             @foreach ($task->taskHistories as $task)
             <tr>
                 <td>{{ $task->created_at }}</td>
-                <td>{{ $task->description }}</td>              
+                <td>{{ $task->description }}</td>
+                          
             </tr>
             @endforeach
         </tbody>

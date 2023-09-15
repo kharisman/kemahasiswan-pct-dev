@@ -84,11 +84,14 @@ Route::get('/projects/{project_id}/tasks', [ProjectController::class,'showTasksB
 Route::get('/tasks/{task_id}/edit', [ProjectController::class, 'edit'])->name('tasks.edit');
 Route::get('/projects/{project_id}/tasks', [ProjectController::class, 'showTasksByProject'])->name('tasks.byProject');
 Route::put('/tasks/{task_id}', [ProjectController::class, 'update'])->name('tasks.update');
-
 Route::get('/task/{task}/edit', [ProjectController::class, 'task_edit'])->name('task.edit');
 Route::post('/task/{task}/edit', [ProjectController::class, 'task_edit_p'])->name('task.update');
-
-
+Route::get('/iduka/{id}/edit_status_work', [ProjectController::class, 'editStatusWork'])->name('edit_status_work');
+Route::post('/iduka/{id}/update-status-work', [ProjectController::class, 'updateStatusWork'])->name('update_status_work');
+Route::get('/project/calculate-completion', [ProjectController::class, 'calculateTask'])->name('project.calculate-completion');
+Route::get('iduka/{id}/tambahNotes', [ProjectController::class,'tambahNotes'])->name('tambahNotes');
+Route::post('/project/save-progress', [ProjectController::class, 'saveProjectProgress'])->name('project.save-progress');
+Route::post('/project/save-progress/{id}', [ProjectController::class,'storeNotes'])->name('save_project_progress');
 
 	Route::get('/admin-dashboard',[adminController::class,'adminDashboard'])->name("admin.dashboard");	
 	Route::prefix('admin')->group(function () {

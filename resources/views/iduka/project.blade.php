@@ -58,7 +58,7 @@
                     <th>Level</th>
                     <th>Tanggal Registrasi</th>
                     <th>Akan Mulai</th>
-                    <th>Status Work</th>
+                    <th>Status Pengerjaan</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -80,12 +80,10 @@
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ route('edit_project', ['id' => $project->id]) }}">Edit</a>
                                 <a class="dropdown-item" href="{{ route('edit_status', ['id' => $project->id]) }}">Change status</a>
+                                <a class="dropdown-item" href="{{ route('edit_status_work', ['id' => $project->id]) }}">Change status Pengerjaan</a>
                                 <a class="dropdown-item" href="{{ route('iduka.ongoing_progress.project', ['id' => $project->id]) }}" >Intern Terkait</a>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteModal-{{ $project->id }}">Delete</a>
-                                <a class="dropdown-item" href="{{ route('tasks.create', ['project' => $project->id]) }}">Tambah Tugas</a>
                                 <a class="dropdown-item" href="{{ route('tasks.byProject', ['project_id' => $project->id]) }}">Lihat Tugas Proyek</a>
-
-            
+                                <a class="dropdown-item" href="{{ route('tambahNotes', ['id' => $project->id]) }}">Tambah Catatan Proyek</a>
                             </div>
                         </div>
                     </td>
