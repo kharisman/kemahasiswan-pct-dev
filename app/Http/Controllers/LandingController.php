@@ -202,8 +202,8 @@ class LandingController extends Controller
 		// Validasi input
 		$request->validate([
 			'name' => 'required|string|max:255',
-			'email' => 'required|email|max:255|unique:event_registrations',
-			'phone' => 'required|string|max:20|unique:event_registrations',
+			'email' => 'required|email|max:255|unique:event_registrations,email,NULL,id,event_id,' . $id,
+			'phone' => 'required|string|max:20|unique:event_registrations,phone,NULL,id,event_id,' . $id,
 			'activity' => 'required|string|max:255',
 		]);
 
@@ -236,10 +236,9 @@ class LandingController extends Controller
 		}
 	}
 
-
 	public function event(Request $request)
 	{
-		$query = Event::where("status","Aktif");
+		$query = Event::where("status","Aktif")->orderBy("id","DESC");
 
 		// Filter berdasarkan judul dan konten
 		if ($request->has('search')) {

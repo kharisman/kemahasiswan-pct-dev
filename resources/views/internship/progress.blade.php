@@ -31,6 +31,24 @@
                               <div class="text-end">{!! $item->status_task !!}</div>
                               <hr class="border border-primary border-2 opacity-50">
                               <p>{!! $item->description !!}</p>
+
+                              <h6 class="mt-4">History Perubahan</h6>
+                              <table class="table" id="dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Deskripsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($item->taskHistories as $task)
+                                    <tr>
+                                        <td>{{ $task->created_at }}</td>
+                                        <td>{{ $task->description }}</td>              
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                             </details>
                         </div>
                         @endforeach
