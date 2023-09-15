@@ -71,7 +71,7 @@
                 @if (now()->between($project->reg_start, $project->reg_end))
                     
                     
-                    <a id="btn-regis" class="btn btn-success">Daftar Sekarang</a>
+                    <a id="btn-regis" class="btn btn-primary text-white">Daftar Sekarang</a>
                     
                 @else
                 

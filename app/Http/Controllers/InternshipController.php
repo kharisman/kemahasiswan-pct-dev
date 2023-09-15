@@ -96,11 +96,15 @@ class InternshipController extends Controller
 		$data = Internship::where('user_id', $idIntership)->first();
 		$dataId = $data->id;
 		$progressData = Project::findOrFail($id);
-		$taskData = Task::join('internship_task','tasks.id','=','internship_task.task_id')
-		->where('internship_task.internship_id', $dataId)
-		->where('project_id', $id)
-		->where('status_task', '<>', 'Belum Dimulai')
+		// return $progressData ;
+		$taskData = Task::with("taskHistories")->with("internships")
+		->where("project_id",$id)
+		->whereHas("internships", function ($query) use ($data) {
+			$query->where("internship_id",$data->id);
+		})
+		->orderby("id", "DESC")
 		->get();
+
 		return view('internship/progress', compact('progressData','taskData','dataId'));
 	}
     public function projectInternship(){

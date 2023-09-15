@@ -29,7 +29,7 @@
                                     @elseif ($item->status == "rejected")
                                         <a class="btn btn-disable btn-sm btn-danger">Ditolak</a>
                                     @elseif ($item->status == "accepted")
-                                    <a class="btn btn-disable btn-sm btn-warning" href="{{url('internship-progress', ['id' => $item->id])}}">Diterima</a>
+                                    <a class="btn btn-disable btn-sm btn-warning" href="{{url('internship-progress', ['id' => $item->project_id])}}">Diterima</a>
                                     @elseif ($item->update_at == "")
                                     <a class="btn btn-disable btn-sm btn-info">Sedang Ditinjau</a>
                                     @endif
