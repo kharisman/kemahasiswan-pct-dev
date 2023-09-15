@@ -9,9 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     use HasFactory;
-    public function category(){
-        return $this->hasOne(ProjectCategory::class,'id','category_id');
-    }
+   
     public function idukaProject()
     {
         return $this->hasOne(Iduka::class, 'id', 'iduka_id');
@@ -23,7 +21,15 @@ class Project extends Model
     // {
     //     return $this->belongsToMany(Project_Category::class, 'projectcategory');
     // }
+    public function category()
+    {
+        return $this->belongsTo(ProjectCategory::class, 'category_id');
+    }
 
+    public function progress()
+    {
+        return $this->hasMany(ProjectProgress::class);
+    }
 
     public function iduka()
     {

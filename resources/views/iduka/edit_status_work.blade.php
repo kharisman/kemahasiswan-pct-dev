@@ -46,8 +46,7 @@
             </div>
         </div>
     </div>
-</div>
-</div>
+
 <script>
     // Trigger the final confirmation when the "Confirm" button in the modal is clicked
     document.getElementById('finalConfirmButton').addEventListener('click', function () {
@@ -60,5 +59,5 @@
     });
 </script>
 <!-- End of Main Content -->
-</div>
+
 @endsection

@@ -77,7 +77,9 @@
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Actions
                             </button>
+                            
                             <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{ route('project.details', ['projectId' => $project->id]) }}">Details Project</a>
                                 <a class="dropdown-item" href="{{ route('edit_project', ['id' => $project->id]) }}">Edit</a>
                                 <a class="dropdown-item" href="{{ route('edit_status', ['id' => $project->id]) }}">Change status</a>
                                 <a class="dropdown-item" href="{{ route('edit_status_work', ['id' => $project->id]) }}">Change status Pengerjaan</a>

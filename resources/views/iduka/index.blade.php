@@ -6,7 +6,7 @@
 
 
 <!-- Begin Page Content -->
-<div class="container-fluid">
+
     <!-- Content Row -->
     <div class="row">
 
@@ -105,6 +105,7 @@
                         <th>Status</th>
                         <th>Tanggal Registrasi</th>
                         <th>Dikunjungi</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -115,8 +116,10 @@
                         <td>{{ $latestProject->status }}</td>
                         <td>{{ $latestProject->registration_start_at }} sampai {{ $latestProject->registration_end_at }}</td>
                         <td>{{ $latestProject->views }}</td>
+                        <td><a href="{{ route('project.details', ['projectId' => $latestProject->id]) }}" class="btn btn-primary">Lihat Detail</a></td>
                     </tr>
                     @endforeach
+                   
                 </tbody>
             </table>
         </div>
@@ -130,14 +133,14 @@
 <!-- persentase task -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Persentase Tasks selesai</h6>
+        <h6  class="m-0 font-weight-bold text-primary">Persentase Tasks selesai</h6>
     </div>
     <div class="card-body">
         @foreach ($projects as $project)
-            <h4 class="small font-weight-bold">Project 
+            <a class="big font-weight-bold" href="{{ route('tasks.byProject', ['project_id' => $project->id]) }}">Project 
                 {{ $project->name }}
                 <span class="float-right">{{ number_format($project->completionPercentage, 2) }}%</span>
-            </h4>
+            </a>
             <div class="progress mb-4">
                 @if ($project->completionPercentage < 100)
                     <div class="progress-bar bg-danger" role="progressbar"
@@ -170,15 +173,7 @@
             <a target="_blank" rel="nofollow" href="https://palcomtech.ac.id">search &rarr;</a>
         </div>
     </div>
-</div>
-</div>
 
-</div>
-<!-- /.container-fluid -->
-
-</div>
-<!-- End of Main Content -->
-</div>
 
 
 @endsection

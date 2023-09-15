@@ -91,7 +91,8 @@ Route::post('/iduka/{id}/update-status-work', [ProjectController::class, 'update
 Route::get('/project/calculate-completion', [ProjectController::class, 'calculateTask'])->name('project.calculate-completion');
 Route::get('iduka/{id}/tambahNotes', [ProjectController::class,'tambahNotes'])->name('tambahNotes');
 Route::post('/project/save-progress', [ProjectController::class, 'saveProjectProgress'])->name('project.save-progress');
-Route::post('/project/save-progress/{id}', [ProjectController::class,'storeNotes'])->name('save_project_progress');
+Route::post('/project/save-progress/{id}', [ProjectController::class, 'storeNotes'])->name('save_project_progress');
+Route::get('/project/{projectId}', [ProjectController::class, 'showProjectDetails'])->name('project.details');
 
 	Route::get('/admin-dashboard',[adminController::class,'adminDashboard'])->name("admin.dashboard");	
 	Route::prefix('admin')->group(function () {
