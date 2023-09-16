@@ -11,9 +11,13 @@
                     <div class="bd-example mb-3">
                         <dl>
                           <dt>Nama Project</dt>
-                          <dd>{{$progressData->name}}</dd>
+                          <dd>{{$projectData->name}}</dd>
                           <dt>Periode</dt>
-                          <dd>{{$progressData->work_start_at}} sampai dengan {{$progressData->work_end_at}}</dd>
+                          <dd>{{$projectData->work_start_at}} sampai dengan {{$projectData->work_end_at}}</dd>
+                          <dt>Catatan Project</dt>
+                          @foreach ($progressData as $item)
+                            <dd>{{$item->notes}}</dd>
+                          @endforeach
                         </dl>
                       </div>
                 </div>

@@ -8,7 +8,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover table-bordered border-dark text-center">
+                        <table class="table table-hover table-bordered border-dark text-center mt-3">
                             <thead>
                                 <tr class="table-dark text-center">
                                     <th scope="col">No</th>
