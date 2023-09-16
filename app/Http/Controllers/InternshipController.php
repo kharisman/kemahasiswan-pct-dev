@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ProjectUpdate;
 use App\Models\ProjectApply;
+use App\Models\ProjectCategory;
 use App\Models\AccountLink;
 use App\Models\Project;
 use App\Models\Internship;
@@ -95,7 +96,8 @@ class InternshipController extends Controller
 		$idIntership = Auth::user()->id;
 		$data = Internship::where('user_id', $idIntership)->first();
 		$dataId = $data->id;
-		$progressData = Project::findOrFail($id);
+		$projectData = Project::findOrFail($id);
+		$progressData = ProjectProgress::where('project_id',$id)->get();
 		// return $progressData ;
 		$taskData = Task::with("taskHistories")->with("internships")
 		->where("project_id",$id)
@@ -105,56 +107,89 @@ class InternshipController extends Controller
 		->orderby("id", "DESC")
 		->get();
 
-		return view('internship/progress', compact('progressData','taskData','dataId'));
+		return view('internship/progress', compact('projectData','progressData','taskData','dataId'));
 	}
     public function projectInternship(){
 		$today = Carbon::now()->toDateString();
 		$id = Auth::user()->id;
 		$internship = Internship::where('user_id', $id)->first();
+		$categoryProjectData = ProjectCategory::where('status','Aktif')->get();
 		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo','projects.views')
 			->join('idukas','projects.iduka_id','=','idukas.id')
 			->join('project_categories','projects.category_id','=','project_categories.id')
 			->whereDate('registration_start_at', '<=', $today)
     		->whereDate('registration_end_at', '>=', $today)
 			->where('projects.status','Aktif')
+			->where('projects.status_work','Belum Dimulai')
 			->get();
-		return view('internship/project', compact('projectData', 'internship'));
+		return view('internship/project', compact('projectData', 'internship','categoryProjectData'));
 	}
     public function projectInternshipPost(Request $r){
 		$today = Carbon::now()->toDateString();
 		$id = Auth::user()->id;
-		$data = $r->data;
+		$data = $r->filter;
+		$search = $r->search;
+		$category = $r->category;
+		if ($data == "new") {
+			$dataFilter = "registration_start_at";
+		}elseif ($data == "best") {
+			$dataFilter = "views";
+		}
 		$internship = Internship::where('user_id', $id)->first();
-		if ($data === "new") {
+		$categoryProjectData = ProjectCategory::where('status','Aktif')->get();
+		if ($data <> "" && !$category) {
 			$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.photo','projects.views')
 				->join('idukas','projects.iduka_id','=','idukas.id')
 				->join('project_categories','projects.category_id','=','project_categories.id')
 				->whereDate('registration_start_at', '<=', $today)
 				->whereDate('registration_end_at', '>=', $today)
 				->where('projects.status','Aktif')
-				->orderBy('registration_start_at', 'desc')
+				->where('projects.status_work','Belum Dimulai')
+				->orderBy($dataFilter, 'desc')
 				->get();
-		}elseif ($data === "best") {
+		}elseif ($data <> "" && $category) {
 			$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.photo','projects.views')
 				->join('idukas','projects.iduka_id','=','idukas.id')
 				->join('project_categories','projects.category_id','=','project_categories.id')
 				->whereDate('registration_start_at', '<=', $today)
 				->whereDate('registration_end_at', '>=', $today)
 				->where('projects.status','Aktif')
-				->orderBy('views', 'desc')
+				->where('category', $category)
+				->where('projects.status_work','Belum Dimulai')
+				->orderBy($dataFilter, 'desc')
+				->get();
+		}elseif ($category) {
+			$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.photo','projects.views')
+				->join('idukas','projects.iduka_id','=','idukas.id')
+				->join('project_categories','projects.category_id','=','project_categories.id')
+				->whereDate('registration_start_at', '<=', $today)
+				->whereDate('registration_end_at', '>=', $today)
+				->where('category', $category)
+				->where('projects.status','Aktif')
+				->where('projects.status_work','Belum Dimulai')
+				->get();
+		}elseif ($search) {
+			$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo','projects.views')
+				->join('idukas','projects.iduka_id','=','idukas.id')
+				->join('project_categories','projects.category_id','=','project_categories.id')
+				->where('projects.name','like',"%$r->search%")
+				->orWhere('idukas.name','like',"%$r->search%")
+				->whereDate('registration_start_at', '<=', $today)
+				->whereDate('registration_end_at', '>=', $today)
+				->where('projects.status','Aktif')
+				->where('projects.status_work','Belum Dimulai')
 				->get();
 		}else {
 			$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address', 'idukas.photo','projects.views')
-			->join('idukas','projects.iduka_id','=','idukas.id')
-			->join('project_categories','projects.category_id','=','project_categories.id')
-			->where('projects.name','like',"%$r->search%")
-			->orWhere('idukas.name','like',"%$r->search%")
-			->whereDate('registration_start_at', '<=', $today)
-			->whereDate('registration_end_at', '>=', $today)
-			->where('projects.status','Aktif')
-			->get();
+				->join('idukas','projects.iduka_id','=','idukas.id')
+				->join('project_categories','projects.category_id','=','project_categories.id')
+				->whereDate('registration_start_at', '<=', $today)
+				->whereDate('registration_end_at', '>=', $today)
+				->where('projects.status','Aktif')
+				->where('projects.status_work','Belum Dimulai')
+				->get();
 		}
-		return view('internship/project', compact('projectData', 'internship'));
+		return view('internship/project', compact('projectData', 'internship','categoryProjectData'));
 	}
     public function historyInternship(){
 		
