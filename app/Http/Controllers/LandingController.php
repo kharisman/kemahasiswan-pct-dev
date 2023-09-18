@@ -208,7 +208,10 @@ class LandingController extends Controller
 		]);
 
 		// Dapatkan ID pengguna yang sedang masuk
-		$user = Auth::user()->id;
+		$user = null ;
+		if (!empty(Auth::user()->id)){
+			$user= Auth::user()->id;
+		}
 
 		// Gunakan transaksi database untuk memastikan konsistensi
 		DB::beginTransaction();
