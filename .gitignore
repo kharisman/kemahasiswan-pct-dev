@@ -5,9 +5,9 @@
 /public/storage
 /storage/*.key
 /vendor
-/public/assets/imeges/*
-/public/imeges/iduka/*
-/public/imeges/internship/*
+/public/assets/images/*
+/public/images/iduka/*
+/public/images/internship/*
 .env
 .env.backup
 .env.production
