@@ -319,8 +319,8 @@ class InternshipController extends Controller
 		try {
 			$validator = Validator::make($r->all(), [
 				'projectId' => 'required',
+				'notes' => 'required|string',
 				'application_letter' => 'required|mimes:pdf',
-				'curriculum_vitae_new' => 'mimes:pdf',
 			]);
 
 			if ($validator->fails()) {
@@ -341,23 +341,11 @@ class InternshipController extends Controller
 				return back()->with('error', 'File surat lamaran tidak ditemukan.');
 			}
 
-			// Mengunggah Curriculum Vitae (CV) baru jika checkbox dicentang
-			if ($r->has('curriculum_vitae')) {
-				if ($r->hasFile('curriculum_vitae_new')) {
-					$curriculum_vitae_new = $r->file('curriculum_vitae_new');
-					$newCurriculumVitae = $id . $projectId . "_curriculum_vitae_apply." . $curriculum_vitae_new->getClientOriginalExtension();
-					$curriculum_vitae_new->move('images/internship/', $newCurriculumVitae);
-				} else {
-					// Jika checkbox dicentang, tetapi tidak ada file CV yang diunggah,
-					// gunakan CV lama
-					$documentData = Document::where('internship_id', $dataId)->first();
-					$newCurriculumVitae = $documentData->curriculum_vitae;
-				}
-			} else {
-				// Jika checkbox tidak dicentang, gunakan CV lama
-				$documentData = Document::where('internship_id', $dataId)->first();
-				$newCurriculumVitae = $documentData->curriculum_vitae;
-			}
+
+			// Jika checkbox tidak dicentang, gunakan CV lama
+			$documentData = Document::where('internship_id', $dataId)->first();
+			$newCurriculumVitae = $documentData->curriculum_vitae;
+
 
 			// Mengupdate data dokumen
 			$oldCertificate = $documentData->certificate;
@@ -381,9 +369,31 @@ class InternshipController extends Controller
 				->first();
 
 				if (!$existingData) {
+					
+					$notes = $r->notes;
+
+					if (!empty($notes)) {
+						$dom = new \DomDocument();
+						@$dom->loadHtml($notes, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+						$images = $dom->getElementsByTagName('img');
+						foreach ($images as $k => $img) {
+							$data = $img->getAttribute('src');
+							list($type, $data) = explode(';', $data);
+							list(, $data) = explode(',', $data);
+							$data = base64_decode($data);
+							$image_name = "/images/internship/" . time() . $k . '.png';
+							$path = public_path() . $image_name;
+							file_put_contents($path, $data);
+							$img->removeAttribute('src');
+							$img->setAttribute('src', $image_name);
+						}
+						$notes = $dom->saveHTML();
+					}
+		
 					$new = new ProjectApply;
 					$new->project_id = $projectId;
 					$new->internship_id = $dataId;
+					$new->notes = $notes;
 					$new->status = "";
 					$new->created_at = now();
 					$new->updated_at = null;

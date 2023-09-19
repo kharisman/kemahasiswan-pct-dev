@@ -126,7 +126,7 @@
     <div class="card-header">
         <p class="d-inline-flex gap-1 text-end">
             <div class="text-dark" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample">
-                Kontak >>
+                Media Sosial >>
             </div>
         </p>
     </div>
@@ -134,25 +134,37 @@
         <div class="card card-body">
             <!-- Link Instagram -->
             <div class="row mb-3 text-end">
-                <label class="col-sm-4 col-form-label text-start">Link Instagram</label>
-                <div class="col-sm-8">
-                    <input class="form-control" type="text" placeholder="Link Instagram..." name="instagram" value="{{ old('instagram', $internship->instagram ?? '') }}">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">@</span>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" placeholder="Username Instagram" aria-label="Username" name="instagram" value="{{ old('instagram', $internship->instagram ?? '') }}">
+                  </div>
                 </div>
             </div>
 
             <!-- Link LinkedIn -->
             <div class="row mb-3 text-end">
-                <label class="col-sm-4 col-form-label text-start">Link LinkedIn</label>
-                <div class="col-sm-8">
-                    <input class="form-control" type="text" placeholder="Link LinkedIn..." name="linkedin" value="{{ old('linkedin', $internship->linkedin ?? '') }}">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">@</span>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" placeholder="Username Linkedin" aria-label="Username" name="linkedin" value="{{ old('linkedin', $internship->linkedin ?? '') }}">
+                  </div>
                 </div>
             </div>
 
             <!-- Link Github -->
             <div class="row mb-3 text-end">
-                <label class="col-sm-4 col-form-label text-start">Link Github</label>
-                <div class="col-sm-8">
-                    <input class="form-control" type="text" placeholder="Link Github..." name="github" value="{{ old('github', $internship->github ?? '') }}">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">@</span>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" placeholder="Username Github" aria-label="Username" name="github" value="{{ old('github', $internship->github ?? '') }}">
+                  </div>
                 </div>
             </div>
         </div>

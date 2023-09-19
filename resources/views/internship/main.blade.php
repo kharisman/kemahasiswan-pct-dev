@@ -9,6 +9,10 @@
   <link rel="stylesheet" href="{{asset('internship/css/style.css')}}">
   <link rel="stylesheet" href="{{asset('internship/vendors/cssdatatables.css')}}">
   <link rel="stylesheet" href="{{asset('internship/css/sweetalert2.min.css')}}">
+  <link rel="stylesheet" href="{{asset('internship/dropzone/min/dropzone.min.css')}}">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 </head>
 <body>
   <div class="container-scroller d-flex">
@@ -171,7 +175,7 @@
           <div class="card">
             <div class="card-body">
               <div class="d-sm-flex justify-content-center justify-content-sm-between py-2">
-                <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="zeinniko.github.io" target="">zeinniko.github.io </a>2023</span>
+                <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">©Institut Teknologi dan Bisnis PalComTech – 2023 &copy;All rights reserved.</span>
               </div>
             </div>
           </div>
@@ -190,6 +194,7 @@
   <script src="{{asset('internship/css/jquery.js')}}"></script>
   <script src="{{asset('internship/css/sweetalert2.all.min.js')}}"></script>
   <script src="{{asset('internship/vendors/scriptdatatables.js')}}"></script>
+  <script src="{{asset('internship/dropzone/min/dropzone.min.js')}}"></script>
   <script>
     $(document).ready(function() {
         $('.table').DataTable();

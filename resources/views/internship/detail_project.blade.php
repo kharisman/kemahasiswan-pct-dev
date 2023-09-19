@@ -62,7 +62,9 @@
                                 <br>
                                 <h3>Alamat Iduka</h3>
                                 <p>
-                                    {{$projectData->address}}
+                                    <address>
+                                        {{$projectData->address}}
+                                    </address>
                                 </p>
                             </div>
                         </div>
