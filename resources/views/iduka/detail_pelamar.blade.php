@@ -1,6 +1,6 @@
 @extends('iduka/layouts.app')
 
-@section('title', 'Detail Internship')
+@section('title', 'Profile Internship')
 
 @section('contents')
 
@@ -8,7 +8,7 @@
 <div class="card">
     <div class="card-body text-left">
         <div class="text-right">
-            <p class="mb-0 {{ $projectApply->internship->status == 'aktif' ? 'text-success' : 'text-danger' }}">
+            <p class="mb-0 {{ $projectApply->internship->status == 'Aktif' ? 'text-success' : 'text-danger' }}">
                 Status:{{ $projectApply->internship->status }}
             </p>
         </div>
@@ -18,7 +18,10 @@
 
         </div>
             <div class="col-md-8">
-                <h4 class="card-title">Internship Profile</h4>
+                <div class="card shadow mb-4 p-4">
+                    <h6>Deskripsi singkat</h6>
+                    <p>{!! $projectApply->notes !!}</p>
+                </div>
                 <form> 
                     <div class="form-group">
                         <label for="name">Nama</label>
@@ -89,10 +92,18 @@
                     </div>
                     
                 </form>
+                @foreach ($documents as $document)
+    <div class="document-item">
+        <h5>Document {{ $loop->iteration }}</h5>
+        <p> <a href="{{ asset('images/internship/' . $document->application_letter) }}" download>Unduh Application Letter</a></p>
+        <p> <a href="{{ asset('images/internship/' . $document->certificate) }}" download>Unduh Certificate</a></p>
+        <p> <a href="{{ asset('images/internship/' . $document->curriculum_vitae) }}" download>Unduh Curriculum vitae</a></p>
+    </div>
+@endforeach
             </div>
         </div>
     </div>
 </div>
-
+<p></p>
 
 @endsection
