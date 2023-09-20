@@ -33,7 +33,7 @@
                     </div>
                     <div class="form-group">
                         <label for="name">Tanggal Lahir</label>
-                        <input type="text" class="form-control" name="name" id="name" value="{{ $projectApply->internship->date_of_birth}}" readonly>
+                        <input type="text" class="form-control" name="name" id="name" value="{{ date('d F Y', strtotime($projectApply->internship->date_of_birth)) }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="address">Alamat</label>
