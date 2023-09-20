@@ -114,7 +114,11 @@
                         <td>{{ $latestProject->id }}</td>
                         <td>{{ $latestProject->name }}</td>
                         <td>{{ $latestProject->status }}</td>
-                        <td>{{ $latestProject->registration_start_at }} sampai {{ $latestProject->registration_end_at }}</td>
+                        <td>
+                            {{ date('d M Y', strtotime($latestProject->registration_start_at)) }}
+                            sampai
+                            {{ date('d M Y', strtotime($latestProject->registration_end_at)) }}
+                        </td>
                         <td>{{ $latestProject->views }}</td>
                         <td><a href="{{ route('project.details', ['projectId' => $latestProject->id]) }}" class="btn btn-primary">Lihat Detail</a></td>
                     </tr>

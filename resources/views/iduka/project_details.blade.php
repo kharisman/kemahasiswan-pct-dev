@@ -6,7 +6,7 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Detail Project: {{ $project->name }}</h6>
+        <h6 class="m-0 font-weight-bold text-primary"> {{ $project->name }}</h6>
     </div>
     <div class="card-body">
         <div class="row">
@@ -34,19 +34,19 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="label-fixed-width"><strong>Mulai Pendaftaran:</strong></label>
-                    {{ $project->registration_start_at }}
+                    {{ date('d M Y', strtotime($project->registration_start_at)) }}
                 </div>
                 <div class="form-group">
                     <label class="label-fixed-width"><strong>Selesai Pendaftaran:</strong></label>
-                    {{ $project->registration_end_at }}
+                    {{ date('d M Y', strtotime($project->registration_end_at)) }}
                 </div>
                 <div class="form-group">
                     <label class="label-fixed-width"><strong>Mulai Pekerjaan:</strong></label>
-                    {{ $project->work_start_at }}
+                    {{ date('d M Y', strtotime($project->work_start_at)) }}
                 </div>
                 <div class="form-group">
                     <label class="label-fixed-width"><strong>Selesai Pekerjaan:</strong></label>
-                    {{ $project->work_end_at }}
+                    {{ date('d M Y', strtotime($project->work_end_at)) }}
                 </div>
                 <div class="form-group">
                     <label class="label-fixed-width"><strong>Jumlah Views:</strong></label>

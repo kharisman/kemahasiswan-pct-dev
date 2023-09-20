@@ -54,7 +54,7 @@
                         Menunggu
                         @endif
                     </td>
-                    <td>{{ $projectApply->created_at->format('d.m.y ') }}</td>
+                    <td>{{ $projectApply->created_at->format('d M Y') }}</td>
                     <td>
                         <a href="{{ route('iduka.detail_apply', ['projectApplyId' => $projectApply->id]) }}" class="btn btn-success ">
                             <i class="fas fa-info-circle"></i> Info profile Intern
