@@ -13,6 +13,7 @@ use App\Models\Internship;
 use App\Models\InternshipsApply;
 use App\Models\Task;
 use App\Models\TaskHistory;
+use App\Models\Document;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -364,12 +365,18 @@ class ProjectController extends Controller
     }
 
     public function detail_apply($projectApplyId)
-    {
-        $iduka = Auth::user()->iduka;
-        $projectApply = ProjectApply::with(['project', 'internship'])->find($projectApplyId);
-        
-        return view('iduka/detail_pelamar', compact('projectApply', 'iduka'));
-    }
+{
+    $iduka = Auth::user()->iduka;
+    $projectApply = ProjectApply::with(['project', 'internship'])->find($projectApplyId);
+
+    $documents = Document::where('internship_id', $projectApply->internship->id)
+        ->where('created_at', '=', $projectApply->created_at) 
+        ->get();
+
+    return view('iduka/detail_pelamar', compact('projectApply', 'iduka', 'documents'));
+}
+
+
 
     public function edit_status_apply(Request $request)
     {
