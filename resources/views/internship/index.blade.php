@@ -71,9 +71,9 @@
                     <div class="card-body">
                         <h4 class="card-title">Project Sedang Berlangsung</h4>
                         <div class="table-responsive">
-                            <table class="table table-bordered border-primary table-hover table-striped">
-                                <thead>
-                                    <tr class="table-dark text-center">
+                            <table class="table table-bordered table-striped">
+                                <thead class="text-center table-dark">
+                                    <tr>
                                         <th>No</th>
                                         <th>Nama Project</th>
                                         <th>Tanggal Mulai</th>
@@ -82,8 +82,8 @@
                                 <tbody>
                                     @if ($onGoingProject <> 0)
                                         @foreach ($onGoingProjectData as $item)
-                                            <tr class="table-bordered border-primary">
-                                                <td class="text-center">{{$loop->iteration}}</td>
+                                            <tr>
+                                                <td class="text-center" style="width:10px;">{{$loop->iteration}}</td>
                                                 <td>{{$item->name}}</td>
                                                 <td class="text-center">{{$item->date_start}}</td>
                                             </tr>

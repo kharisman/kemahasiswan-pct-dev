@@ -101,10 +101,11 @@ class InternshipController extends Controller
 		// return $progressData ;
 		$taskData = Task::with("taskHistories")->with("internships")
 		->where("project_id",$id)
+		->where("status_task","Sedang Dikerjakan")
 		->whereHas("internships", function ($query) use ($data) {
 			$query->where("internship_id",$data->id);
 		})
-		->orderby("id", "DESC")
+		->orderBy("id","DESC")
 		->get();
 
 		return view('internship/progress', compact('projectData','progressData','taskData','dataId'));
@@ -298,15 +299,33 @@ class InternshipController extends Controller
 			return back()->with('error', 'Data Pribadi gagal diperbarui. Coba kembali. Error: ' . $e->getMessage());
 		}
 	}
-
-    public function projectDetailInternship(Request $r, $id){
+	public function projectDetailInternship(Request $r, $id){
 		$projectData = Project::select('projects.*','project_categories.category', 'idukas.name as idukaName', 'idukas.address')
 			->join('idukas','projects.iduka_id','=','idukas.id')
 			->join('project_categories','projects.category_id','=','project_categories.id')
 			->findOrFail($id);
-		
+	
+		$internshipId = auth()->user()->internship_id; 
+		if (!$this->hasVisitedProjectDetail($internshipId, $id)) {
+			$newProject = Project::findOrFail($id);
+			$newProject->increment('views');
+			$newProject->save();
+	
+			$this->markVisitedProjectDetail($internshipId, $id);
+		}
+	
 		return view('internship/detail_project', compact('projectData'));
 	}
+	
+	private function hasVisitedProjectDetail($internshipId, $projectId) {
+		return session()->has("visited_project_{$internshipId}_{$projectId}");
+	}
+
+	private function markVisitedProjectDetail($internshipId, $projectId) {
+		session()->put("visited_project_{$internshipId}_{$projectId}", true);
+	}
+	
+	
 
 	public function applyProjectInternship(Request $r, $id){
 		$userId = Auth::user()->id;
@@ -357,11 +376,6 @@ class InternshipController extends Controller
 			$newDocument->curriculum_vitae = $newCurriculumVitae;
 			$newDocument->certificate = $oldCertificate;
 			$newDocument->save();
-
-			// menubah data Project views
-			$newProject = Project::findOrFail($projectId);
-			$newProject->increment('views');
-			$newProject->save();
 				
 
 				$existingData = ProjectApply::where('project_id', $projectId)

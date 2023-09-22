@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="{{asset('internship/vendors/mdi/css/materialdesignicons.min.css')}}">
   <link rel="stylesheet" href="{{asset('internship/vendors/css/vendor.bundle.base.css')}}">
   <link rel="stylesheet" href="{{asset('internship/css/style.css')}}">
-  <link rel="stylesheet" href="{{asset('internship/vendors/cssdatatables.css')}}">
   <link rel="stylesheet" href="{{asset('internship/css/sweetalert2.min.css')}}">
   <link rel="stylesheet" href="{{asset('internship/dropzone/min/dropzone.min.css')}}">
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
@@ -194,11 +193,17 @@
   <script src="{{asset('internship/css/jquery.js')}}"></script>
   <script src="{{asset('internship/css/sweetalert2.all.min.js')}}"></script>
   <script src="{{asset('internship/vendors/scriptdatatables.js')}}"></script>
-  <script src="{{asset('internship/dropzone/min/dropzone.min.js')}}"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  
   <script>
-    $(document).ready(function() {
-        $('.table').DataTable();
-    });
+      $(document).ready(function() {
+          var table = $('#dataTable').DataTable({
+  
+          });
+      });
+  
   </script>
+  <script src="{{asset('internship/dropzone/min/dropzone.min.js')}}"></script>
 </body>
 </html>

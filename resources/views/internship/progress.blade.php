@@ -1,5 +1,6 @@
 @extends('internship/main')
 @section('contentInternship')
+<link href="{{ asset('internship/css/custom.min.css') }}" rel="stylesheet">
     <div class="content-wrapper">
         <div class="row mb-3">
             <div class="card border-left-primary shadow h-100 py-2 mb-3">
@@ -28,34 +29,50 @@
                     
                 </div>
                 <div class="card-body">
-                        @foreach ($taskData as $item)
-                        <div class="bd-example mb-3">
-                            <details open="">
-                              <summary>{!! $item->name !!}</summary>
-                              <div class="text-end">{!! $item->status_task !!}</div>
-                              <hr class="border border-primary border-2 opacity-50">
-                              <p>{!! $item->description !!}</p>
-
-                              <h6 class="mt-4">History Perubahan</h6>
-                              <table class="table" id="dataTable">
-                                <thead>
-                                    <tr>
-                                        <th>Tanggal</th>
-                                        <th>Deskripsi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($item->taskHistories as $task)
-                                    <tr>
-                                        <td>{{ $task->created_at }}</td>
-                                        <td>{{ $task->description }}</td>              
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            </details>
-                        </div>
-                        @endforeach
+                    <ul class="list-unstyled timeline">
+                            @foreach ($taskData as $item)
+                          <li>
+                            <div class="block">
+                              <div class="tags">
+                                  @if ($item->status_task == "Sedang Dikerjakan")
+                                  <a class="tag">
+                                  <span>Proses</span>
+                                </a>
+                                @endif
+                              </div>
+                              <div class="block_content">
+                                <h2 class="title">
+                                    <a>{!! $item->name !!}</a>
+                                </h2>
+                                <div class="byline">
+                                  <span>{{$item->created_at->diffForHumans()}}</span>
+                                </div>
+                                @if ($item->status_task != "Selesai" && $item->status_task != "Batal")
+                                <p class="excerpt">{!! $item->description !!}
+                                    <h6 class="mt-4">History Perubahan</h6>
+                                    <table class="table" id="dataTable">
+                                      <thead>
+                                          <tr>
+                                              <th>Tanggal</th>
+                                              <th>Deskripsi</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          @foreach ($item->taskHistories as $task)
+                                          <tr>
+                                              <td>{{ $task->created_at }}</td>
+                                              <td>{{ $task->description }}</td>              
+                                          </tr>
+                                          @endforeach
+                                      </tbody>
+                                  </table>
+                                </p>
+                                @endif
+                              </div>
+                            </div>
+                          </li>
+                          @endforeach
+                        </ul>
                 </div>
             </div>
         </div>
