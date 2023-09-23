@@ -14,9 +14,9 @@
 
 <div class="custom-breadcrumns border-bottom">
     <div class="container">
-        <a href="index.html">Home</a>
+        <a href="{{ route('index') }}">Home</a>
         <span class="mx-3 icon-keyboard_arrow_right"></span>
-        <a href="courses.html">Pengajuan Iduka</a>
+        <a href="#">Pengajuan Iduka</a>
 </div>
 
 <div class="site-section">
