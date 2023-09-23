@@ -32,6 +32,9 @@
                         <div class="form-group">
                           <label for="notes">Catatan</label>
                           <textarea class="form-control border-secondary" name="notes" id="notes" rows="4" oninput="countCharacters()"></textarea>
+                          @error('notes')
+                          <div class="text-danger">{{ $message }}</div>
+                          @enderror
                         </div>
                         <footer class="blockquote-footer"><cite title="catatan">Anda dapat menjelaskan tentang latar belakang, ide, dan pencapaian anda dalam bidang ini, sebagai pertimbangan Iduka.</cite></footer>
                     </div>
