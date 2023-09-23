@@ -11,7 +11,7 @@
                     <div class="row mb-3">
                         <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="search">Proyek :</label>
+                                    <label for="search">Nama Project :</label>
                                     <input type="text" id="search" name="search" class="form-control border-secondary" placeholder="Nama project...">
                                 </div>
                         </div>
