@@ -9,7 +9,7 @@
             </div>
             <div class="col-lg-8">
                 <p class="lead">Perkembangan teknologi dan bisnis di Indonesia maupun global semakin dinamis dan semakin sulit diprediksi. Institut Teknologi dan Bisnis hadir di kota Palembang untuk membantu masyarakat di kota Palembang beradaptasi serta mengambil peluang dari perkembangan teknologi dan bisnis. Institut Palcomtech Dengan 3 Program studi yang dimiliki, yaitu Informatika, Sistem Informasi dan Bisnis Digital, memiliki visi untuk mengintegrasikan teknologi dan bisnis ke dalam dunia industri dan bisnis</p>
-                <p><a href="#">Read more</a></p>
+                <p><a href="https://palcomtech.ac.id/tentang-institut-teknologi-dan-bisnis-palcomtech/">Read more</a></p>
             </div>
         </div>
     </div>
