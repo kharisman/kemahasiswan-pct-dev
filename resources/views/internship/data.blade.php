@@ -28,7 +28,7 @@
                 <div class="row mb-3 text-end">
                     <label for="name" class="col-sm-4 col-form-label text-start">Nama</label>
                     <div class="col-sm-8">
-                        <input id="name" class="form-control" type="text" name="name" placeholder="name..." required value="{{ old('name', $internship->name) }}">
+                        <input id="name" class="form-control" type="text" name="name" placeholder="name..."  value="{{ old('name', $internship->name) }}">
                         @error('name')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -38,7 +38,7 @@
                 <div class="row mb-3 text-end">
                     <label for="date_of_birth" class="col-sm-4 col-form-label text-start">Tanggal Lahir</label>
                     <div class="col-sm-8">
-                        <input id="date_of_birth" class="form-control" type="date" name="date_of_birth" placeholder="date_of_birth..." required value="{{ old('date_of_birth', $internship->date_of_birth) }}">
+                        <input id="date_of_birth" class="form-control" type="date" name="date_of_birth" placeholder="date_of_birth..."  value="{{ old('date_of_birth', $internship->date_of_birth) }}">
                         @error('date_of_birth')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -82,7 +82,7 @@
                 <div class="row mb-3 text-end">
                     <label for="nationality" class="col-sm-4 col-form-label text-start">Negara</label>
                     <div class="col-sm-8">
-                        <input id="nationality" class="form-control" type="text" name="nationality" placeholder="nationality..." required value="{{ old('nationality', $internship->nationality) }}">
+                        <input id="nationality" class="form-control" type="text" name="nationality" placeholder="nationality..."  value="{{ old('nationality', $internship->nationality) }}">
                         @error('nationality')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -92,7 +92,7 @@
                 <div class="row mb-3 text-end">
                     <label for="education" class="col-sm-4 col-form-label text-start">Pendidikan</label>
                     <div class="col-sm-8">
-                        <input id="education" class="form-control" type="text" name="education" placeholder="education..." required value="{{ old('education', $internship->education) }}">
+                        <input id="education" class="form-control" type="text" name="education" placeholder="education..."  value="{{ old('education', $internship->education) }}">
                         @error('education')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -102,7 +102,7 @@
                 <div class="row mb-3 text-end">
                     <label for="interest" class="col-sm-4 col-form-label text-start">Interest</label>
                     <div class="col-sm-8">
-                        <input id="interest" class="form-control" type="text" name="interest" placeholder="interest..." required value="{{ old('interest', $internship->interest) }}">
+                        <input id="interest" class="form-control" type="text" name="interest" placeholder="interest..."  value="{{ old('interest', $internship->interest) }}">
                         @error('interest')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -112,7 +112,7 @@
                 <div class="row mb-3 text-end">
                     <label for="phone" class="col-sm-4 col-form-label text-start">Nomor Telepon</label>
                     <div class="col-sm-8">
-                        <input id="phone" class="form-control" type="text" placeholder="nomor telepon ..." name="phone" required value="{{ old('phone', $internship->phone) }}">
+                        <input id="phone" class="form-control" type="text" placeholder="nomor telepon ..." name="phone"  value="{{ old('phone', $internship->phone) }}">
                     </div>
                     @error('phone')
                     <div class="text-danger">{{ $message }}</div>

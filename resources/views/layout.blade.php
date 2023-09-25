@@ -12,30 +12,46 @@
     <link rel="stylesheet" href="{{url('')}}/landingpage/css/jquery-ui.css">
     <link rel="stylesheet" href="{{url('')}}/landingpage/css/owl.carousel.min.css">
     <link rel="stylesheet" href="{{url('')}}/landingpage/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="{{url('')}}/landingpage/css/owl.theme.default.min.css">
-
     <link rel="stylesheet" href="{{url('')}}/landingpage/css/jquery.fancybox.min.css">
 
     <link rel="stylesheet" href="{{url('')}}/landingpage/css/bootstrap-datepicker.css">
-
     <link rel="stylesheet" href="{{url('')}}/landingpage/fonts/flaticon/font/flaticon.css">
-
     <link rel="stylesheet" href="{{url('')}}/landingpage/css/aos.css">
-
-    
     <script src="{{url('')}}/landingpage/js/jquery-3.3.1.min.js"></script>
     <script src="{{url('')}}/landingpage/js/jquery-migrate-3.0.1.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <link href="css/jquery.mb.YTPlayer.min.css" media="all" rel="stylesheet" type="text/css">
-
     <link rel="stylesheet" href="{{url('')}}/landingpage/css/style.css">
+
+    <style>
+        /* Tampilan awal menu pada layar besar */
+        .main-menu {
+            display: block;
+        }
+
+        /* Sembunyikan menu pada layar kecil */
+        @media (max-width: 767px) {
+            .main-menu {
+                display: none;
+            }
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Tampilkan menu saat kelas 'active' ditambahkan */
+        .main-menu.active {
+            display: block;
+        }
+        .active-page {
+    
+    color: white; /* Warna teks putih */
+}
+    </style>
 </head>
 
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-
     <div class="site-wrap">
-
         <div class="site-mobile-menu site-navbar-target">
             <div class="site-mobile-menu-header">
                 <div class="site-mobile-menu-close mt-3">
@@ -44,14 +60,12 @@
             </div>
             <div class="site-mobile-menu-body"></div>
         </div>
-
-
         <div class="py-2 bg-light">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-9 d-none d-lg-block">
                         <a href="#" class="small mr-3"><span class="icon-question-circle-o mr-2"></span> Have a questions?</a>
-                        <a href="#" class="small mr-3"><span class="icon-phone2 mr-2"></span>(0711) 359089 </a>
+                        <a href="#" class="small mr-3"><span class="icon-phone2 mr-2"></span>(0711) 359089</a>
                         <a href="mailto:info@palcomtech.ac.id" class="small mr-3"><span class="icon-envelope-o mr-2"></span> info@palcomtech.ac.id</a>
                         <a href="https://api.whatsapp.com/send?phone=+6281271788080" class="small mr-3"><span class="icon-whatsapp"></span> 081271788080</a>
                     </div>
@@ -63,7 +77,6 @@
             </div>
         </div>
         <header class="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
-
             <div class="container">
                 <div class="d-flex align-items-center">
                     <div class="site-logo">
@@ -72,9 +85,9 @@
                         </a>
                     </div>
                     <div class="mr-auto">
-                        <nav class="site-navigation position-relative text-right" role="navigation">
-                            <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
-                                 <li class="{{ Request::route()->getName() == 'index' ? 'active' : '' }}">
+                        <nav class="menu-toggle" role="navigation">
+                            <ul class="site-menu main-menu js-clone-nav mr-auto d-lg-block">
+                                <li class="{{ Request::route()->getName() == 'index' ? 'active' : '' }}">
                                     <a href="{{route('index')}}" class="nav-link text-left">Beranda</a>
                                 </li>
                                 <li class="{{ Request::route()->getName() == 'iduka' ? 'active' : '' }}">
@@ -83,60 +96,38 @@
                                 <li class="{{ Request::route()->getName() == 'intership' ? 'active' : '' }}">
                                     <a href="{{route('intership')}}" class="nav-link text-left">Program Intership</a>
                                 </li>
-
                                 <li class="{{ Request::route()->getName() == 'berita' ? 'active' : '' }}">
                                     <a href="{{route('berita')}}" class="nav-link text-left">Berita</a>
                                 </li>
-
                                 <li class="{{ Request::route()->getName() == 'project' ? 'active' : '' }}">
                                     <a href="{{route('project')}}" class="nav-link text-left">Project</a>
                                 </li>
-
-
-                                 <li class="{{ Request::route()->getName() == 'event' ? 'active' : '' }}">
+                                <li class="{{ Request::route()->getName() == 'event' ? 'active' : '' }}">
                                     <a href="{{route('event')}}" class="nav-link text-left">Event</a>
                                 </li>
-
-                                {{-- <li class="{{ Request::route()->getName() == 'kontak' ? 'active' : '' }}">
-                                    <a href="{{route('kontak')}}" class="nav-link text-left">Kontak Kami</a>
-                                </li> --}}
-
-                                {{-- <li class="has-children">
-                                    <a href="about.html" class="nav-link text-left">About Us</a>
-                                    <ul class="dropdown">
-                                        <li><a href="teachers.html">Iduka Partner</a></li>
-                                        <li><a href="about.html">About me</a></li>
-                                    </ul>
-                                </li> --}}
-                                
-                            </ul>
                             </ul>
                         </nav>
-
                     </div>
                     <div class="ml-auto">
                         <div class="social-wrap">
                             <a href="https://www.facebook.com/palcomtechpusat/"><span class="icon-facebook"></span></a>
                             <a href="https://www.instagram.com/palcomtech/"><span class="icon-instagram"></span></a>
                             <a href="https://www.youtube.com/c/PalComTechTVofficial"><span class="icon-youtube"></span></a>
-
-                            <a href="#" class="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black"><span class="icon-menu h3"></span></a>
+                            <a class="menu-toggle" aria-label="Toggle Menu">
+                                <span class="icon-menu h3"></span>
+                            </a>
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </header>
-
 
         @if(Session::has('success'))
         <script>
             $(document).ready(function() {
                 Swal.fire({
                     title: 'Berhasil !'
-                    , text: '{{ Session::get('
-                    success ') }}'
+                    , text: '{{ Session::get('success') }}'
                     , icon: 'success'
                     , confirmButtonText: 'Tutup'
                 })
@@ -148,14 +139,12 @@
         @endphp
         @endif
 
-
         @if(Session::has('error'))
         <script>
             $(document).ready(function() {
                 Swal.fire({
                     title: 'Gagal !'
-                    , text: '{{ Session::get('
-                    error ') }}'
+                    , text: '{{ Session::get('error') }}'
                     , icon: 'error'
                     , confirmButtonText: 'Tutup'
                 })
@@ -166,7 +155,6 @@
         Session::forget('error');
         @endphp
         @endif
-
 
         @yield('content')
 
@@ -185,7 +173,6 @@
                             Jl. Jend. Basuki Rahmat No. 05, Talang Aman, Kec. Kemuning, Kota Palembang, Sumatera Selatan
                             <p></p>
                             <li><a href="https://palcomtech.ac.id/">Open</a></li>
-
                             <li>Senin s/d Jumat : 8:00 – 16:00</li>
                             Sabtu: 8:00 – 12:00
                         </ul>
@@ -204,17 +191,13 @@
                         </ul>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-12">
                         <div class="copyright">
                             <p>
-                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                                 &copy;<script>
                                     document.write(new Date().getFullYear());
-
                                 </script> Institut Teknologi dan Bisnis PalComTech <i class="icon-heart" aria-hidden="true"></i> All rights reserved.
-                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             </p>
                         </div>
                     </div>
@@ -224,10 +207,6 @@
     </div>
 
     <!-- .site-wrap -->
-
-    <!-- loader 
-    <div id="loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#51be78"/></svg></div>
-    -->
 
     <script src="{{url('')}}/landingpage/js/jquery-ui.js"></script>
     <script src="{{url('')}}/landingpage/js/popper.min.js"></script>
@@ -242,7 +221,14 @@
     <script src="{{url('')}}/landingpage/js/jquery.sticky.js"></script>
     <script src="{{url('')}}/landingpage/js/jquery.mb.YTPlayer.min.js"></script>
     <script src="{{url('')}}/landingpage/js/main.js"></script>
+    <script>
+        // Tambahkan JavaScript berikut untuk mengaktifkan menu toggle
+        $(document).ready(function() {
+            $(".menu-toggle").click(function() {
+                $(".main-menu").toggleClass("active");
+            });
+        });
 
+    </script>
 </body>
 
-</html>

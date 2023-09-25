@@ -51,17 +51,6 @@
                             <form method="POST" action="{{ route('profile.update.password') }}">
                                 @csrf
                                 <div class="form-group row">
-                                    <label for="old-password" class="col-md-4 col-form-label text-md-right">{{ __('Password Lama') }}</label>
-                                    <div class="col-md-6">
-                                        <input id="old-password" type="password" class="form-control @error('old_password') is-invalid @enderror" name="old_password" required autocomplete="current-password">
-                                        @error('old_password')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group row">
                                     <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password Baru') }}</label>
                                     <div class="col-md-6">
                                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">

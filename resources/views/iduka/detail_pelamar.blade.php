@@ -55,11 +55,12 @@
                         <label for="name">Hoby</label>
                         <input type="text" class="form-control" name="name" id="name" value="{{ $projectApply->internship->interest}}" readonly>
                     </div>
+
                     <div class="form-group">
                         <label for="instagram">Instagram:</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-instagram"></i></span>
+                                <span class="input-group-text"><i class="icon-instagram" aria-hidden="true"></i></span>
                             </div>
                             <a href="https://www.instagram.com/{{ $projectApply->internship->instagram }}" target="_blank" class="form-control" id="instagram" readonly>
                                 {{ $projectApply->internship->instagram }}

@@ -169,7 +169,7 @@ class ProjectController extends Controller
 
             DB::commit();
 
-            return redirect()->route('iduka.index')->with('success', 'Proyek berhasil diperbarui.');
+            return redirect()->route('iduka.index')->with('success', 'Proyek berhasil diperbaruhi.');
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui proyek.');
@@ -194,7 +194,7 @@ class ProjectController extends Controller
         $project->status = $data['status'];
         $project->save();
 
-        return redirect()->route('iduka.index')->with('success', 'Status updated successfully.');
+        return redirect()->route('iduka.index')->with('success', 'Status berhasil diperbaruhi');
     }
     
     public function all_project(Request $request)
@@ -396,12 +396,12 @@ class ProjectController extends Controller
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'Status berhasil diperbarui');
+            return redirect()->back()->with('success', 'Status berhasil diperbaruhi');
         } catch (\Exception $e) {
 
             DB::rollback();
 
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui status.');
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbaruhi status.');
         }
     } 
 
@@ -621,7 +621,7 @@ class ProjectController extends Controller
             $project = Project::findOrFail($projectId);
             $project->status_work = $data['status_work'];
             $project->save();
-            return redirect()->route('iduka.index')->with('success', 'Status updated successfully.');
+            return redirect()->route('iduka.index')->with('success', 'Status berhasil diperbaruhi.');
         } catch (\Exception $e) {
             
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
