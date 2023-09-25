@@ -16,7 +16,7 @@
     <div class="container">
         <a href="{{ route('index') }}">Home</a>
         <span class="mx-3 icon-keyboard_arrow_right"></span>
-        <a href="#">
+        <span class="current">
             @if ($filter === 'terbaru')
                 Berita Terbaru
             @elseif ($filter === 'populer')
@@ -24,8 +24,8 @@
             @else
                 Semua Berita
             @endif
-        </a>
-</div>
+</span>
+</div></div>
 <div class="news-updates">
     <div class="container">
         <form class="form-inline mb-5" action="{{ route('berita') }}" method="GET">

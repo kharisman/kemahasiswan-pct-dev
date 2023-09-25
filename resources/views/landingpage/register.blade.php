@@ -71,14 +71,17 @@
                                 <input type="submit" class="col-12 btn btn-primary btn-lg px-5">
                             </div>
                             <br>
-                    </form>
-                    <div class="col-12" style="margin-top: 20px;margin-bottom:20px">
-                        <a href="{{route('registerIduka')}}" class="col-12 btn btn-warning btn-lg px-5 ">Daftar Sebagai Iduka</a>
+                        </form>
+                        <div class="col-12" style="margin-top: 20px;margin-bottom:20px">
+                            <a href="{{route('registerIduka')}}" class="col-12 btn btn-warning btn-lg px-5 ">Daftar Sebagai Iduka</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+           
+    
 @endsection
 

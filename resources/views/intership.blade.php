@@ -16,7 +16,8 @@
     <div class="container">
         <a href="{{ route('index') }}">Home</a>
         <span class="mx-3 icon-keyboard_arrow_right"></span>
-        <a href="#">Pengajuan Internship</a>
+        <span class="current">Pengajuan Intership</span>
+    </div>
 </div>
 
 <div class="site-section">
@@ -56,30 +57,27 @@
         </div>
     </div>
 </div>
-
-
-<div class="section-bg style-1" style="background-image: url('images/hero_1.jpg');">
+<div class="section-bg style-1" style="background-image: route('images/hero_1.jpg');">
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-6 mb-5 mb-lg-0">
                 <span class="icon flaticon-mortarboard"></span>
-                <h3>Our Philosphy</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis recusandae, iure repellat quis delectus ea? Dolore, amet reprehenderit.</p>
+                <h3>Tekhnik Informatika </h3>
+                <p>Menjadi program studi yang menghasilkan sarjana dengan kompetensi unggulan di bidang rekayasa perangkat lunak, pengembangan sistem cerdas dan jaringan komputer yang berprestasi dan berwawasan global.</p>
             </div>
             <div class="col-lg-4 col-md-6 mb-5 mb-lg-0">
                 <span class="icon flaticon-school-material"></span>
-                <h3>Academics Principle</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis recusandae, iure repellat quis delectus ea?
-                    Dolore, amet reprehenderit.</p>
+                <h3>Sistem Informasi</h3>
+                <p>Menjadi program studi yang menghasilkan sarjana dengan kompetensi unggulan di bidang desain, manajemen dan analisis sistem informasi yang berprestasi dan berwawasan global.</p>
             </div>
             <div class="col-lg-4 col-md-6 mb-5 mb-lg-0">
                 <span class="icon flaticon-library"></span>
-                <h3>Key of Success</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis recusandae, iure repellat quis delectus ea?
-                    Dolore, amet reprehenderit.</p>
+                <h3>Bisnis Digital</h3>
+                <p>Menjadi program studi yang menghasilkan sarjana dengan kompetensi di bidang bisnis dan keuangan dengan berbasis teknologi digital yang berprestasi dan berwawasan global.</p>
             </div>
         </div>
     </div>
 </div>
+<p></p>
 
 @endsection

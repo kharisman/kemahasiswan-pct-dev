@@ -16,17 +16,17 @@
     <div class="container">
         <a href="{{ route('index') }}">Home</a>
         <span class="mx-3 icon-keyboard_arrow_right"></span>
-        <a href="#">
+        <span class="current">
             @if ($filter === 'terbaru')
-            Berita Terbaru
+            Project Terbaru
             @elseif ($filter === 'populer')
-            Berita Terpopuler
+            Project Terpopuler
             @else
-            Semua Berita
+            Semua Project
             @endif
         </a>
     </div>
-
+</div>
     <div class="news-updates">
         <div class="container">
 
