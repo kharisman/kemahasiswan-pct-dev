@@ -63,15 +63,16 @@
                                 <input type="submit" class="col-12 btn btn-primary btn-lg px-5">
                             </div>
                             <br>
-                    </form>
-                    <div class="col-12" style="margin-top: 20px;margin-bottom: 20px;">
-                        <a href="{{url('register')}}" class="col-12 btn btn-warning btn-lg px-5 ">Daftar Sebagai internship</a>
+                        </form>
+                        <div class="col-12" style="margin-top: 20px;margin-bottom: 20px;">
+                            <a href="{{url('register')}}" class="col-12 btn btn-warning btn-lg px-5 ">Daftar Sebagai internship</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+   
 
 @endsection

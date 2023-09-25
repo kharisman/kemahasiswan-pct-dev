@@ -16,7 +16,7 @@
     <div class="container">
         <a href="{{ route('index') }}">Home</a>
         <span class="mx-3 icon-keyboard_arrow_right"></span>
-        <a href="#">
+        <span class="current">
             @if ($filter === 'terbaru')
             Event Terbaru
             @elseif ($filter === 'populer')
@@ -26,7 +26,7 @@
             @endif
         </a>
     </div>
-
+    </div>
     <div class="news-updates">
         <div class="container">
 

@@ -85,6 +85,7 @@
                         </a>
                     </div>
                     <div class="mr-auto">
+                    <nav class="site-navigation position-relative text-right" role="navigation">
                         <nav class="menu-toggle" role="navigation">
                             <ul class="site-menu main-menu js-clone-nav mr-auto d-lg-block">
                                 <li class="{{ Request::route()->getName() == 'index' ? 'active' : '' }}">
@@ -113,7 +114,7 @@
                             <a href="https://www.facebook.com/palcomtechpusat/"><span class="icon-facebook"></span></a>
                             <a href="https://www.instagram.com/palcomtech/"><span class="icon-instagram"></span></a>
                             <a href="https://www.youtube.com/c/PalComTechTVofficial"><span class="icon-youtube"></span></a>
-                            <a class="menu-toggle" aria-label="Toggle Menu">
+                            <a class="d-inline-block d-lg-none site-menu-toggle menu-toggle" aria-label="Toggle Menu">
                                 <span class="icon-menu h3"></span>
                             </a>
                         </div>
