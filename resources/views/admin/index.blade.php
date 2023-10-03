@@ -337,10 +337,13 @@
 
     <script src="{{ asset('admin/js/demo/datatables-demo.js') }}"></script>
 
+    @if(request()->segment(1)=="admin-dashboard")
     <script src="{{ asset('admin/vendor/chart.js/Chart.min.js') }}"></script>
 
     <script src="{{ asset('admin/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('admin/js/demo/chart-pie-demo.js') }}"></script>
+        
+    @endif
 
 </body>
 

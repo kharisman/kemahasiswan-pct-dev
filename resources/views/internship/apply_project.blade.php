@@ -19,7 +19,7 @@
                 <input type="hidden" name="projectId" value="{{$projectId->id}}">
                     <!-- Surat Lamaran -->
                     <div class="row mb-3 text-end">
-                        <label for="application_letter" class="col-sm-4 col-form-label text-start">Surat Lamaran</label>
+                        <label for="application_letter" class="col-sm-4 col-form-label text-start">Portfolio</label>
                         <div class="col-sm-8">
                             <input id="application_letter" class="form-control border-secondary" type="file" name="application_letter">
                             @error('application_letter')

@@ -52,7 +52,13 @@
 					<br>
 					<small></small>
 				</span>
-        <img class="img-profile rounded-circle" src="{{ asset($iduka->photo) }}">
+        @php
+        $ph = url("")."/landingpage/images/Logo-1.jpg" ;
+          if (!empty($iduka->photo)){
+            $ph = asset($iduka->photo) ;
+          }
+        @endphp
+        <img class="img-profile rounded-circle" src="{{ $ph }}">
       </a>
       <!-- Dropdown - User Information -->
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

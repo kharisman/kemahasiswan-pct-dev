@@ -25,7 +25,7 @@ return [
     'before_or_equal' => ':attribute harus berisi tanggal sebelum atau sama dengan :date.',
     'between'         => [
         'numeric' => ':attribute harus bernilai antara :min sampai :max.',
-        'file'    => ':attribute harus berukuran antara :min sampai :max kilobita.',
+        'file'    => ':attribute harus berukuran antara :min sampai :max kilobyte.',
         'string'  => ':attribute harus berisi antara :min sampai :max karakter.',
         'array'   => ':attribute harus memiliki :min sampai :max anggota.',
     ],

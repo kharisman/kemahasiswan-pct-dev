@@ -69,9 +69,9 @@ class IdukaController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
-                'address' => 'nullable',
-                'phone' => 'nullable',
-                'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048' // Validate photo format and size
+                'address' => 'required',
+                'phone' => 'required',
+                'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:3000' // Validate photo format and size
             ]);
     
             if ($validator->fails()) {

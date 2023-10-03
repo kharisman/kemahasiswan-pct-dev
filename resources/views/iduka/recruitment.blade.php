@@ -5,6 +5,10 @@
     <!-- Page Content -->
     <div class="card">
         <div class="card-body text-left">
+            @if($iduka->status=="Tidak")
+                <div class="alert alert-danger"> Mohon maaf sebelumnya. Tunggu sampai akun Anda aktif</div>
+            @else
+
             <form action="{{ route('save_project') }}" method="POST" class="project">
                 @csrf
                 <div class="form-group">
@@ -69,6 +73,9 @@
 
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+                
+            @endif
+            
 
         </div>
     </div>
