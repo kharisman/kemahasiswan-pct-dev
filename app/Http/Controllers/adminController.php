@@ -897,7 +897,7 @@ class adminController extends Controller
         try {
             // Validasi data input
             $validator = Validator::make($request->all(), [
-                'images' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'images' => 'nullable|image|mimes:jpeg,png,jpg|max:5048',
                 'status' => 'required|in:Aktif,Tidak',
                 'judul_acara' => 'required|max:255',
                 'deskripsi' => 'required',
@@ -1173,6 +1173,12 @@ class adminController extends Controller
             // Handle kesalahan sesuai kebutuhan Anda
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function event_peserta(Request $request){
+        
+        $event = Event::where("id",$request->id)->firstOrFail();
+        return view('admin.event.peserta',compact('event')) ;
     }
     
 }

@@ -144,6 +144,11 @@ Route::get('/project/{projectId}', [ProjectController::class, 'showProjectDetail
 		Route::post('event/edit',[adminController::class,'event_edit_p']);
 		Route::get('event/delete',[adminController::class,'event_delete_p']) ;
 
+		
+		Route::get('event/peserta',[adminController::class,'event_peserta']);
+
+		
+
 	});
 });
 

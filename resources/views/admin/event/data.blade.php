@@ -15,7 +15,7 @@
                             <tr class="text-center">
                                 <th>No</th>
                                 <th>Nama Event</th>
-                                <th>Peserta</th>
+                                <th>Kuota Peserta</th>
                                 <th>Periode Pendaftaran</th>
                                 <th>Periode Acara</th>
                                 <th>Status</th>
@@ -29,8 +29,8 @@
                             @foreach ($data as $d)
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ $d->title }}</td>
-                                <td>{{ $d->participants }}</td>
+                                <td>{{ $d->data }}</td>
+                                <td><a href="{{url('')}}/admin/event/peserta??id={{ $d->id }}">{{$d->registrations()->count()}}</a>/{{ $d->participants }}</td>
                                 <td>{{ $d->reg_start . ' - ' . $d->reg_end }}</td>
                                 <td>{{ $d->start_date . ' - ' . $d->end_date }}</td>
                                 <td>{{ $d->status}}</td>

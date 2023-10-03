@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="card w-100">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Form Edit Project</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Form Edit Event</h6>
                     </div>
                     <div class="card-body">
                         <div class="">
