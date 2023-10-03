@@ -48,19 +48,19 @@
             <span class="mdi mdi-menu"></span>
           </button>
           <div class="navbar-brand-wrapper">
-            <a class="navbar-brand brand-logo" href=""><img src="{{asset('landingpage/images/logo-1.jpg')}}" width="50" alt="logo"/></a>
-            <a class="navbar-brand brand-logo-mini" href=""><img src="{{asset('landingpage/images/logo-1.jpg')}}" height="55" width="30" alt="logo"/></a>
+            {{-- <a class="navbar-brand brand-logo" href=""><img src="{{asset('landingpage/images/logo-1.jpg')}}" width="50" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href=""><img src="{{asset('landingpage/images/logo-1.jpg')}}" height="55" width="30" alt="logo"/></a> --}}
           </div>
-          <h4 class="font-weight-bold mb-0 d-none d-md-block mt-1">Selamat datang, 
+          {{-- <h4 class="font-weight-bold mb-0 d-none d-md-block mt-1">Selamat datang,  --}}
             @if (Auth::check())
             <?php
                 $internship = App\Models\Internship::where('user_id', Auth::user()->id)->first();
                 $name = $internship ? $internship->name : '';
                 $dateSign = ($internship->created_at)->format('j'). " days ago";
                 if ($internship->photo <> '') {
-                  $photo = $internship->photo;
+                  $photo = asset('images/internship/' . $internship->photo) ;
                 }else {
-                  $photo = 'undraw_profile.svg';
+                  $photo = url('')."/landingpage/images/logo-1.jpg" ;
                 }
                 $condition = 0;
 
@@ -76,7 +76,7 @@
                     $condition++;
                 }
             ?>
-            {{ $name }}
+            Menu
             @endif
         
           </h4>
@@ -144,7 +144,7 @@
             </li>
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                <img src="{{ asset('images/internship/' . $photo) }}" width="55" alt="profile"/>
+                <img src="{{ $photo }}" width="55" height="55"  alt="profile"/>
                 <span class="nav-profile-name">{{$name}}</span>
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
