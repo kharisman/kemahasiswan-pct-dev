@@ -22,7 +22,7 @@
                             <form id="projectForm"  method="POST" class="project">
                                 @csrf
                                 @method('POST')
-                                <input type="hidden" name="id" class="form-control" id="id" value="{{ Auth::user()->id }}" readonly>
+                                <input type="hidden" name="id" class="form-control" id="id" value="{{ $project->id }}" readonly>
 
                                 <div class="form-group">
                                     <label for="category_id">Kategori Project</label>
