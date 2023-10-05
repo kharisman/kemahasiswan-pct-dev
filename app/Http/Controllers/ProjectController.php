@@ -78,7 +78,8 @@ class ProjectController extends Controller
                     list(, $data) = explode(',', $data);
                     $data = base64_decode($data);
                     $image_name = "/assets/images/project/" . time() . $k . '.png';
-                    $path = public_path() . $image_name;
+                    // $path = public_path() . $image_name;
+                    $path = $_SERVER['DOCUMENT_ROOT'] . $image_name;
                     file_put_contents($path, $data);
                     $img->removeAttribute('src');
                     $img->setAttribute('src', $image_name);
@@ -154,7 +155,8 @@ class ProjectController extends Controller
                     list(, $data) = explode(',', $data);
                     $data = base64_decode($data);
                     $image_name = "/assets/images/project/" . time() . $k . '.png';
-                    $path = public_path() . $image_name;
+                    // $path = public_path() . $image_name;
+                    $path = $_SERVER['DOCUMENT_ROOT'] . $image_name;
                     file_put_contents($path, $data);
                     $img->removeAttribute('src');
                     $img->setAttribute('src', $image_name);

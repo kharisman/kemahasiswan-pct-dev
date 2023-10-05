@@ -399,7 +399,9 @@ class adminController extends Controller
                 list(, $data)      = explode(',', $data);
                 $data = base64_decode($data);
                 $image_name= "/assets/images/post/" . time().$k.'.png';
-                $path = public_path() . $image_name;
+                // $path = public_path() . $image_name;
+                $path = $_SERVER['DOCUMENT_ROOT'] . $image_name;
+                // return $path ;x
                 file_put_contents($path, $data);
                 $img->removeAttribute('src');
                 $img->setAttribute('src', $image_name);
@@ -428,7 +430,9 @@ class adminController extends Controller
             $image->resize($width, $height, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            $image->save(public_path($publicPath . $filename));
+            
+            // return  $_SERVER['DOCUMENT_ROOT'] .($publicPath . $filename) ;
+            $image->save( $_SERVER['DOCUMENT_ROOT'] ."/".($publicPath . $filename));
             $url = asset($publicPath . $filename);
         } else {
             // No image was uploaded, set the URL to null or a default value
@@ -506,7 +510,8 @@ class adminController extends Controller
                 list(, $data)      = explode(',', $data);
                 $data = base64_decode($data);
                 $image_name= "/assets/images/post/" . time().$k.'.png';
-                $path = public_path() . $image_name;
+                // $path = public_path() . $image_name;
+                $path = $_SERVER['DOCUMENT_ROOT'] . $image_name;
                 file_put_contents($path, $data);
                 $img->removeAttribute('src');
                 $img->setAttribute('src', $image_name);
@@ -539,12 +544,14 @@ class adminController extends Controller
             $image->resize($width, $height, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            $image->save(public_path($publicPath . $filename));
+            // $image->save(public_path($publicPath . $filename));
+            
+            $image->save( $_SERVER['DOCUMENT_ROOT'] ."/".($publicPath . $filename));
             $url = asset($publicPath . $filename);
     
             // Delete the old image if it exists
-            if ($save->cover && file_exists(public_path($save->cover))) {
-                unlink(public_path($save->cover));
+            if ($save->cover && file_exists($_SERVER['DOCUMENT_ROOT'] ."/".($save->cover))) {
+                unlink($_SERVER['DOCUMENT_ROOT'] ."/".($save->cover));
             }
     
             $save->cover = $url;
@@ -724,7 +731,8 @@ class adminController extends Controller
                     list(, $data) = explode(',', $data);
                     $data = base64_decode($data);
                     $image_name = "/assets/images/project/" . time() . $k . '.png';
-                    $path = public_path() . $image_name;
+                    // $path = public_path() . $image_name;
+                    $path = $_SERVER['DOCUMENT_ROOT'] . $image_name;
                     file_put_contents($path, $data);
                     $img->removeAttribute('src');
                     $img->setAttribute('src', $image_name);
@@ -944,7 +952,8 @@ class adminController extends Controller
                     list(, $data) = explode(',', $data);
                     $data = base64_decode($data);
                     $image_name = "/assets/images/event/" . time() . $k . '.png';
-                    $path = public_path() . $image_name;
+                    // $path = public_path() . $image_name;
+                    $path = $_SERVER['DOCUMENT_ROOT'] . $image_name;
                     file_put_contents($path, $data);
                     $img->removeAttribute('src');
                     $img->setAttribute('src', $image_name);
@@ -974,7 +983,9 @@ class adminController extends Controller
                 $image->resize($width, $height, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $image->save(public_path($publicPath . $filename));
+                // $image->save(public_path($publicPath . $filename));
+                
+                $image->save( $_SERVER['DOCUMENT_ROOT'] ."/".($publicPath . $filename));
                 $url = asset($publicPath . $filename);
             } else {
                 // No image was uploaded, set the URL to null or a default value
@@ -1058,6 +1069,9 @@ class adminController extends Controller
                     ->withInput();
             }
 
+            
+            $event = Event::where("id",$request->id)->firstOrFail();
+
             $d1  = explode(" - ",$request->periode_pendaftaran);
             $d2  = explode(" - ",$request->periode_acara);
 
@@ -1075,7 +1089,8 @@ class adminController extends Controller
                     list(, $data) = explode(',', $data);
                     $data = base64_decode($data);
                     $image_name = "/assets/images/event/" . time() . $k . '.png';
-                    $path = public_path() . $image_name;
+                    // $path = public_path() . $image_name;
+                    $path = $_SERVER['DOCUMENT_ROOT'] . $image_name;
                     file_put_contents($path, $data);
                     $img->removeAttribute('src');
                     $img->setAttribute('src', $image_name);
@@ -1105,7 +1120,10 @@ class adminController extends Controller
                 $image->resize($width, $height, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $image->save(public_path($publicPath . $filename));
+                // $image->save(public_path($publicPath . $filename));
+
+                
+                $image->save( $_SERVER['DOCUMENT_ROOT'] ."/".($publicPath . $filename));
                 $url = asset($publicPath . $filename);
             } else {
                 // No image was uploaded, set the URL to null or a default value
@@ -1114,7 +1132,6 @@ class adminController extends Controller
             }
 
             // Membuat instance Event dan mengisi data dari input form
-            $event = Event::where("id",$request->id)->firstOrFail();
             $event->title = $request->input('judul_acara');
             $event->cover = $url;
             $event->status = $request->status;
