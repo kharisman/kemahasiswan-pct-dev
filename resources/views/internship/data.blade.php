@@ -82,7 +82,12 @@
                 <div class="row mb-3 text-end">
                     <label for="nationality" class="col-sm-4 col-form-label text-start">Negara</label>
                     <div class="col-sm-8">
-                        <input id="nationality" class="form-control" type="text" name="nationality" placeholder="nationality..." value="{{ old('nationality', $internship->nationality) }}">
+                        <select id="nationality" class="form-select" name="nationality">
+                            <option value="">Pilih Negara</option>
+                            @foreach ($countries as $country)
+                                <option value="{{ $country }}" @if (old('nationality', $internship->nationality) === $country) selected @endif>{{ $country }}</option>
+                            @endforeach
+                        </select>
                         @error('nationality')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -92,7 +97,12 @@
                 <div class="row mb-3 text-end">
                     <label for="education" class="col-sm-4 col-form-label text-start">Pendidikan</label>
                     <div class="col-sm-8">
-                        <input id="education" class="form-control" type="text" name="education" placeholder="education..." value="{{ old('education', $internship->education) }}">
+                        <select id="education" class="form-select" name="education">
+                            <option value="">Pilih Pendidikan</option>
+                            @foreach ($educations as $edu)
+                                    <option value="{{ $edu }}" @if (old('education', $internship->education) === $edu) selected @endif>{{ $edu }}</option>
+                            @endforeach
+                        </select>
                         @error('education')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -212,7 +222,7 @@
         <!-- Tombol "Update" -->
         <div class="card mb-3">
             <div class="card-header">
-                <button type="submit" class="btn btn-warning btn-sm text-center w-100 h3"><i class="mdi mdi-pencil-box-outline"></i> Update</button>
+                <button type="submit" class="btn btn-warning btn-sm text-center w-100"><i class="mdi mdi-content-save-all menu-icon"></i><b> Perbaruhi</b></button>
             </div>
         </div>
     </form>

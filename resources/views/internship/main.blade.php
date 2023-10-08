@@ -18,24 +18,23 @@
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <ul class="nav">
         <li class="sidebar-category">
-          <p>INTERNSHIP</p>
-          <span></span>
+          <p class="h5"> INTERNSHIP</p>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{url('internship-index')}}">
-            <i class="mdi mdi-chart-bar menu-icon"></i>
+            <i class="mdi mdi-view-dashboard menu-icon"></i>
             <span class="menu-title">Dashboard</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url('internship-project') }}">
-            <i class="mdi mdi-view-headline menu-icon"></i>
+            <i class="mdi mdi-package-variant-closed menu-icon"></i>
             <span class="menu-title">Project</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{url('internship-history')}}">
-            <i class="mdi mdi-box menu-icon"></i>
+            <i class="mdi mdi-newspaper menu-icon"></i>
             <span class="menu-title">Riwayat</span>
           </a>
         </li>
@@ -51,7 +50,7 @@
             {{-- <a class="navbar-brand brand-logo" href=""><img src="{{asset('landingpage/images/logo-1.jpg')}}" width="50" alt="logo"/></a>
             <a class="navbar-brand brand-logo-mini" href=""><img src="{{asset('landingpage/images/logo-1.jpg')}}" height="55" width="30" alt="logo"/></a> --}}
           </div>
-          {{-- <h4 class="font-weight-bold mb-0 d-none d-md-block mt-1">Selamat datang,  --}}
+          <h4 class="font-weight-bold mb-0 d-none d-md-block mt-1">   Selamat datang, 
             @if (Auth::check())
             <?php
                 $internship = App\Models\Internship::where('user_id', Auth::user()->id)->first();
@@ -76,14 +75,14 @@
                     $condition++;
                 }
             ?>
-            Menu
+            {{$name}}
             @endif
         
           </h4>
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item">
               <h4 class="mb-0 font-weight-bold d-none d-xl-block">
-                {{ now()->format('F d, Y') }}
+                {{ now()->locale('id_ID')->isoFormat('D MMMM Y') }}
               </h4>
             </li>
             <li class="nav-item dropdown me-2">
@@ -144,17 +143,12 @@
             </li>
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                <img src="{{ $photo }}" width="55" height="55"  alt="profile"/>
-                <span class="nav-profile-name">{{$name}}</span>
+                <img src="{{ $photo }}" width="55" height="55"  alt="profile" class="object-fit-cover border rounded-circle">
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                 <a class="dropdown-item" href="{{url('internship-data')}}">
-                  <i class="mdi mdi-settings text-primary"></i>
+                  <i class="mdi mdi-account-card-details text-primary"></i>
                   Settings
-                </a>
-                <a class="dropdown-item" href="{{url('/')}}">
-                  <i class="mdi mdi-menu text-primary"></i>
-                  Landing page
                 </a>
                 <a class="dropdown-item" href="{{url('logout')}}">
                   <i class="mdi mdi-logout text-primary"></i>
