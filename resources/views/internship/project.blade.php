@@ -37,7 +37,12 @@
                                 </select>
                             </div>
                         </div>
-                            <button type="submit" class="btn btn-primary col-md-12">Filter</button>
+                        
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary col-md-12">Filter</button>
+                            </div>
+                        </div>
                     </div>
                 </form>
 
@@ -78,6 +83,23 @@
                 @else
                     <div class="text-center">Data Pengguna Belum Lengkap, Mohon Lengkapi Data Sebelum Mendaftar di project, <a href="{{url('internship-data')}}">Disini</a></div>
                 @endif
+                
+        @if($internship->phone == "")
+        <script>
+            document.addEventListener('DOMContentLoaded', function(){
+                Swal.fire({
+                title : 'Data Belum Lengkap!',
+                text : 'Mohon lengkapi data pengguna',
+                icon : 'warning',
+                confirmButtonText : 'OK'
+                }).then((result) =>{
+                  if(result.isConfirmed){
+                      window.location.href = '{{url('internship-data')}}';
+                  }  
+                });
+            });
+        </script>
+        @endif
             </div>
         </div>
     </div>
