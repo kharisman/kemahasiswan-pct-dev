@@ -78,7 +78,7 @@ class AuthController extends Controller
 	
 			// Cek apakah alamat email berasal dari domain yang dilarang
 			if (in_array($emailDomain, $blockedEmailDomains)) {
-				return redirect()->back()->with('error', 'Akun Industri hanya dapat didaftarkan dengan domain resmi usaha, seperti co.id Jika Anda tidak memiliki email domain resmi usaha, anda akan dialihkan ke form khusus untuk mendaftar, dan mohon menunggu tim Palcomtech memverifikasi data terlebih dahulu.');
+				return redirect()->back()->with('error', 'Akun Industri hanya dapat didaftarkan dengan domain resmi usaha, seperti palcomtech.ac.id Jika Anda tidak memiliki email domain resmi usaha, anda akan dialihkan ke Google form khusus untuk mendaftar, dan mohon menunggu tim Palcomtech memverifikasi data terlebih dahulu.');
 
 			}
 	
