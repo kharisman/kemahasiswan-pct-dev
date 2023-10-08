@@ -156,5 +156,7 @@ return [
     */
 
     'attributes' => [],
+    'password' => 'The password must be at least 8 characters long and contain both letters and numbers.',
+    'email' => 'The email format is invalid or the use of Gmail or Yahoo email is not allowed.',
 
 ];

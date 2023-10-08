@@ -68,53 +68,79 @@ class AuthController extends Controller
 		return view('landingpage/register_iduka');
 	}
 
+	public function registerIdukaSimpan(Request $request)
+	{
+		try {
+			$blockedEmailDomains = ['gmail.com', 'yahoo.com']; // Daftar domain yang dilarang
 	
-public function registerIdukaSimpan(Request $request)
-{
-    try {
-        $validator = Validator::make($request->all(), [
-            'username' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|confirmed'
-        ]);
+			$emailParts = explode('@', $request->email);
+			$emailDomain = end($emailParts);
+	
+			// Cek apakah alamat email berasal dari domain yang dilarang
+			if (in_array($emailDomain, $blockedEmailDomains)) {
+				return redirect()->back()->with('error', 'Akun Industri hanya dapat didaftarkan dengan domain resmi usaha, seperti co.id Jika Anda tidak memiliki email domain resmi usaha, anda akan dialihkan ke form khusus untuk mendaftar, dan mohon menunggu tim Palcomtech memverifikasi data terlebih dahulu.');
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
+			}
+	
+			$validator = Validator::make($request->all(), [
+				'username' => 'required',
+				'email' => 'required|email',
+				'password' => 'required|confirmed'
+			]);
+	
+			if ($validator->fails()) {
+				return back()->withErrors($validator)->withInput();
+			}
+	
+			DB::beginTransaction();
+	
+			$user = User::create([
+				'username' => $request->username,
+				'email' => $request->email,
+				'password' => Hash::make($request->password),
+				'roles' => 'iduka'
+			]);
+	
+			$iduka = new Iduka();
+			$iduka->user_id = $user->id;
+			$iduka->name = $request->username;
+			$iduka->address = null;
+			$iduka->phone = null;
+			$iduka->photo = null;
+			$iduka->status = "Tidak";
+			$iduka->save();
+	
+			DB::commit();
+	
+			return redirect()->route('login')->with('success', 'Registrasi Berhasil. Silakan login');
+		} catch (\Exception $e) {
+			DB::rollback();
+			return back()->with('error', 'Terjadi kesalahan saat melakukan registrasi.');
+		}
+	}
+	
 
-        DB::beginTransaction();
-
-        $user = User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'roles' => 'iduka'
-        ]);
-
-        $iduka = new Iduka();
-        $iduka->user_id = $user->id;
-        $iduka->name = $request->username;
-        $iduka->address = null;
-        $iduka->phone = null;
-        $iduka->photo = null;
-        $iduka->status = "Tidak";
-        $iduka->save();
-
-        DB::commit();
-
-        return redirect()->route('login')->with('success', 'Registrasi Berhasil. Silahkan login');
-    } catch (\Exception $e) {
-        DB::rollback();
-        return back()->with('error', 'Terjadi kesalahan saat melakukan registrasi.');
-    }
-}
 
 	public function login(Request $request)
 	{
+		if (Auth::check()) {
+			// Jika pengguna sudah login, maka redirect sesuai peran (role) mereka.
+			if (Auth::user()->hasRole('iduka')) {
+				return redirect()->route('iduka.index');
+			} elseif (Auth::user()->hasRole('internship')) {
+				if (!empty(session()->get('last_url'))) {
+					return redirect(session()->get('last_url'));
+				}
+				return redirect()->route('internship.index');
+			} elseif (Auth::user()->hasRole('admin')) {
+				return redirect()->route('admin.dashboard');
+			}
+		}
+
+		// Jika pengguna belum login, tampilkan halaman login.
 		$lastUrl = $request->id;
-		// dd($lastUrl);
-		if (!empty($lastUrl)){
-			$lastUrl = url('internship-project-apply/'.$lastUrl);
+		if (!empty($lastUrl)) {
+			$lastUrl = url('internship-project-apply/' . $lastUrl);
 		}
 		session()->put('last_url', $lastUrl);
 		return view('landingpage/login');
@@ -165,4 +191,5 @@ public function registerIdukaSimpan(Request $request)
 	}
 
 	
+
 }
