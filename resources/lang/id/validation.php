@@ -161,4 +161,6 @@ return [
     */
 
     'attributes' => [],
+    'email' => 'The email format is invalid or the use of Gmail or Yahoo email is not allowed.',
+
 ];
