@@ -73,7 +73,7 @@ class InternshipController extends Controller
 		// return $progressData ;
 		$taskData = Task::with("taskHistories")->with("internships")
 		->where("project_id",$id)
-		->where("status_task","Sedang Dikerjakan")
+		// ->where("status_task","Sedang Dikerjakan")
 		->whereHas("internships", function ($query) use ($data) {
 			$query->where("internship_id",$data->id);
 		})

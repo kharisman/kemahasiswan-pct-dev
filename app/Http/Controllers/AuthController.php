@@ -16,6 +16,19 @@ class AuthController extends Controller
 {
 	public function register()
 	{
+		if (Auth::check()) {
+			// Jika pengguna sudah login, maka redirect sesuai peran (role) mereka.
+			if (Auth::user()->hasRole('iduka')) {
+				return redirect()->route('iduka.index');
+			} elseif (Auth::user()->hasRole('internship')) {
+				if (!empty(session()->get('last_url'))) {
+					return redirect(session()->get('last_url'));
+				}
+				return redirect()->route('internship.index');
+			} elseif (Auth::user()->hasRole('admin')) {
+				return redirect()->route('admin.dashboard');
+			}
+		}
 		return view('landingpage/register');
 	}
 
@@ -26,7 +39,12 @@ class AuthController extends Controller
 			$validator = Validator::make($request->all(), [
 				'username' => 'required|string|min:3|max:225',
 				'email' => 'required|email|unique:users,email',
-				'password' => 'required|confirmed'
+				'password' => [
+					'required',
+					'confirmed',
+					'min:8', // Minimal 8 karakter
+					'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/' // Kombinasi huruf, angka, dan simbol
+				]
 			]);
 
 			if ($validator->fails()) {

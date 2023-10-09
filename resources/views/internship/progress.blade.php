@@ -38,6 +38,16 @@
                                   <a class="tag">
                                   <span>Proses</span>
                                 </a>
+                                @elseif($item->status_task=="Belum Dimulai")
+                               <a class="tag">
+                                  <span>Persiapan</span>
+                                </a>
+
+                                 @elseif($item->status_task=="Selesai")
+                                <a class="tag">
+                                    <span>Selesai</span>
+                                  </a>
+
                                 @endif
                               </div>
                               <div class="block_content">
@@ -47,10 +57,10 @@
                                 <div class="byline">
                                   <span>{{$item->created_at->diffForHumans()}}</span>
                                 </div>
-                                @if ($item->status_task != "Selesai" && $item->status_task != "Batal")
+                                @if ( $item->status_task != "Batal")
                                 <p class="excerpt">{!! $item->description !!}
                                     <h6 class="mt-4">History Perubahan</h6>
-                                    <table class="table" id="dataTable">
+                                    <table class="table td" id="">
                                       <thead>
                                           <tr>
                                               <th>Tanggal</th>
@@ -77,4 +87,10 @@
             </div>
         </div>
     </div>
+<script>
+    $(document).ready(function() {
+        $('.td').DataTable({
+        });
+    });
+</script>
 @endsection
