@@ -11,6 +11,7 @@ use App\Http\Controllers\LandingController;
 
 Route::controller(AuthController::class)->group(function () {
 	Route::get('register', 'register')->name('register');
+	Route::get('registerIduka', 'register_iduka')->name('registerIduka');
 	Route::post('register', 'registerSimpan')->name('register.simpan');
 	Route::get('registerIduka', 'registerIduka')->name('registerIduka');
 	Route::post('registerIduka', 'registerIdukaSimpan')->name('registerIduka.simpan');
@@ -166,4 +167,6 @@ Route::get('/add-post',[adminController::class,'addPost']);
 Route::post('/add-post',[adminController::class,'addPostPost']);
 Route::get('/add-category-project',[adminController::class,'addCategoryProject']);
 Route::post('/add-category-project',[adminController::class,'addCategoryProjectPost']);
-
+Route::fallback(function(){
+    return view('iduka.404');
+});
