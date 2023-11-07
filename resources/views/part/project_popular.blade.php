@@ -44,8 +44,10 @@
                                 <h3>{{$item->iduka->name}}</h3>
                             </div>
                         </figure>
+                   
                         <div class="course-1-content pb-4">
-                            <h2>{{$item->name}}</h2>
+                            <h3>{{$item->name}}</h3>
+                            <img src="{{$item->iduka->photo}}" alt="" height="100px">
                             <div class="rating text-center mb-3">
                                 <span class="icon-star2 text-warning"></span>
                                 <span class="icon-star2 text-warning"></span>
