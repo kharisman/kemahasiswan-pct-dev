@@ -3,7 +3,7 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('iduka.index') }}">
         <div class="sidebar-brand-icon">
-            <img src="{{ asset('landingpage/images/Logo-1.jpg') }}" alt="Image" class="img-fluid" height="50" width="55">
+            <img src="{{ asset('landingpage/images/Logo-1.jpg') }}" alt="Image" class="img-fluid" height="10" width="35">
         </div>
         <div class="sidebar-brand-text mx-3">X Iduka</div>
     </a>

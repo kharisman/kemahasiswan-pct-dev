@@ -26,14 +26,29 @@
                 <div class="card-header">{{ __('Form register') }}</div>
                 
                 <div class="card-body">
-                   
+                    @if (session('success'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {!! session('error') !!}
+                        </div>
+                        <script>
+                            // Setelah 3 detik, alihkan pengguna ke form iduka 
+                            setTimeout(function () {
+                                window.location.href = 'https://palcomtech.ac.id';
+                            }, 3000);
+                        </script>
+                    @endif
 
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('registerIduka') }}">{{ __('Iduka') }}</a>
+                            <a class="nav-link active" href="{{ route('registerIduka') }}">{{ __('Iduka') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('register') }}">{{ __('Internship') }}</a>
+                            <a class="nav-link " href="{{ route('register') }}">{{ __('Internship') }}</a>
                         </li>
                     </ul>
                     
@@ -42,7 +57,7 @@
                         <div class="row align-items-end justify-content-center text-center">
                             <div class="col-lg-7">
                                 <h2 class="mb-0">Register</h2>
-                                <p>Sebagai internship</p>
+                                <p>Sebagai Iduka</p>
                             </div>
                             @if(session('success'))
                             <div class="alert alert-success w-100">
@@ -60,7 +75,7 @@
                             @endif
                         </div>
                         
-                            <form action="{{ route('register.simpan') }}" method="POST" class="user">
+                            <form action="{{ route('registerIduka.simpan') }}" method="POST" class="user">
                                 @csrf
                                 <div class="col-md-12 form-group">
                                     <label for="username">Nama</label>
