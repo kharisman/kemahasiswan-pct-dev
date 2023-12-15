@@ -20,7 +20,7 @@
 
 <div class="hero-slide owl-carousel site-blocks-cover">
     @foreach ($Sliders as $Slider )
-        <div class="intro-section" style="background-image: url('images/{{$Slider->images}}');">
+        <div class="intro-section" style="background-image: url('{{$Slider->images}}');">
             {{-- <div class="container">
                 <div class="row align-items-center">
                     Isi konten di sini
