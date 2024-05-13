@@ -214,7 +214,7 @@ class adminController extends Controller
             $image->resize($width, $height, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            $image->save(public_path($publicPath . $filename));
+            $image->save(($publicPath . $filename));
             $url = asset($publicPath . $filename);
         } else {
             // No image was uploaded, set the URL to null or a default value
@@ -269,12 +269,12 @@ class adminController extends Controller
             $image->resize($width, $height, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            $image->save(public_path($publicPath . $filename));
+            $image->save(($publicPath . $filename));
             $url = asset($publicPath . $filename);
     
             // Delete the old image if it exists
-            if ($slider->images && file_exists(public_path($slider->images))) {
-                unlink(public_path($slider->images));
+            if ($slider->images && file_exists(($slider->images))) {
+                unlink(($slider->images));
             }
     
             $slider->images = $url;

@@ -1,39 +1,36 @@
 <style>
-    .intro-section {
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center center;
-        padding: 20px; /* Padding untuk layar yang lebih besar */
-        margin: 20px; /* Margin untuk layar yang lebih besar */
-        background-color: #f2f2f2; /* Background color for the entire section */
+    .intro-sections {
+        width: 100%;
+        overflow: hidden; /* Ensure the image doesn't overflow its container */
+        margin-top: 100px;
     }
 
-    /* Mengurangi margin dan padding pada layar yang lebih kecil */
+    .intro-sections img {
+        width: 100%;
+        height: auto; /* Allow the image to adjust its height while maintaining aspect ratio */
+        object-fit: cover;
+    }
+
     @media (max-width: 767px) {
-        .intro-section {
-            padding: 10px; /* Reduced padding for smaller screens */
-            margin: 10px; /* Reduced margin for smaller screens */
-            background-size: 100% auto; /* Adjusted background size */
+        .intro-sections {
+            margin-top: 120px; /* Adjust margin for smaller screens */
         }
     }
 </style>
-
-<div class="hero-slide owl-carousel site-blocks-cover">
-    @foreach ($Sliders as $Slider )
-        <div class="intro-section" style="background-image: url('{{$Slider->images}}');">
-            {{-- <div class="container">
-                <div class="row align-items-center">
-                    Isi konten di sini
-                </div>
-            </div> --}}
-        </div>
-    @endforeach
-
-    <div class="intro-section" style="background-image: url('{{asset('landingpage/images/smart_campus.jpg')}}');">
-        {{-- <div class="container">
-            <div class="row align-items-center">
-                Isi konten di sini
+<div id="carouselExample" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        @foreach ($Sliders as $index => $Slider)
+            <div class="carousel-item {{$index == 0 ? 'active' : ''}}">
+                <img class="intro-sections d-block w-100" src="{{$Slider->images}}" alt="Slide {{$index + 1}}">
             </div>
-        </div> --}}
+        @endforeach
     </div>
+    <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
 </div>

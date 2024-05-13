@@ -23,16 +23,16 @@
                     $statusClass = 'status-open'; // Kode status default
 
                     if ($now < $registrationStart) {
-                        $status = 'Pendaftaran Belum Dibuka';
+                        $status = 'Belum Dibuka';
                         $statusClass = 'status-not-open';
                     } elseif ($now > $registrationEnd) {
-                        $status = 'Pendaftaran Ditutup';
+                        $status = 'Ditutup';
                         $statusClass = 'status-closed';
                     } elseif ($now > $workEnd) {
-                        $status = 'Proyek Selesai';
+                        $status = 'Selesai';
                         $statusClass = 'status-finished';
                     } elseif ($now >= $workStart && $now <= $workEnd) {
-                        $status = 'Proyek Sedang Berlangsung';
+                        $status = 'Sedang Berlangsung';
                         $statusClass = 'status-ongoing';
                     }
                     @endphp
