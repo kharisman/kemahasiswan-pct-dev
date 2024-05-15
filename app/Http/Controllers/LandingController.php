@@ -24,39 +24,39 @@ use Illuminate\Support\Facades\Cache;
 
 class LandingController extends Controller
 {
-    //
-    public function index()
+	//
+	public function index()
 	{
-		$Sliders = Slider::where("status","Aktif")->OrderBy("sort","ASC")->get();
-        $new_posts = Post::with("categories.category")->where("status","Aktif")->OrderBy("created_at","DESC")->get();
-        $pop_posts = Post::with("categories.category")->where("status","Aktif")->OrderBy("views","DESC")->get();
-		$projects = Project::where("status","Aktif")->with("iduka")->get();
+		$Sliders = Slider::where("status", "Aktif")->OrderBy("sort", "ASC")->get();
+		$new_posts = Post::with("categories.category")->where("status", "Aktif")->OrderBy("created_at", "DESC")->get();
+		$pop_posts = Post::with("categories.category")->where("status", "Aktif")->OrderBy("views", "DESC")->get();
+		$projects = Project::where("status", "Aktif")->with("iduka")->get();
 
 		// return $new_posts ;
-		return view('beranda',compact('Sliders','new_posts','pop_posts','projects'));
+		return view('beranda', compact('Sliders', 'new_posts', 'pop_posts', 'projects'));
 	}
 
-    public function iduka()
+	public function iduka()
 	{
 		return view('iduka');
 	}
 
-    public function intership()
+	public function intership()
 	{
 		return view('intership');
 	}
-    
-    public function kontak()
+
+	public function kontak()
 	{
 		return view('kontak');
 	}
 
 	public function berita_detail(Request $request, $id, $judul)
 	{
-		
-        $post = Post::with("categories.category")->where("status","Aktif")->where("id",$id)->firstOrFail();
 
-		
+		$post = Post::with("categories.category")->where("status", "Aktif")->where("id", $id)->firstOrFail();
+
+
 		$ip = request()->ip();
 		$userAgent = request()->header('User-Agent'); // Mendapatkan informasi User-Agent
 
@@ -72,7 +72,7 @@ class LandingController extends Controller
 			Cache::put($cacheKey, true, now()->addDay());
 		}
 
-    	return view('berita_detail', compact("post"));
+		return view('berita_detail', compact("post"));
 	}
 
 
@@ -85,7 +85,6 @@ class LandingController extends Controller
 			$search = $request->search;
 			// dd($search);
 			$query->where('title', 'like', '%' . $search . '%')->orWhere('content', 'like', '%' . $search . '%');
-			
 		}
 
 		// Filter pilihan: terbaru atau populer
@@ -108,22 +107,22 @@ class LandingController extends Controller
 		$posts = $query->get();
 
 		$categories = Category::all(); // Mendapatkan daftar kategori
-		$filter = $request->get('filter'); 
+		$filter = $request->get('filter');
 
-		return view('berita', compact('posts','categories','filter'));
+		return view('berita', compact('posts', 'categories', 'filter'));
 	}
 
 	public function project_detail(Request $request, $id, $judul)
 	{
-		
-        $project = Project::with("iduka")->where("status","Aktif")->where("id",$id)->firstOrFail();
 
-		
+		$project = Project::with("iduka")->where("status", "Aktif")->where("id", $id)->firstOrFail();
+
+
 		$ip = request()->ip();
 		$userAgent = request()->header('User-Agent'); // Mendapatkan informasi User-Agent
 
 		// Generate a unique cache key based on IP and User-Agent
-		$cacheKey = md5($ip . $userAgent)."p".$project->id;
+		$cacheKey = md5($ip . $userAgent) . "p" . $project->id;
 
 		// Check if the cache key exists
 		if (!Cache::has($cacheKey)) {
@@ -134,19 +133,18 @@ class LandingController extends Controller
 			Cache::put($cacheKey, true, now()->addDay());
 		}
 
-    	return view('project_detail', compact("project"));
+		return view('project_detail', compact("project"));
 	}
 
 	public function project(Request $request)
 	{
-		$query = Project::with("iduka")->with("category")->where("status","Aktif");
+		$query = Project::with("iduka")->with("category")->where("status", "Aktif");
 
 		// Filter berdasarkan judul dan konten
 		if ($request->has('search')) {
 			$search = $request->search;
 			// dd($search);
 			$query->where('name', 'like', '%' . $search . '%')->orWhere('notes', 'like', '%' . $search . '%');
-			
 		}
 
 		// Filter pilihan: terbaru atau populer
@@ -161,29 +159,28 @@ class LandingController extends Controller
 		// Filter berdasarkan kategori
 		if ($request->has('kategori')) {
 			$kategoriId = $request->input('kategori');
-				$query->where('category_id', $kategoriId);
-			
+			$query->where('category_id', $kategoriId);
 		}
 
 		$posts = $query->get();
 
 		$categories = ProjectCategory::all(); // Mendapatkan daftar kategori
-		$filter = $request->get('filter'); 
+		$filter = $request->get('filter');
 
-		return view('project', compact('posts','categories','filter'));
+		return view('project', compact('posts', 'categories', 'filter'));
 	}
 
 	public function event_detail(Request $request, $id, $judul)
 	{
-		
-        $project = Event::where("id",$id)->firstOrFail();
 
-		
+		$project = Event::where("id", $id)->firstOrFail();
+
+
 		$ip = request()->ip();
 		$userAgent = request()->header('User-Agent'); // Mendapatkan informasi User-Agent
 
 		// Generate a unique cache key based on IP and User-Agent
-		$cacheKey = md5($ip . $userAgent)."e".$project->id;
+		$cacheKey = md5($ip . $userAgent) . "e" . $project->id;
 
 		// Check if the cache key exists
 		if (!Cache::has($cacheKey)) {
@@ -194,7 +191,7 @@ class LandingController extends Controller
 			Cache::put($cacheKey, true, now()->addDay());
 		}
 
-    	return view('event_detail', compact("project"));
+		return view('event_detail', compact("project"));
 	}
 
 	public function event_p(Request $request, $id, $judul)
@@ -208,9 +205,9 @@ class LandingController extends Controller
 		]);
 
 		// Dapatkan ID pengguna yang sedang masuk
-		$user = null ;
-		if (!empty(Auth::user()->id)){
-			$user= Auth::user()->id;
+		$user = null;
+		if (!empty(Auth::user()->id)) {
+			$user = Auth::user()->id;
 		}
 
 		// Gunakan transaksi database untuk memastikan konsistensi
@@ -241,14 +238,13 @@ class LandingController extends Controller
 
 	public function event(Request $request)
 	{
-		$query = Event::where("status","Aktif")->orderBy("id","DESC");
+		$query = Event::where("status", "Aktif")->orderBy("id", "DESC");
 
 		// Filter berdasarkan judul dan konten
 		if ($request->has('search')) {
 			$search = $request->search;
 			// dd($search);
 			$query->where('title', 'like', '%' . $search . '%')->orWhere('description', 'like', '%' . $search . '%');
-			
 		}
 
 		// Filter pilihan: terbaru atau populer
@@ -260,13 +256,12 @@ class LandingController extends Controller
 			}
 		}
 
-		
+
 
 		$posts = $query->get();
 
-		$filter = $request->get('filter'); 
+		$filter = $request->get('filter');
 
-		return view('event', compact('posts','filter'));
+		return view('event', compact('posts', 'filter'));
 	}
-
 }
